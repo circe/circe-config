@@ -32,10 +32,11 @@ scalacOptions ++= Seq(
   "-feature",
   "-language:postfixOps",
   "-unchecked",
+  "-Xfuture",
+  "-Xfatal-warnings",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Xfuture",
   "-Ywarn-unused-import"
 )
 
