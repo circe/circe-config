@@ -17,7 +17,6 @@ package io.github.jonas.circe.config
 
 import io.circe._
 import com.typesafe.config._
-import scala.collection.JavaConverters._
 
 object printer {
 
@@ -29,20 +28,7 @@ object printer {
   def print(root: Json, options: ConfigRenderOptions = defaultOptions): String = {
     val origin = ConfigOriginFactory.newSimple("circe-config printer")
 
-    def jsonToConfig(json: Json): ConfigValue = {
-      json.fold(
-        ConfigValueFactory.fromAnyRef(null),
-        boolean => ConfigValueFactory.fromAnyRef(boolean),
-        number => number.toLong match {
-          case Some(long) => ConfigValueFactory.fromAnyRef(long)
-          case None => ConfigValueFactory.fromAnyRef(number.toDouble)
-        },
-        str => ConfigValueFactory.fromAnyRef(str),
-        arr => ConfigValueFactory.fromIterable(arr.map(jsonToConfig).asJava),
-        obj => ConfigValueFactory.fromMap(obj.toMap.mapValues(jsonToConfig).asJava)
-      ).withOrigin(origin)
-    }
-
-    jsonToConfig(root).render(options)
+    jsonToConfigValue(root).render(options)
   }
+
 }

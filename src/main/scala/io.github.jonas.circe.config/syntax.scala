@@ -34,6 +34,10 @@ object syntax {
       .leftMap(t => "Decoder[ConfigMemorySize]")
   }
 
+  implicit val configValueDecoder: Decoder[ConfigValue] = Decoder.decodeJson.emap { json =>
+    Either.catchNonFatal(jsonToConfigValue(json)).leftMap(t => "Decoder[ConfigValue]")
+  }
+
   implicit val configDecoder: Decoder[Config] = Decoder.decodeString.emap { str =>
     Either
       .catchNonFatal(ConfigFactory.parseString(str))
