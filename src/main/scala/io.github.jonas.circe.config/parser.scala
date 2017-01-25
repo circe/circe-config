@@ -65,6 +65,9 @@ object parser extends Parser {
   final def parseFile(file: File): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.parseFile(file))
 
+  final def decode[A: Decoder](config: Config): Either[Error, A] =
+    finishDecode(parse(config))
+
   final def decodeFile[A: Decoder](file: File): Either[Error, A] =
     finishDecode[A](parseFile(file))
 

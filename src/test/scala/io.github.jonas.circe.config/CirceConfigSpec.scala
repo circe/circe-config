@@ -80,4 +80,16 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     assert(parser.parse(printedConfigString) == json)
   }
 
+  it should "provide syntax to decode" in {
+    import syntax._
+    val config = ConfigFactory.parseString(ConfigString)
+    assert(config.as[TestConfig] == Right(LoadedConfig))
+  }
+
+  it should "provide syntax to decode at a given path" in {
+    import syntax._
+    val config = ConfigFactory.parseString(ConfigString)
+    assert(config.as[Nested]("e") == Right(Nested(true)))
+  }
+
 }
