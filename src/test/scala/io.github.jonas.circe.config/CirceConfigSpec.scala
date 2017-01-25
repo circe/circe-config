@@ -37,7 +37,8 @@ object CirceConfigSpec {
     f: List[Double],
     g: List[List[String]],
     h: List[Nested],
-    i: FiniteDuration
+    i: FiniteDuration,
+    j: ConfigMemorySize
   )
   object TestConfig {
     implicit val decoder: Decoder[TestConfig] = deriveDecoder
@@ -57,6 +58,7 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     g = [ [ nested, list ] ]
     h = [ { obj = true }, { obj: false } ]
     i = 7357 s
+    j = 128M
   """
 
   val LoadedConfig = TestConfig(
@@ -68,7 +70,8 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     f = List(0, .2, 123.4),
     g = List(List("nested", "list")),
     h = List(Nested(obj = true), Nested(obj = false)),
-    i = 7357 seconds
+    i = 7357 seconds,
+    j = ConfigMemorySize.ofBytes(134217728)
   )
 
   "ConfigParser" should "read simple config file" in {
