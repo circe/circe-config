@@ -1,4 +1,6 @@
-# circe-config - yet another Typesafe config wrapper powered by circe
+# circe-config
+
+[![Travis CI Status]][Travis CI]
 
 Combines the power of [circe] and awesomeness of [Typesafe config] to
 enable straightforward reading of settings into Scala types.
@@ -17,3 +19,5 @@ limitations under the License.
  [apache]: http://www.apache.org/licenses/LICENSE-2.0
  [circe]: https://github.com/circe/circe
  [Typesafe config]: https://github.com/typesafehub/config
+ [Travis CI]: https://travis-ci.org/jonas/circe-config
+ [Travis CI Status]: https://travis-ci.org/jonas/circe-config.svg?branch=master
