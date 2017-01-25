@@ -31,7 +31,13 @@ object syntax {
   implicit val memorySizeDecoder: Decoder[ConfigMemorySize] = Decoder.decodeString.emap { str =>
     Either
       .catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("m").getMemorySize("m"))
-      .leftMap(t => "Decoder[getMemorySize]")
+      .leftMap(t => "Decoder[ConfigMemorySize]")
+  }
+
+  implicit val configDecoder: Decoder[Config] = Decoder.decodeString.emap { str =>
+    Either
+      .catchNonFatal(ConfigFactory.parseString(str))
+      .leftMap(t => "Decoder[Config]")
   }
 
   implicit class CirceConfigOps(val config: Config) extends AnyVal {

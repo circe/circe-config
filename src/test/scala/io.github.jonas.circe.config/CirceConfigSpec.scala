@@ -38,7 +38,8 @@ object CirceConfigSpec {
     g: List[List[String]],
     h: List[Nested],
     i: FiniteDuration,
-    j: ConfigMemorySize
+    j: ConfigMemorySize,
+    k: Config
   )
   object TestConfig {
     implicit val decoder: Decoder[TestConfig] = deriveDecoder
@@ -59,6 +60,7 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     h = [ { obj = true }, { obj: false } ]
     i = 7357 s
     j = 128M
+    k = "a = 1.1"
   """
 
   val LoadedConfig = TestConfig(
@@ -71,7 +73,8 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     g = List(List("nested", "list")),
     h = List(Nested(obj = true), Nested(obj = false)),
     i = 7357 seconds,
-    j = ConfigMemorySize.ofBytes(134217728)
+    j = ConfigMemorySize.ofBytes(134217728),
+    k = ConfigFactory.parseString("a = 1.1")
   )
 
   "ConfigParser" should "read simple config file" in {
@@ -79,7 +82,9 @@ class CirceConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "decode it into a case class" in {
-    assert(parser.decode[TestConfig](ConfigString) == Right(LoadedConfig))
+    val config = parser.decode[TestConfig](ConfigString)
+    assert(config == Right(LoadedConfig))
+    assert(config.right.get.k.getDouble("a") == 1.1)
   }
 
   it should "print it into a config string" in {
