@@ -30,6 +30,7 @@ scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
+  "-language:postfixOps",
   "-unchecked",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",

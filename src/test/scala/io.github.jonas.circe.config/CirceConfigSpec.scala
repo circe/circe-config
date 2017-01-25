@@ -18,6 +18,9 @@ package io.github.jonas.circe.config
 import org.scalatest.{ FlatSpec, Matchers }
 import com.typesafe.config._
 import io.circe._, io.circe.generic.semiauto._
+import scala.concurrent.duration._
+
+import syntax._
 
 object CirceConfigSpec {
   case class Nested(obj: Boolean)
@@ -33,7 +36,8 @@ object CirceConfigSpec {
     e: Nested,
     f: List[Double],
     g: List[List[String]],
-    h: List[Nested]
+    h: List[Nested],
+    i: FiniteDuration
   )
   object TestConfig {
     implicit val decoder: Decoder[TestConfig] = deriveDecoder
@@ -52,6 +56,7 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     f = [ 0, 0.2, 123.4 ]
     g = [ [ nested, list ] ]
     h = [ { obj = true }, { obj: false } ]
+    i = 7357 s
   """
 
   val LoadedConfig = TestConfig(
@@ -62,7 +67,8 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     e = Nested(obj = true),
     f = List(0, .2, 123.4),
     g = List(List("nested", "list")),
-    h = List(Nested(obj = true), Nested(obj = false))
+    h = List(Nested(obj = true), Nested(obj = false)),
+    i = 7357 seconds
   )
 
   "ConfigParser" should "read simple config file" in {
@@ -81,13 +87,11 @@ class CirceConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "provide syntax to decode" in {
-    import syntax._
     val config = ConfigFactory.parseString(ConfigString)
     assert(config.as[TestConfig] == Right(LoadedConfig))
   }
 
   it should "provide syntax to decode at a given path" in {
-    import syntax._
     val config = ConfigFactory.parseString(ConfigString)
     assert(config.as[Nested]("e") == Right(Nested(true)))
   }

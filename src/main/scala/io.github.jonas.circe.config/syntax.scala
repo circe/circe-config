@@ -17,8 +17,16 @@ package io.github.jonas.circe.config
 
 import com.typesafe.config._
 import io.circe._
+import cats.syntax.either._
+import scala.concurrent.duration._
 
 object syntax {
+  implicit val durationDecoder: Decoder[FiniteDuration] = Decoder.decodeString.emap { str =>
+    Either.catchNonFatal {
+      val d = ConfigValueFactory.fromAnyRef(str).atKey("d").getDuration("d")
+      Duration.fromNanos(d.toNanos)
+    }.leftMap(t => "Decoder[FiniteDuration]")
+  }
 
   implicit class CirceConfigOps(val config: Config) extends AnyVal {
     /**
