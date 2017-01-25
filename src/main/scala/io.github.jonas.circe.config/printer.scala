@@ -20,7 +20,7 @@ import com.typesafe.config._
 
 object printer {
 
-  val defaultOptions = ConfigRenderOptions.defaults.setJson(true).setComments(false).setOriginComments(false).setFormatted(false)
+  val defaultOptions = ConfigRenderOptions.defaults.setJson(false).setOriginComments(false)
 
   /**
    * Print JSON to a Typesafe Config string.
