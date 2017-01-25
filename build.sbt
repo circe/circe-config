@@ -39,6 +39,7 @@ scalacOptions ++= Seq(
 )
 
 scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import")) }
+scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
 scmInfo := Some(
   ScmInfo(
