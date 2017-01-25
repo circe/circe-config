@@ -17,17 +17,13 @@ package io.github.jonas.circe.config
 
 import org.scalatest.{ FlatSpec, Matchers }
 import com.typesafe.config._
-import io.circe._, io.circe.generic.semiauto._
+import io.circe.generic.auto._
 import scala.concurrent.duration._
 
 import syntax._
 
 object CirceConfigSpec {
   case class Nested(obj: Boolean)
-  object Nested {
-    implicit val decoder: Decoder[Nested] = deriveDecoder
-  }
-
   case class TestConfig(
     a: Int,
     b: Boolean,
@@ -42,9 +38,6 @@ object CirceConfigSpec {
     k: Config,
     l: ConfigValue
   )
-  object TestConfig {
-    implicit val decoder: Decoder[TestConfig] = deriveDecoder
-  }
 }
 
 class CirceConfigSpec extends FlatSpec with Matchers {
