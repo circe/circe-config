@@ -58,6 +58,7 @@ class CirceConfigSpec extends FlatSpec with Matchers {
   "printer" should "print it into a config string" in {
     val json = parser.parse(AppConfig)
     val printedConfigString = printer.print(json.right.get)
+    assert(printedConfigString == readFile("application.printed.conf"))
     assert(parser.parse(printedConfigString) == json)
   }
 
