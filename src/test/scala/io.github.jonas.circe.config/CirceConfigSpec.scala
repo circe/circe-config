@@ -17,12 +17,66 @@ package io.github.jonas.circe.config
 
 import org.scalatest.{ FlatSpec, Matchers }
 import com.typesafe.config._
+import io.circe._
 import io.circe.generic.auto._
 import scala.concurrent.duration._
+import scala.io.Source
 
 import syntax._
 
+class CirceConfigSpec extends FlatSpec with Matchers {
+  import CirceConfigSpec._
+
+  trait ParserTests {
+    def parse: Either[ParsingFailure, Json]
+    def decode: Either[Error, TestConfig]
+
+    assert(parse.isRight)
+
+    val config = decode
+    assert(config == Right(DecodedTestConfig))
+    assert(config.right.get.k.getDouble("a") == 1.1)
+    assert(config.right.get.l.unwrapped == "localhost")
+  }
+
+  "parser" should "parse and decode config from string" in new ParserTests {
+    def parse = parser.parse(AppConfigString)
+    def decode = parser.decode[TestConfig](AppConfigString)
+  }
+
+  it should "parse and decode config from object" in new ParserTests {
+    def parse = parser.parse(AppConfig)
+    def decode = parser.decode[TestConfig](ConfigFactory.load)
+  }
+
+  it should "parse and decode config from file" in new ParserTests {
+    def file = resolveFile("application.conf")
+    def parse = parser.parseFile(file)
+    def decode = parser.decodeFile[TestConfig](file)
+  }
+
+  "printer" should "print it into a config string" in {
+    val json = parser.parse(AppConfig)
+    val printedConfigString = printer.print(json.right.get)
+    assert(parser.parse(printedConfigString) == json)
+  }
+
+  "syntax" should "provide Config decoder" in {
+    assert(AppConfig.as[TestConfig] == Right(DecodedTestConfig))
+  }
+
+  it should "provide syntax to decode at a given path" in {
+    assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
+  }
+}
+
 object CirceConfigSpec {
+  def resolveFile(name: String) = new java.io.File("src/test/resources", name)
+  def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines.mkString("\n")
+
+  val AppConfig: Config = ConfigFactory.defaultApplication
+  val AppConfigString: String = readFile("application.conf")
+
   case class Nested(obj: Boolean)
   case class TestConfig(
     a: Int,
@@ -38,27 +92,8 @@ object CirceConfigSpec {
     k: Config,
     l: ConfigValue
   )
-}
 
-class CirceConfigSpec extends FlatSpec with Matchers {
-  import CirceConfigSpec._
-
-  val ConfigString = """
-    a = 42
-    b = false
-    c = "http://example.org"
-    d = null
-    e = { obj = true }
-    f = [ 0, 0.2, 123.4 ]
-    g = [ [ nested, list ] ]
-    h = [ { obj = true }, { obj: false } ]
-    i = 7357 s
-    j = 128M
-    k = "a = 1.1"
-    l = localhost
-  """
-
-  val LoadedConfig = TestConfig(
+  val DecodedTestConfig = TestConfig(
     a = 42,
     b = false,
     c = "http://example.org",
@@ -72,32 +107,4 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     k = ConfigFactory.parseString("a = 1.1"),
     l = ConfigValueFactory.fromAnyRef("localhost")
   )
-
-  "ConfigParser" should "read simple config file" in {
-    assert(parser.parse(ConfigString).isRight)
-  }
-
-  it should "decode it into a case class" in {
-    val config = parser.decode[TestConfig](ConfigString)
-    assert(config == Right(LoadedConfig))
-    assert(config.right.get.k.getDouble("a") == 1.1)
-    assert(config.right.get.l.unwrapped == "localhost")
-  }
-
-  it should "print it into a config string" in {
-    val json = parser.parse(ConfigString)
-    val printedConfigString = printer.print(json.right.get)
-    assert(parser.parse(printedConfigString) == json)
-  }
-
-  it should "provide syntax to decode" in {
-    val config = ConfigFactory.parseString(ConfigString)
-    assert(config.as[TestConfig] == Right(LoadedConfig))
-  }
-
-  it should "provide syntax to decode at a given path" in {
-    val config = ConfigFactory.parseString(ConfigString)
-    assert(config.as[Nested]("e") == Right(Nested(true)))
-  }
-
 }
