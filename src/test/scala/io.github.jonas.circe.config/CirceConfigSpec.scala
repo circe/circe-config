@@ -77,6 +77,14 @@ object CirceConfigSpec {
   val AppConfig: Config = ConfigFactory.defaultApplication
   val AppConfigString: String = readFile("application.conf")
 
+  sealed abstract class Adder[T] {
+    def add(a: T, b: T): T
+  }
+  implicit def numericAdder[T: scala.math.Numeric] = new Adder[T] {
+    override def add(a: T, b: T): T = implicitly[scala.math.Numeric[T]].plus(a, b)
+  }
+
+  case class TypeWithAdder[T: Adder](typeWithAdder: T)
   case class Nested(obj: Boolean)
   case class TestConfig(
     a: Int,
@@ -90,7 +98,8 @@ object CirceConfigSpec {
     i: FiniteDuration,
     j: ConfigMemorySize,
     k: Config,
-    l: ConfigValue
+    l: ConfigValue,
+    m: TypeWithAdder[Int]
   )
 
   val DecodedTestConfig = TestConfig(
@@ -105,6 +114,7 @@ object CirceConfigSpec {
     i = 7357 seconds,
     j = ConfigMemorySize.ofBytes(134217728),
     k = ConfigFactory.parseString("a = 1.1"),
-    l = ConfigValueFactory.fromAnyRef("localhost")
+    l = ConfigValueFactory.fromAnyRef("localhost"),
+    m = TypeWithAdder(12)
   )
 }
