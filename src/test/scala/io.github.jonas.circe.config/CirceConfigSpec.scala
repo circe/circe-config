@@ -57,9 +57,8 @@ class CirceConfigSpec extends FlatSpec with Matchers {
 
   "printer" should "print it into a config string" in {
     val json = parser.parse(AppConfig)
-    val printedConfigString = printer.print(json.right.get)
-    assert(printedConfigString == readFile("application.printed.conf"))
-    assert(parser.parse(printedConfigString) == json)
+    val expected = readFile("application.printed.conf")
+    assert(printer.print(json.right.get) == expected)
   }
 
   "syntax" should "provide Config decoder" in {
@@ -69,10 +68,21 @@ class CirceConfigSpec extends FlatSpec with Matchers {
   it should "provide syntax to decode at a given path" in {
     assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
   }
+
+  "round-trip" should "parse and print" in {
+    for (file <- testResourcesDir.listFiles) {
+      val json = parser.parseFile(file)
+      assert(json.isRight == true, s"failed to parse ${file.getName}")
+      assert(
+        parser.parse(printer.print(json.right.get)) == json,
+        s"round-trip failed for ${file.getName}")
+    }
+  }
 }
 
 object CirceConfigSpec {
-  def resolveFile(name: String) = new java.io.File("src/test/resources", name)
+  val testResourcesDir = new java.io.File("src/test/resources")
+  def resolveFile(name: String) = new java.io.File(testResourcesDir, name)
   def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines.mkString("\n")
 
   val AppConfig: Config = ConfigFactory.defaultApplication
