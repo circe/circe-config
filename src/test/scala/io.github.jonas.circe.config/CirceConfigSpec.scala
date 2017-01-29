@@ -110,7 +110,9 @@ object CirceConfigSpec {
     j: ConfigMemorySize,
     k: Config,
     l: ConfigValue,
-    m: TypeWithAdder[Int]
+    m: TypeWithAdder[Int],
+    n: Double,
+    o: Double
   )
 
   val DecodedTestConfig = TestConfig(
@@ -126,6 +128,8 @@ object CirceConfigSpec {
     j = ConfigMemorySize.ofBytes(134217728),
     k = ConfigFactory.parseString("a = 1.1"),
     l = ConfigValueFactory.fromAnyRef("localhost"),
-    m = TypeWithAdder(12)
+    m = TypeWithAdder(12),
+    n = 0.0,
+    o = 0
   )
 }
