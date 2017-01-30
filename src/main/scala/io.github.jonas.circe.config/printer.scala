@@ -25,10 +25,7 @@ object printer {
   /**
    * Print JSON to a Typesafe Config string.
    */
-  def print(root: Json, options: ConfigRenderOptions = defaultOptions): String = {
-    val origin = ConfigOriginFactory.newSimple("circe-config printer")
-
+  def print(root: Json, options: ConfigRenderOptions = defaultOptions): String =
     jsonToConfigValue(root).render(options)
-  }
 
 }
