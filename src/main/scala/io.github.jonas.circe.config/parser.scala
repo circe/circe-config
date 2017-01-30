@@ -36,8 +36,12 @@ object parser extends Parser {
         (value.valueType, value.unwrapped) match {
           case (ConfigValueType.NULL, _) =>
             Json.Null
-          case (ConfigValueType.NUMBER, _) =>
-            JsonNumber.fromString(value.render).map(Json.fromJsonNumber).getOrElse {
+          case (ConfigValueType.NUMBER, int: java.lang.Integer) =>
+            Json.fromInt(int)
+          case (ConfigValueType.NUMBER, long: java.lang.Long) =>
+            Json.fromLong(long)
+          case (ConfigValueType.NUMBER, double: java.lang.Double) =>
+            Json.fromDouble(double).getOrElse {
               throw new NumberFormatException(s"Invalid numeric string ${value.render}")
             }
           case (ConfigValueType.BOOLEAN, boolean: java.lang.Boolean) =>
