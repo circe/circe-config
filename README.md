@@ -36,6 +36,12 @@ val appSettings = config.as[AppSettings]
 // => appSettings: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
 ```
 
+## Releasing
+
+To release version `x.y.z` run:
+
+    > sbt release -Dproject.version=x.y.z
+
 ## License
 
 circe-config is licensed under the **[Apache License, Version 2.0][apache]** (the

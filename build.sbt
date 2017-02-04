@@ -1,3 +1,4 @@
+organization := "io.github.jonas"
 name := "circe-config"
 organization := "io.github.jonas.circe.config"
 description := "Yet another Typesafe Config decoder"
@@ -6,6 +7,36 @@ licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html
 
 scalaVersion := "2.11.8"
 crossScalaVersions := Seq("2.11.8", "2.12.1")
+
+enablePlugins(GitPlugin)
+versionWithGit
+git.useGitDescribe := true
+
+enablePlugins(BintrayPlugin)
+bintrayRepository := "maven"
+bintrayOrganization := Some("fonseca")
+publishArtifact in Test := false
+publishMavenStyle := true
+
+enablePlugins(ReleasePlugin)
+releaseCrossBuild := true
+releaseTagName := (version in ThisBuild).value
+releaseVersionFile := target.value / "unused-version.sbt"
+releaseProcess := {
+  import ReleaseTransformations._
+  Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    { st: State =>
+      val v = (version in ThisBuild).value
+      st.put(ReleaseKeys.versions, (v, v))
+    },
+    runTest,
+    setReleaseVersion,
+    tagRelease,
+    publishArtifacts,
+    pushChanges
+  )
+}
 
 val Versions = new {
   val circe = "0.7.0"
