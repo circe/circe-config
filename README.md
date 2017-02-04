@@ -15,6 +15,10 @@ resolvers += Resolver.bintrayRepo("fonseca", "maven")
 libraryDependencies += "io.github.jonas" %% "circe-config" % "0.1.0"
 ```
 
+## Documentation
+
+ - [API docs](https://jonas.github.io/circe-config/io/github/jonas/circe/config/index.html)
+
 ## Example
 
 ```scala
