@@ -1,6 +1,7 @@
 # circe-config
 
 [![Travis CI Status]][Travis CI]
+[![Bintray Latest Version Badge]][Bintray Latest Version]
 
 Combines the power of [circe] and awesomeness of [Typesafe config] to
 enable straightforward reading of settings into Scala types.
@@ -67,3 +68,5 @@ limitations under the License.
  [Typesafe config]: https://github.com/typesafehub/config
  [Travis CI]: https://travis-ci.org/jonas/circe-config
  [Travis CI Status]: https://travis-ci.org/jonas/circe-config.svg?branch=master
+ [Bintray Latest Version Badge]: https://api.bintray.com/packages/fonseca/maven/circe-config/images/download.svg
+ [Bintray Latest Version]: https://bintray.com/fonseca/maven/circe-config/_latestVersion
