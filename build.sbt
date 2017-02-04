@@ -1,6 +1,5 @@
-organization := "io.github.jonas"
 name := "circe-config"
-organization := "io.github.jonas.circe.config"
+organization := "io.github.jonas"
 description := "Yet another Typesafe Config decoder"
 homepage := Some(url("https://github.com/jonas/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
