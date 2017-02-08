@@ -11,8 +11,7 @@ enable straightforward reading of settings into Scala types.
 To use this library configure your sbt project with the following lines:
 
 ```sbt
-resolvers += Resolver.bintrayRepo("fonseca", "maven")
-libraryDependencies += "io.github.jonas" %% "circe-config" % "0.1.0"
+libraryDependencies += "io.github.jonas" %% "circe-config" % "0.1.1"
 ```
 
 ## Documentation
