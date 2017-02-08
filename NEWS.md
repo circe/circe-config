@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.1.1
+
+ - Add release notes.
+
 ## 0.1.0
 
 Heavily inspired by the [circe-yaml] library the initial version provides:
