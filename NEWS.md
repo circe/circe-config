@@ -3,6 +3,7 @@
 ## 0.1.1
 
  - Add release notes.
+ - Publish to Maven Central. (#2)
 
 ## 0.1.0
 
