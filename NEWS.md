@@ -3,7 +3,9 @@
 ## 0.1.1
 
  - Add release notes.
- - Publish to Maven Central. (#2)
+ - Publish to Maven Central. ([#2])
+
+ [#2]: https://github.com/jonas/circe-config/issues/2
 
 ## 0.1.0
 
