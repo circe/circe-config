@@ -1,5 +1,11 @@
 # Release notes
 
+## master
+
+ - Fix normalization of JSON used for testing the printer law. ([#1])
+
+ [#1]: https://github.com/jonas/circe-config/issues/1
+
 ## 0.1.1
 
  - Add release notes.

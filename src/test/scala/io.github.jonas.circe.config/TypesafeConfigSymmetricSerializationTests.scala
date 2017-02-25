@@ -20,14 +20,7 @@ class TypesafeConfigPrinterLaws extends FunSuite with Discipline with Laws {
       name = "printer",
       parent = None,
       "roundTrip" -> Prop.forAll { (json: Json) =>
-        /*
-         * FIXME: Ideally this should be:
-         *
-         *    parse(print(json)) <-> Right(json)
-         *
-         * However, loss of precision prohibits this.
-         */
-        parse(print(json)) <-> parse(print(parse(print(json)).right.get))
+        parse(print(json)) <-> Right(json)
       }
     )
   }
@@ -36,9 +29,15 @@ class TypesafeConfigPrinterLaws extends FunSuite with Discipline with Laws {
     def normalize(json: Json): Json = json
       .mapObject(_.filterKeys(_.nonEmpty).withJsons(normalize))
       .mapArray(_.map(normalize))
-      .mapNumber(_ match {
-        case number if number.toDouble.isInfinite => Json.fromDouble(42).get.asNumber.get
-        case number => number
+      .mapNumber(number => {
+        // Map to the three principal types supported by Typesafe Config: Int, Long or Double
+        val json =
+          number.toInt.map(Json.fromInt) orElse
+            number.toLong.map(Json.fromLong) orElse
+            Json.fromDouble(number.toDouble) getOrElse
+            Json.fromInt(42)
+
+        json.asNumber.get
       })
 
     for (jsonObject <- testing.instances.arbitraryJsonObject.arbitrary)
