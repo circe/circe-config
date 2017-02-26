@@ -84,15 +84,42 @@ object syntax {
    * scala> serverJson.as[ConfigValue]
    * res2: io.circe.Decoder.Result[ConfigValue] = Right(SimpleConfigObject({"host":"localhost","port":8080}))
    * }}}
+   *
+   * @see [[configDecoder]] for decoding circe JSON objects to a Typesafe Config instance.
    */
   implicit val configValueDecoder: Decoder[ConfigValue] = Decoder.decodeJson.emap { json =>
     Either.catchNonFatal(jsonToConfigValue(json)).leftMap(t => "Decoder[ConfigValue]")
   }
 
-  implicit val configDecoder: Decoder[Config] = Decoder.decodeString.emap { str =>
-    Either
-      .catchNonFatal(ConfigFactory.parseString(str))
-      .leftMap(t => "Decoder[Config]")
+  /**
+   * Decoder for converting [[io.circe.Json]] to a Typesafe Config instance.
+   *
+   * Converts a circe JSON object to a Typesafe Config instance.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.Json
+   * scala> import com.typesafe.config.Config
+   * scala> import io.github.jonas.circe.config.syntax._
+   *
+   * scala> val hostJson = Json.fromString("localhost")
+   * scala> val portJson = Json.fromInt(8080)
+   * scala> val serverJson = Json.obj("host" -> hostJson, "port" -> portJson)
+   *
+   * scala> portJson.as[Config]
+   * res0: io.circe.Decoder.Result[Config] = Left(DecodingFailure(JSON must be an object, was type NUMBER, List()))
+   *
+   * scala> serverJson.as[Config]
+   * res3: io.circe.Decoder.Result[Config] = Right(Config(SimpleConfigObject({"host":"localhost","port":8080})))
+   * }}}
+   *
+   * @see [[configValueDecoder]] for decoding any circe JSON AST.
+   */
+  implicit val configDecoder: Decoder[Config] = configValueDecoder.emap { value =>
+    value match {
+      case obj: ConfigObject => Right(obj.toConfig)
+      case other => Left(s"JSON must be an object, was type ${other.valueType}")
+    }
   }
 
   /**

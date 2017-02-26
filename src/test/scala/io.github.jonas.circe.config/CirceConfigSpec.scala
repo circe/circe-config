@@ -35,7 +35,8 @@ class CirceConfigSpec extends FlatSpec with Matchers {
 
     val config = decode
     assert(config == Right(DecodedTestConfig))
-    assert(config.right.get.k.getDouble("a") == 1.1)
+    assert(config.right.get.k.getDouble("ka") == 1.1)
+    assert(config.right.get.k.getString("kb") == "abc")
     assert(config.right.get.l.unwrapped == "localhost")
   }
 
@@ -126,7 +127,7 @@ object CirceConfigSpec {
     h = List(Nested(obj = true), Nested(obj = false)),
     i = 7357 seconds,
     j = ConfigMemorySize.ofBytes(134217728),
-    k = ConfigFactory.parseString("a = 1.1"),
+    k = ConfigFactory.parseString("ka = 1.1, kb = abc"),
     l = ConfigValueFactory.fromAnyRef("localhost"),
     m = TypeWithAdder(12),
     n = 0.0,
