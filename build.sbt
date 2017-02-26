@@ -3,9 +3,11 @@ organization := "io.github.jonas"
 description := "Yet another Typesafe Config decoder"
 homepage := Some(url("https://github.com/jonas/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
+autoAPIMappings := true
+apiURL := Some(url("https://jonas.github.io/circe-config/api/"))
 
-scalaVersion := "2.11.8"
 crossScalaVersions := Seq("2.11.8", "2.12.1")
+scalaVersion := crossScalaVersions.value.last
 
 enablePlugins(GitPlugin)
 versionWithGit
@@ -55,6 +57,9 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
 )
+
+doctestTestFramework := DoctestTestFramework.ScalaTest
+doctestWithDependencies := false
 
 scalacOptions ++= Seq(
   "-deprecation",

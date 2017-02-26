@@ -3,6 +3,8 @@
 ## master
 
  - Fix normalization of JSON used for testing the printer law. ([#1])
+ - Improve documentation with example using sbt-doctest. Renames
+   `printer.defaultOptions` to `printer.DefaultOptions`.
 
  [#1]: https://github.com/jonas/circe-config/issues/1
 

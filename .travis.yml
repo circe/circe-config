@@ -7,7 +7,7 @@ scala:
 
 jdk: oraclejdk8
 
-script: sbt ++$TRAVIS_SCALA_VERSION test
+script: sbt ++$TRAVIS_SCALA_VERSION test doc
 
 before_cache:
   # See http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html

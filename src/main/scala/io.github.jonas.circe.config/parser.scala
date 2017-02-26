@@ -22,6 +22,26 @@ import scala.util.{ Failure, Success, Try }
 import scala.collection.JavaConverters._
 import com.typesafe.config._
 
+/**
+ * Low-level utilities for parsing Typesafe Config sources to [[io.circe.Json]] or
+ * decoding to a specific type.
+ *
+ * @example
+ * {{{
+ * scala> import com.typesafe.config.ConfigFactory
+ * scala> import io.github.jonas.circe.config.parser
+ * scala> val config = ConfigFactory.parseString("server { host = localhost, port = 8080 }")
+ *
+ * scala> val json: Either[io.circe.ParsingFailure, io.circe.Json] = parser.parse(config)
+ * scala> json.right.get.noSpaces
+ * res0: String = {"server":{"port":8080,"host":"localhost"}}
+ *
+ * scala> import io.circe.generic.auto._
+ * scala> case class ServerSettings(host: String, port: Int)
+ * scala> parser.decode[ServerSettings](config.getConfig("server"))
+ * res1: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080))
+ * }}}
+ */
 object parser extends Parser {
 
   private[this] final def toJson[T](parseConfig: => Config): Either[ParsingFailure, Json] = {

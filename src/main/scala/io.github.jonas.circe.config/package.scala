@@ -19,6 +19,32 @@ import io.circe._
 import com.typesafe.config._
 import scala.collection.JavaConverters._
 
+/**
+ * circe-config: A [[https://github.com/typesafehub/config Typesafe config]]
+ * wrapper powered by [[io.circe circe]].
+ *
+ * @example
+ * {{{
+ * scala> import com.typesafe.config.ConfigFactory
+ * scala> import io.circe.generic.auto._
+ * scala> import io.github.jonas.circe.config.syntax._
+ *
+ * scala> case class ServerSettings(host: String, port: Int, ssl: Option[String])
+ * scala> case class HttpSettings(server: ServerSettings, version: Double)
+ * scala> case class AppSettings(http: HttpSettings)
+ *
+ * scala> val config = ConfigFactory.parseString("http { version = 1.1, server { host = localhost, port = 8080 } }")
+ *
+ * scala> config.as[ServerSettings]("http.server")
+ * res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080,None))
+ *
+ * scala> config.as[HttpSettings]("http")
+ * res1: Either[io.circe.Error, HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,None),1.1))
+ *
+ * scala> config.as[AppSettings]
+ * res2: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
+ * }}}
+ */
 package object config {
 
   private[config] def jsonToConfigValue(json: Json): ConfigValue =

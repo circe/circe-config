@@ -18,14 +18,37 @@ package io.github.jonas.circe.config
 import io.circe._
 import com.typesafe.config._
 
+/**
+ * Print [[io.circe.Json]] to a Typesafe Config string.
+ *
+ * @example
+ * {{{
+ * scala> import io.circe.Json
+ * scala> import io.github.jonas.circe.config.printer
+ * scala> val options = com.typesafe.config.ConfigRenderOptions.defaults.setJson(false).setOriginComments(false).setFormatted(false)
+ * scala> val json = Json.obj("server" -> Json.obj("host" -> Json.fromString("localhost"), "port" -> Json.fromInt(8080)))
+ * scala> printer.print(json, options)
+ * res0: String = server{host=localhost,port=8080}
+ * }}}
+ */
 object printer {
 
-  val defaultOptions = ConfigRenderOptions.defaults.setJson(false).setOriginComments(false)
+  /**
+   * Default printer options.
+   *
+   * By default JSON is printed in
+   * [[https://github.com/typesafehub/config/blob/master/HOCON.md HOCON format]]
+   * without origin comments.
+   */
+  val DefaultOptions = ConfigRenderOptions.defaults.setJson(false).setOriginComments(false)
 
   /**
    * Print JSON to a Typesafe Config string.
+   *
+   * @param root A [[io.circe.JsonObject JSON object]]
+   * @param options Printer options allowing to configure printing to JSON or HOCON
    */
-  def print(root: Json, options: ConfigRenderOptions = defaultOptions): String =
+  def print(root: Json, options: ConfigRenderOptions = DefaultOptions): String =
     jsonToConfigValue(root).render(options)
 
 }
