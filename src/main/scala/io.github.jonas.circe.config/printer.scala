@@ -39,6 +39,8 @@ object printer {
    * By default JSON is printed in
    * [[https://github.com/typesafehub/config/blob/master/HOCON.md HOCON format]]
    * without origin comments.
+   *
+   * @see [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/ConfigRenderOptions.html com.typesafe.config.ConfigRenderOptions]]
    */
   val DefaultOptions = ConfigRenderOptions.defaults.setJson(false).setOriginComments(false)
 

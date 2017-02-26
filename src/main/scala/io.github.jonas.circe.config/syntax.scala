@@ -21,8 +21,8 @@ import cats.syntax.either._
 import scala.concurrent.duration._
 
 /**
- * Implicits for decoding Typesafe Config instances using circe
- * [[io.circe.Decoder decoders]].
+ * Implicits for decoding Typesafe Config values and instances using
+ * [[io.circe.Decoder circe decoders]].
  *
  * In addition to [[syntax.durationDecoder]] and [[syntax.memorySizeDecoder]]
  * for reading Typesafe Config specific value formats, this module also provides
@@ -32,16 +32,32 @@ import scala.concurrent.duration._
  * {{{
  * scala> import io.circe.generic.auto._
  * scala> import io.github.jonas.circe.config.syntax._
- * scala> case class Server(port: Int, host: String)
- * scala> val config = com.typesafe.config.ConfigFactory.parseString("port = 7357, host = localhost")
- * scala> config.as[Server]
- * res0: Either[io.circe.Error, Server] = Right(Server(7357,localhost))
+ * scala> import scala.concurrent.duration.FiniteDuration
+ * scala> case class ServerSettings(port: Int, host: String, timeout: FiniteDuration)
+ * scala> val config = com.typesafe.config.ConfigFactory.parseString("port = 7357, host = localhost, timeout = 5 s")
+ * scala> config.as[ServerSettings]
+ * res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(7357,localhost,5 seconds))
  * }}}
  */
 object syntax {
   /**
    * Decoder for reading
    * [[https://github.com/typesafehub/config/blob/master/HOCON.md#duration-format duration formats]].
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.Json
+   * scala> import io.github.jonas.circe.config.syntax._
+   * scala> import scala.concurrent.duration.FiniteDuration
+   *
+   * scala> durationDecoder.decodeJson(Json.fromString("5 seconds"))
+   * res0: io.circe.Decoder.Result[FiniteDuration] = Right(5 seconds)
+   * scala> durationDecoder.decodeJson(Json.fromString("1 hour"))
+   * res1: io.circe.Decoder.Result[FiniteDuration] = Right(1 hour)
+   *
+   * scala> Json.fromString("200 ms").as[FiniteDuration]
+   * res2: io.circe.Decoder.Result[FiniteDuration] = Right(200 milliseconds)
+   * }}}
    */
   implicit val durationDecoder: Decoder[FiniteDuration] = Decoder.decodeString.emap { str =>
     Either.catchNonFatal {
@@ -52,7 +68,24 @@ object syntax {
 
   /**
    * Decoder for reading
-   * [[https://github.com/typesafehub/config/blob/master/HOCON.md#size-in-bytes-format memory size in bytes format]].
+   * [[https://github.com/typesafehub/config/blob/master/HOCON.md#size-in-bytes-format memory size in bytes format]]
+   * into a
+   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/ConfigMemorySize.html com.typesafe.config.ConfigMemorySize]].
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.Json
+   * scala> import io.github.jonas.circe.config.syntax._
+   * scala> import com.typesafe.config.ConfigMemorySize
+   *
+   * scala> memorySizeDecoder.decodeJson(Json.fromString("128M"))
+   * res0: io.circe.Decoder.Result[ConfigMemorySize] = Right(ConfigMemorySize(134217728))
+   * scala> memorySizeDecoder.decodeJson(Json.fromString("4096 KiB"))
+   * res1: io.circe.Decoder.Result[ConfigMemorySize] = Right(ConfigMemorySize(4194304))
+   *
+   * scala> Json.fromString("32 GB").as[ConfigMemorySize]
+   * res2: io.circe.Decoder.Result[ConfigMemorySize] = Right(ConfigMemorySize(32000000000))
+   * }}}
    */
   implicit val memorySizeDecoder: Decoder[ConfigMemorySize] = Decoder.decodeString.emap { str =>
     Either
@@ -61,9 +94,10 @@ object syntax {
   }
 
   /**
-   * Decoder for converting [[io.circe.Json]] to Typesafe Config values.
+   * Decoder for converting [[io.circe.Json]] to
+   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/ConfigValue.html com.typesafe.config.ConfigValue]].
    *
-   * Maps from any circe's JSON AST to the Typesafe Config AST.
+   * Maps any circe JSON AST to the Typesafe Config AST.
    *
    * @example
    * {{{
@@ -75,10 +109,10 @@ object syntax {
    * scala> val portJson = Json.fromInt(8080)
    * scala> val serverJson = Json.obj("host" -> hostJson, "port" -> portJson)
    *
-   * scala> hostJson.as[ConfigValue]
+   * scala> configValueDecoder.decodeJson(hostJson)
    * res0: io.circe.Decoder.Result[ConfigValue] = Right(Quoted("localhost"))
    *
-   * scala> portJson.as[ConfigValue]
+   * scala> configValueDecoder.decodeJson(portJson)
    * res1: io.circe.Decoder.Result[ConfigValue] = Right(ConfigLong(8080))
    *
    * scala> serverJson.as[ConfigValue]
@@ -92,7 +126,8 @@ object syntax {
   }
 
   /**
-   * Decoder for converting [[io.circe.Json]] to a Typesafe Config instance.
+   * Decoder for converting [[io.circe.Json]] to
+   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
    *
    * Converts a circe JSON object to a Typesafe Config instance.
    *
@@ -106,11 +141,13 @@ object syntax {
    * scala> val portJson = Json.fromInt(8080)
    * scala> val serverJson = Json.obj("host" -> hostJson, "port" -> portJson)
    *
-   * scala> portJson.as[Config]
-   * res0: io.circe.Decoder.Result[Config] = Left(DecodingFailure(JSON must be an object, was type NUMBER, List()))
-   *
+   * scala> configDecoder.decodeJson(Json.obj("host" -> hostJson))
+   * res0: io.circe.Decoder.Result[Config] = Right(Config(SimpleConfigObject({"host":"localhost"})))
    * scala> serverJson.as[Config]
-   * res3: io.circe.Decoder.Result[Config] = Right(Config(SimpleConfigObject({"host":"localhost","port":8080})))
+   * res1: io.circe.Decoder.Result[Config] = Right(Config(SimpleConfigObject({"host":"localhost","port":8080})))
+   *
+   * scala> portJson.as[Config]
+   * res2: io.circe.Decoder.Result[Config] = Left(DecodingFailure(JSON must be an object, was type NUMBER, List()))
    * }}}
    *
    * @see [[configValueDecoder]] for decoding any circe JSON AST.
@@ -123,7 +160,9 @@ object syntax {
   }
 
   /**
-   * Enriches Typesafe Config instances with methods to decode to a specific type.
+   * Enriches
+   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
+   * instances with methods to decode to a specific type.
    */
   implicit class CirceConfigOps(val config: Config) extends AnyVal {
     /**

@@ -23,8 +23,9 @@ import scala.collection.JavaConverters._
 import com.typesafe.config._
 
 /**
- * Low-level utilities for parsing Typesafe Config sources to [[io.circe.Json]] or
- * decoding to a specific type.
+ * Utilities for parsing
+ * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
+ * sources to [[io.circe.Json]] as well as decoding to a specific type.
  *
  * @example
  * {{{
@@ -41,6 +42,9 @@ import com.typesafe.config._
  * scala> parser.decode[ServerSettings](config.getConfig("server"))
  * res1: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080))
  * }}}
+ *
+ * @see [[syntax.configDecoder]] for how to map [[io.circe.Json]] to
+ * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
  */
 object parser extends Parser {
 
