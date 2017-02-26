@@ -16,9 +16,9 @@
 package io.github.jonas.circe.config
 
 import cats.data.ValidatedNel
+import cats.syntax.either._
 import io.circe._
 import java.io.File
-import scala.util.{ Failure, Success, Try }
 import scala.collection.JavaConverters._
 import com.typesafe.config._
 
@@ -78,10 +78,9 @@ object parser extends Parser {
         }
     }
 
-    Try(parseConfig.root).map(convertValueUnsafe) match {
-      case Success(json)  => Right(json)
-      case Failure(error) => println(error); Left(ParsingFailure(error.getMessage, error))
-    }
+    Either
+      .catchNonFatal(convertValueUnsafe(parseConfig.root))
+      .leftMap(error => ParsingFailure(error.getMessage, error))
   }
 
   final def parse(config: Config): Either[ParsingFailure, Json] =
