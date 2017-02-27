@@ -25,7 +25,8 @@ import com.typesafe.config._
  * {{{
  * scala> import io.circe.Json
  * scala> import io.github.jonas.circe.config.printer
- * scala> val options = com.typesafe.config.ConfigRenderOptions.defaults.setJson(false).setOriginComments(false).setFormatted(false)
+ *
+ * scala> val options = printer.DefaultOptions.setFormatted(false)
  * scala> val json = Json.obj("server" -> Json.obj("host" -> Json.fromString("localhost"), "port" -> Json.fromInt(8080)))
  * scala> printer.print(json, options)
  * res0: String = server{host=localhost,port=8080}
