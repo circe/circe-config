@@ -21,33 +21,30 @@ libraryDependencies += "io.github.jonas" %% "circe-config" % "0.1.1"
 ## Example
 
 ```scala
-import com.typesafe.config.ConfigFactory
-import io.circe.generic.auto._
-import io.github.jonas.circe.config.syntax._
+scala> import com.typesafe.config.{ ConfigFactory, ConfigMemorySize }
+scala> import io.circe.generic.auto._
+scala> import io.github.jonas.circe.config.syntax._
+scala> import scala.concurrent.duration.FiniteDuration
 
-case class ServerSettings(host: String, port: Int, ssl: Option[String])
-case class HttpSettings(server: ServerSettings, version: Double)
-case class AppSettings(http: HttpSettings)
+scala> case class ServerSettings(host: String, port: Int, timeout: FiniteDuration, maxUpload: ConfigMemorySize)
+scala> case class HttpSettings(server: ServerSettings, version: Option[Double])
+scala> case class AppSettings(http: HttpSettings)
 
-val config = ConfigFactory.parseString("""
-  http {
-    version = 1.1
-    server {
-      host = localhost
-      port = 8080
-    }
-  }
-""")
+scala> val config = ConfigFactory.load()
 
-val serverSettings = config.as[ServerSettings]("http.server")
-// => serverSettings: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,None))
+scala> config.as[ServerSettings]("http.server")
+res0: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
 
-val httpSettings = config.as[ServerSettings]("http")
-// => httpSettings: Either[io.circe.Error,HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,None),1.1))
+scala> config.as[HttpSettings]("http")
+res1: Either[io.circe.Error,HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1)))
 
-val appSettings = config.as[AppSettings]
-// => appSettings: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
+scala> config.as[AppSettings]
+res2: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
 ```
+
+Based on this [application.conf].
+
+ [application.conf]: https://github.com/jonas/circe-config/tree/master/src/test/resources/application.conf
 
 ## Releasing
 

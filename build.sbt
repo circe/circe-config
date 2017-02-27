@@ -59,6 +59,7 @@ libraryDependencies ++= Seq(
 
 autoAPIMappings := true
 doctestTestFramework := DoctestTestFramework.ScalaTest
+doctestMarkdownEnabled := true
 doctestWithDependencies := false
 scalacOptions in (Compile,doc) := Seq(
   "-groups",
