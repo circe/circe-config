@@ -98,6 +98,9 @@ object parser extends Parser {
   final def decodeFile[A: Decoder](file: File): Either[Error, A] =
     finishDecode[A](parseFile(file))
 
+  final def decodeAccumulating[A: Decoder](config: Config): ValidatedNel[Error, A] =
+    finishDecodeAccumulating[A](parse(config))
+
   final def decodeFileAccumulating[A: Decoder](file: File): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parseFile(file))
 
