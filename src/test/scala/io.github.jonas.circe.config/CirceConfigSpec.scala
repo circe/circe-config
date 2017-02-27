@@ -47,18 +47,18 @@ class CirceConfigSpec extends FlatSpec with Matchers {
 
   it should "parse and decode config from object" in new ParserTests {
     def parse = parser.parse(AppConfig)
-    def decode = parser.decode[TestConfig](ConfigFactory.load)
+    def decode = parser.decode[TestConfig](AppConfig)
   }
 
   it should "parse and decode config from file" in new ParserTests {
-    def file = resolveFile("application.conf")
+    def file = resolveFile("CirceConfigSpec.conf")
     def parse = parser.parseFile(file)
     def decode = parser.decodeFile[TestConfig](file)
   }
 
   "printer" should "print it into a config string" in {
     val json = parser.parse(AppConfig)
-    val expected = readFile("application.printed.conf")
+    val expected = readFile("CirceConfigSpec.printed.conf")
     assert(printer.print(json.right.get) == expected)
   }
 
@@ -86,8 +86,8 @@ object CirceConfigSpec {
   def resolveFile(name: String) = new java.io.File(testResourcesDir, name)
   def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines.mkString("\n")
 
-  val AppConfig: Config = ConfigFactory.defaultApplication
-  val AppConfigString: String = readFile("application.conf")
+  val AppConfig: Config = ConfigFactory.parseResources("CirceConfigSpec.conf")
+  val AppConfigString: String = readFile("CirceConfigSpec.conf")
 
   sealed abstract class Adder[T] {
     def add(a: T, b: T): T
