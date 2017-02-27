@@ -3,7 +3,6 @@ organization := "io.github.jonas"
 description := "Yet another Typesafe Config decoder"
 homepage := Some(url("https://github.com/jonas/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
-autoAPIMappings := true
 apiURL := Some(url("https://jonas.github.io/circe-config/api/"))
 
 crossScalaVersions := Seq("2.11.8", "2.12.1")
@@ -58,8 +57,15 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
 )
 
+autoAPIMappings := true
 doctestTestFramework := DoctestTestFramework.ScalaTest
 doctestWithDependencies := false
+scalacOptions in (Compile,doc) := Seq(
+  "-groups",
+  "-implicits",
+  "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
+  "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath
+)
 
 scalacOptions ++= Seq(
   "-deprecation",
