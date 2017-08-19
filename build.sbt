@@ -5,7 +5,7 @@ homepage := Some(url("https://github.com/jonas/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://jonas.github.io/circe-config/api/"))
 
-crossScalaVersions := Seq("2.11.8", "2.12.1")
+crossScalaVersions := Seq("2.11.11", "2.12.3")
 scalaVersion := crossScalaVersions.value.last
 
 enablePlugins(GitPlugin)
@@ -40,10 +40,10 @@ releaseProcess := {
 
 val Versions = new {
   val circe = "0.7.0"
-  val discipline = "0.7.2"
-  val scalaCheck = "0.13.4"
-  val scalaTest = "3.0.1"
   val config = "1.3.1"
+  val discipline = "0.8"
+  val scalaCheck = "0.13.5"
+  val scalaTest = "3.0.4"
 }
 
 libraryDependencies ++= Seq(
