@@ -18,11 +18,18 @@ class CirceConfigLaws extends FlatSpec {
       .mapObject(_.filterKeys(_.nonEmpty).withJsons(normalize))
       .mapArray(_.map(normalize))
       .mapNumber(number => {
+        def numberToDouble = {
+          val double = number.toDouble
+          if (double.isWhole)
+            Some(Json.fromLong(double.toLong))
+          else
+            Json.fromDouble(double)
+        }
         // Map to the three principal types supported by Typesafe Config: Int, Long or Double
         val json =
           number.toInt.map(Json.fromInt) orElse
             number.toLong.map(Json.fromLong) orElse
-            Json.fromDouble(number.toDouble) getOrElse
+            numberToDouble getOrElse
             Json.fromInt(42)
 
         json.asNumber.get

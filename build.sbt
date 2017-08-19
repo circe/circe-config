@@ -39,7 +39,7 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val circe = "0.7.0"
+  val circe = "0.8.0"
   val config = "1.3.1"
   val discipline = "0.8"
   val scalaCheck = "0.13.5"
@@ -61,7 +61,7 @@ autoAPIMappings := true
 doctestTestFramework := DoctestTestFramework.ScalaTest
 doctestMarkdownEnabled := true
 doctestWithDependencies := false
-scalacOptions in (Compile,doc) := Seq(
+scalacOptions in (Compile, doc) := Seq(
   "-groups",
   "-implicits",
   "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
