@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.2.1
+
+ - Update circe to version 0.8.0.
+ - Update dependencies.
+
 ## 0.2.0
 
  - Fix normalization of JSON used for testing the printer law. ([#1])

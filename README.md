@@ -11,7 +11,7 @@ enable straightforward reading of settings into Scala types.
 To use this library configure your sbt project with the following lines:
 
 ```sbt
-libraryDependencies += "io.github.jonas" %% "circe-config" % "0.2.0"
+libraryDependencies += "io.github.jonas" %% "circe-config" % "0.2.1"
 ```
 
 ## Documentation
