@@ -52,6 +52,9 @@ To release version `x.y.z` run:
 
     > sbt release -Dproject.version=x.y.z
 
+Then go to https://bintray.com/fonseca/maven/circe-config/x.y.z#central and sync
+to Maven central.
+
 ## License
 
 circe-config is licensed under the **[Apache License, Version 2.0][apache]** (the
