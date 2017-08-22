@@ -1,4 +1,4 @@
-package io.github.jonas.circe.config
+package io.circe.config
 
 import cats.instances.either._
 import cats.laws._

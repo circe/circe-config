@@ -1,9 +1,9 @@
 name := "circe-config"
-organization := "io.github.jonas"
+organization := "io.circe"
 description := "Yet another Typesafe Config decoder"
-homepage := Some(url("https://github.com/jonas/circe-config"))
+homepage := Some(url("https://github.com/circe/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
-apiURL := Some(url("https://jonas.github.io/circe-config/api/"))
+apiURL := Some(url("https://circe.github.io/circe-config/api/"))
 
 crossScalaVersions := Seq("2.11.11", "2.12.3")
 scalaVersion := crossScalaVersions.value.last
@@ -87,8 +87,8 @@ scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
 scmInfo := Some(
   ScmInfo(
-    url("https://github.com/jonas/circe-config"),
-    "scm:git:git@github.com:jonas/circe-config.git"
+    url("https://github.com/circe/circe-config"),
+    "scm:git:git@github.com:circe/circe-config.git"
   )
 )
 

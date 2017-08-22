@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jonas.circe.config
+package io.circe
+package config
 
 import com.typesafe.config._
-import io.circe._
 import cats.syntax.either._
 import scala.concurrent.duration._
 
@@ -31,7 +31,7 @@ import scala.concurrent.duration._
  * @example
  * {{{
  * scala> import io.circe.generic.auto._
- * scala> import io.github.jonas.circe.config.syntax._
+ * scala> import io.circe.config.syntax._
  * scala> import scala.concurrent.duration.FiniteDuration
  * scala> case class ServerSettings(port: Int, host: String, timeout: FiniteDuration)
  * scala> val config = com.typesafe.config.ConfigFactory.parseString("port = 7357, host = localhost, timeout = 5 s")
@@ -47,7 +47,7 @@ object syntax {
    * @example
    * {{{
    * scala> import io.circe.Json
-   * scala> import io.github.jonas.circe.config.syntax._
+   * scala> import io.circe.config.syntax._
    * scala> import scala.concurrent.duration.FiniteDuration
    *
    * scala> durationDecoder.decodeJson(Json.fromString("5 seconds"))
@@ -75,7 +75,7 @@ object syntax {
    * @example
    * {{{
    * scala> import io.circe.Json
-   * scala> import io.github.jonas.circe.config.syntax._
+   * scala> import io.circe.config.syntax._
    * scala> import com.typesafe.config.ConfigMemorySize
    *
    * scala> memorySizeDecoder.decodeJson(Json.fromString("128M"))
@@ -103,7 +103,7 @@ object syntax {
    * {{{
    * scala> import io.circe.Json
    * scala> import com.typesafe.config.ConfigValue
-   * scala> import io.github.jonas.circe.config.syntax._
+   * scala> import io.circe.config.syntax._
    *
    * scala> val hostJson = Json.fromString("localhost")
    * scala> val portJson = Json.fromInt(8080)
@@ -135,7 +135,7 @@ object syntax {
    * {{{
    * scala> import io.circe.Json
    * scala> import com.typesafe.config.Config
-   * scala> import io.github.jonas.circe.config.syntax._
+   * scala> import io.circe.config.syntax._
    *
    * scala> val hostJson = Json.fromString("localhost")
    * scala> val portJson = Json.fromInt(8080)

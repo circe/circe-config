@@ -23,7 +23,7 @@ libraryDependencies += "io.github.jonas" %% "circe-config" % "0.2.1"
 ```scala
 scala> import com.typesafe.config.{ ConfigFactory, ConfigMemorySize }
 scala> import io.circe.generic.auto._
-scala> import io.github.jonas.circe.config.syntax._
+scala> import io.circe.config.syntax._
 scala> import scala.concurrent.duration.FiniteDuration
 
 scala> case class ServerSettings(host: String, port: Int, timeout: FiniteDuration, maxUpload: ConfigMemorySize)
