@@ -16,7 +16,7 @@ libraryDependencies += "io.github.jonas" %% "circe-config" % "0.2.1"
 
 ## Documentation
 
- - [API docs](https://jonas.github.io/circe-config/io/github/jonas/circe/config/index.html)
+ - [API docs](https://circe.github.io/circe-config/io/github/jonas/circe/config/index.html)
 
 ## Example
 
@@ -44,7 +44,7 @@ res2: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(Server
 
 Based on this [application.conf].
 
- [application.conf]: https://github.com/jonas/circe-config/tree/master/src/test/resources/application.conf
+ [application.conf]: https://github.com/circe/circe-config/tree/master/src/test/resources/application.conf
 
 ## Releasing
 
@@ -69,7 +69,7 @@ limitations under the License.
  [apache]: http://www.apache.org/licenses/LICENSE-2.0
  [circe]: https://github.com/circe/circe
  [Typesafe config]: https://github.com/typesafehub/config
- [Travis CI]: https://travis-ci.org/jonas/circe-config
- [Travis CI Status]: https://travis-ci.org/jonas/circe-config.svg?branch=master
+ [Travis CI]: https://travis-ci.org/circe/circe-config
+ [Travis CI Status]: https://travis-ci.org/circe/circe-config.svg?branch=master
  [Bintray Latest Version Badge]: https://api.bintray.com/packages/fonseca/maven/circe-config/images/download.svg
  [Bintray Latest Version]: https://bintray.com/fonseca/maven/circe-config/_latestVersion
