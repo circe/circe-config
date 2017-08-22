@@ -1,23 +1,29 @@
 # Contributing
 
-Bugs and feature requests should be reported in the [GitHub issue
-tracker](https://github.com/jonas/circe-config/issues/new) and
+As part of the [circe] community, circe-config supports the [Typelevel] [code of
+conduct] and wants all of its channels (Gitter, GitHub, etc.) to be welcoming
+environments for everyone.
+
+Bugs and feature requests should be reported in the [GitHub issue tracker] and
 answer the following questions:
 
- - Motivation: Why should this be addressed? What is the purpose?
- - Input: What are the pre-conditions?
+ - Motivation: Why should this issue be addressed? What is the purpose?
+ - Input: How can the bug be reproduced? What are the pre-conditions?
  - Output: What is the expected outcome after the issue has been addressed?
- - Test: How can the results listed in the "Output" be QA'ed?
 
-For code contributions, these are the suggested steps:
+For bugs also include the circe-config, circe and Scala version you are using.
 
- - Identify the change you'd like to make, e.g. fix a bug or add a feature.
-   Larger contributions should always begin with [first creating an
-   issue](https://github.com/jonas/circe-config/issues/new) to ensure
-   that the change is properly scoped.
- - Fork the repository on GitHub.
- - Develop your change on a feature branch.
- - Write tests to validate your change works as expected.
- - Create a pull request.
- - Address any issues raised during the code review.
- - Once you get a "+1" on the pull request, the change can be merged.
+Please read the [circe Contributor's Guide] for information about how to submit
+a pull request.
+
+This circe community module is currently maintained by [Jonas Fonseca], with
+guidance from [Travis Brown]. It strives to conform as closely as possible to
+the style of circe itself.
+
+ [circe]: https://github.com/circe/circe
+ [Typelevel]: http://typelevel.org/
+ [code of conduct]: http://typelevel.org/conduct.html
+ [GitHub issue tracker]: https://github.com/jonas/circe-config/issues/new
+ [circe Contributor's Guide]: https://github.com/circe/circe/blob/master/CONTRIBUTING.md
+ [Jonas Fonseca]: https://github.com/jonas
+ [Travis Brown]: https://github.com/travisbrown

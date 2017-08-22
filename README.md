@@ -46,6 +46,11 @@ Based on this [application.conf].
 
  [application.conf]: https://github.com/circe/circe-config/tree/master/src/test/resources/application.conf
 
+## Contributing
+
+Contributions are very welcome. Please see [instructions](CONTRIBUTING.md) on
+how to create issues and submit patches.
+
 ## Releasing
 
 To release version `x.y.z` run:
