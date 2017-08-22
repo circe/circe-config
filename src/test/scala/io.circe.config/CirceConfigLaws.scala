@@ -15,7 +15,7 @@ class CirceConfigLaws extends FlatSpec {
 
   implicit val arbitraryConfigJson: Arbitrary[Json] = Arbitrary {
     def normalize(json: Json): Json = json
-      .mapObject(_.filterKeys(_.nonEmpty).withJsons(normalize))
+      .mapObject(_.filterKeys(_.nonEmpty).mapValues(normalize))
       .mapArray(_.map(normalize))
       .mapNumber(number => {
         def numberToDouble = {
