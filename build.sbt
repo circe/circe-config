@@ -5,21 +5,14 @@ homepage := Some(url("https://github.com/circe/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://circe.github.io/circe-config/api/"))
 
-crossScalaVersions := Seq("2.11.11", "2.12.3")
-scalaVersion := crossScalaVersions.value.last
-
 enablePlugins(GitPlugin)
 versionWithGit
 git.useGitDescribe := true
-
-enablePlugins(BintrayPlugin)
-bintrayRepository := "maven"
-bintrayOrganization := Some("fonseca")
-publishArtifact in Test := false
-publishMavenStyle := true
+git.remoteRepo := "git@github.com:circe/circe-circe.git"
 
 enablePlugins(ReleasePlugin)
 releaseCrossBuild := true
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseTagName := (version in ThisBuild).value
 releaseVersionFile := target.value / "unused-version.sbt"
 releaseProcess := {
@@ -34,7 +27,8 @@ releaseProcess := {
     setReleaseVersion,
     tagRelease,
     publishArtifacts,
-    pushChanges
+    pushChanges,
+    releaseStepTask(ghpagesPushSite)
   )
 }
 
@@ -57,7 +51,10 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
 )
 
+enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
 autoAPIMappings := true
+ghpagesNoJekyll := true
+siteSubdirName in SiteScaladoc := "api"
 doctestTestFramework := DoctestTestFramework.ScalaTest
 doctestMarkdownEnabled := true
 doctestWithDependencies := false
@@ -84,6 +81,28 @@ scalacOptions ++= Seq(
 
 scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import")) }
 scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
+
+publishMavenStyle := true
+publishArtifact in Test := false
+pomIncludeRepository := { _ => false }
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+credentials ++= (
+  for {
+    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
+    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
+  } yield Credentials(
+    "Sonatype Nexus Repository Manager",
+    "oss.sonatype.org",
+    username,
+    password
+  )
+).toSeq
 
 scmInfo := Some(
   ScmInfo(
