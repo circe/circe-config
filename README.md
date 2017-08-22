@@ -3,20 +3,28 @@
 [![Travis CI Status]][Travis CI]
 [![Bintray Latest Version Badge]][Bintray Latest Version]
 
-Combines the power of [circe] and awesomeness of [Typesafe config] to
-enable straightforward reading of settings into Scala types.
+Small library for translating between [HOCON], [Java properties], and JSON
+documents and circe's JSON AST.
+
+At a high-level it can be used as a [circe] powered front-end for the [Typesafe
+config] library to enable boilerplate free loading of settings into Scala types.
+More generally it provides parsers and printers for interoperating with
+[Typesafe config]'s JSON AST.
+
+ [HOCON]: https://github.com/typesafehub/config/blob/master/HOCON.md
+ [Java properties]: https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html
 
 ## Usage
 
-To use this library configure your sbt project with the following lines:
+To use this library configure your sbt project with the following line:
 
 ```sbt
-libraryDependencies += "io.github.jonas" %% "circe-config" % "0.2.1"
+libraryDependencies += "io.circe" %% "circe-config" % "0.3.0"
 ```
 
 ## Documentation
 
- - [API docs](https://circe.github.io/circe-config/io/github/jonas/circe/config/index.html)
+ - [API docs](https://circe.github.io/circe-config/io/circe/config/index.html)
 
 ## Example
 
@@ -55,10 +63,7 @@ how to create issues and submit patches.
 
 To release version `x.y.z` run:
 
-    > sbt release -Dproject.version=x.y.z
-
-Then go to https://bintray.com/fonseca/maven/circe-config/x.y.z#central and sync
-to Maven central.
+    > sbt -Dproject.version=x.y.z release
 
 ## License
 

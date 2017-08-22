@@ -1,6 +1,6 @@
 # Release notes
 
-## master
+## 0.3.0
 
  - circe-config is now part of the [circe](https://github.com/circe) GitHub
    organization.
