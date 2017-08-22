@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jonas.circe.config
+package io.circe
+package config
 
 import cats.data.ValidatedNel
 import cats.syntax.either._
-import io.circe._
 import java.io.File
 import scala.collection.JavaConverters._
 import com.typesafe.config._
@@ -30,7 +30,7 @@ import com.typesafe.config._
  * @example
  * {{{
  * scala> import com.typesafe.config.ConfigFactory
- * scala> import io.github.jonas.circe.config.parser
+ * scala> import io.circe.config.parser
  * scala> val config = ConfigFactory.parseString("server { host = localhost, port = 8080 }")
  *
  * scala> val json: Either[io.circe.ParsingFailure, io.circe.Json] = parser.parse(config)

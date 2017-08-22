@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jonas.circe
+package io.circe
 
-import io.circe._
 import com.typesafe.config._
 import scala.collection.JavaConverters._
 
@@ -27,7 +26,7 @@ import scala.collection.JavaConverters._
  * {{{
  * scala> import com.typesafe.config.ConfigFactory
  * scala> import io.circe.generic.auto._
- * scala> import io.github.jonas.circe.config.syntax._
+ * scala> import io.circe.config.syntax._
  *
  * scala> case class ServerSettings(host: String, port: Int, ssl: Option[String])
  * scala> case class HttpSettings(server: ServerSettings, version: Double)

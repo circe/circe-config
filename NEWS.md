@@ -1,5 +1,11 @@
 # Release notes
 
+## master
+
+ - circe-config is now part of the [circe](https://github.com/circe) GitHub
+   organization.
+ - Move everything under the `io.config.config` package.
+
 ## 0.2.1
 
  - Update circe to version 0.8.0.

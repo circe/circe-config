@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jonas.circe.config
+package io.circe
+package config
 
-import io.circe._
 import com.typesafe.config._
 
 /**
@@ -24,7 +24,7 @@ import com.typesafe.config._
  * @example
  * {{{
  * scala> import io.circe.Json
- * scala> import io.github.jonas.circe.config.printer
+ * scala> import io.circe.config.printer
  *
  * scala> val options = printer.DefaultOptions.setFormatted(false)
  * scala> val json = Json.obj("server" -> Json.obj("host" -> Json.fromString("localhost"), "port" -> Json.fromInt(8080)))

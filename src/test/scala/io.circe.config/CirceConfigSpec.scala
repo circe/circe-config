@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jonas.circe.config
+package io.circe.config
 
 import org.scalatest.{ FlatSpec, Matchers }
 import com.typesafe.config._
