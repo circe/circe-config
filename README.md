@@ -1,7 +1,7 @@
 # circe-config
 
 [![Travis CI Status]][Travis CI]
-[![Bintray Latest Version Badge]][Bintray Latest Version]
+[![Latest Version Badge]][Latest Version]
 
 Small library for translating between [HOCON], [Java properties], and JSON
 documents and circe's JSON AST.
@@ -81,5 +81,5 @@ limitations under the License.
  [Typesafe config]: https://github.com/typesafehub/config
  [Travis CI]: https://travis-ci.org/circe/circe-config
  [Travis CI Status]: https://travis-ci.org/circe/circe-config.svg?branch=master
- [Bintray Latest Version Badge]: https://api.bintray.com/packages/fonseca/maven/circe-config/images/download.svg
- [Bintray Latest Version]: https://bintray.com/fonseca/maven/circe-config/_latestVersion
+ [Latest Version Badge]: https://img.shields.io/maven-central/v/io.circe/circe-config_2.12.svg
+ [Latest Version]: https://maven-badges.herokuapp.com/maven-central/io.circe/circe-config_2.12
