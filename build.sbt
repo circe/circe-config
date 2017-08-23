@@ -8,7 +8,7 @@ apiURL := Some(url("https://circe.github.io/circe-config/api/"))
 enablePlugins(GitPlugin)
 versionWithGit
 git.useGitDescribe := true
-git.remoteRepo := "git@github.com:circe/circe-circe.git"
+git.remoteRepo := "git@github.com:circe/circe-config.git"
 
 enablePlugins(ReleasePlugin)
 releaseCrossBuild := true
@@ -54,7 +54,7 @@ libraryDependencies ++= Seq(
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
 autoAPIMappings := true
 ghpagesNoJekyll := true
-siteSubdirName in SiteScaladoc := "api"
+siteSubdirName in SiteScaladoc := ""
 doctestTestFramework := DoctestTestFramework.ScalaTest
 doctestMarkdownEnabled := true
 doctestWithDependencies := false
