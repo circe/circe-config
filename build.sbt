@@ -5,6 +5,8 @@ homepage := Some(url("https://github.com/circe/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://circe.github.io/circe-config/api/"))
 
+mimaPreviousArtifacts := Set("io.circe" %% "circe-config" % "0.3.0")
+
 enablePlugins(GitPlugin)
 versionWithGit
 git.useGitDescribe := true

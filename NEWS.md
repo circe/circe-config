@@ -1,15 +1,20 @@
 # Release notes
 
+## master
+
+ - Configure MiMa. [#4], [#8]
+
+ [#4]: https://github.com/circe/circe-config/issues/4
+ [#8]: https://github.com/circe/circe-config/pull/8
+
 ## 0.3.0
 
- - circe-config is now part of the [circe GitHub organization].
+ - circe-config is now part of the [circe GitHub organization](https://github.com/circe).
  - Move everything under the `io.circe.config` package.
-
- [circe GitHub organization]: https://github.com/circe
 
 ## 0.2.1
 
- - Update circe to version 0.8.0.
+ - Update circe to version [0.8.0](https://github.com/circe/circe/releases/tag/v0.8.0).
  - Update other dependencies.
 
 ## 0.2.0
@@ -36,5 +41,4 @@ Heavily inspired by the [circe-yaml] library the initial version provides:
 
  [0.1.0-printer-issue]: https://github.com/circe/circe-config/blob/0.1.0/src/test/scala/io.github.jonas.circe.config/TypesafeConfigSymmetricSerializationTests.scala#L24
  [circe-yaml]: https://github.com/circe/circe-yaml
- [circe GitHub organization]: https://github.com/circe
  [ficus]: https://github.com/iheartradio/ficus
