@@ -59,7 +59,6 @@ ghpagesNoJekyll := true
 siteSubdirName in SiteScaladoc := ""
 doctestTestFramework := DoctestTestFramework.ScalaTest
 doctestMarkdownEnabled := true
-doctestWithDependencies := false
 scalacOptions in (Compile, doc) := Seq(
   "-groups",
   "-implicits",
