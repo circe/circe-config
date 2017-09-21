@@ -3,9 +3,11 @@
 ## master
 
  - Configure MiMa. [#4], [#8]
+ - Build using sbt 1.0. [#9]
 
  [#4]: https://github.com/circe/circe-config/issues/4
  [#8]: https://github.com/circe/circe-config/pull/8
+ [#9]: https://github.com/circe/circe-config/pull/9
 
 ## 0.3.0
 
