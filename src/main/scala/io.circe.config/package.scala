@@ -19,7 +19,7 @@ import com.typesafe.config._
 import scala.collection.JavaConverters._
 
 /**
- * circe-config: A [[https://github.com/typesafehub/config Typesafe config]]
+ * circe-config: A [[https://github.com/lightbend/config Typesafe config]]
  * wrapper powered by [[io.circe circe]].
  *
  * @example

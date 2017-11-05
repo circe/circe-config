@@ -11,7 +11,7 @@ config] library to enable boilerplate free loading of settings into Scala types.
 More generally it provides parsers and printers for interoperating with
 [Typesafe config]'s JSON AST.
 
- [HOCON]: https://github.com/typesafehub/config/blob/master/HOCON.md
+ [HOCON]: https://github.com/lightbend/config/blob/master/HOCON.md
  [Java properties]: https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html
 
 ## Usage
@@ -78,7 +78,7 @@ limitations under the License.
 
  [apache]: http://www.apache.org/licenses/LICENSE-2.0
  [circe]: https://github.com/circe/circe
- [Typesafe config]: https://github.com/typesafehub/config
+ [Typesafe config]: https://github.com/lightbend/config
  [Travis CI]: https://travis-ci.org/circe/circe-config
  [Travis CI Status]: https://travis-ci.org/circe/circe-config.svg?branch=master
  [Latest Version Badge]: https://img.shields.io/maven-central/v/io.circe/circe-config_2.12.svg

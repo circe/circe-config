@@ -42,7 +42,7 @@ import scala.concurrent.duration._
 object syntax {
   /**
    * Decoder for reading
-   * [[https://github.com/typesafehub/config/blob/master/HOCON.md#duration-format duration formats]].
+   * [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration formats]].
    *
    * @example
    * {{{
@@ -68,9 +68,9 @@ object syntax {
 
   /**
    * Decoder for reading
-   * [[https://github.com/typesafehub/config/blob/master/HOCON.md#size-in-bytes-format memory size in bytes format]]
+   * [[https://github.com/lightbend/config/blob/master/HOCON.md#size-in-bytes-format memory size in bytes format]]
    * into a
-   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/ConfigMemorySize.html com.typesafe.config.ConfigMemorySize]].
+   * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigMemorySize.html com.typesafe.config.ConfigMemorySize]].
    *
    * @example
    * {{{
@@ -95,7 +95,7 @@ object syntax {
 
   /**
    * Decoder for converting [[io.circe.Json]] to
-   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/ConfigValue.html com.typesafe.config.ConfigValue]].
+   * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigValue.html com.typesafe.config.ConfigValue]].
    *
    * Maps any circe JSON AST to the Typesafe Config AST.
    *
@@ -127,7 +127,7 @@ object syntax {
 
   /**
    * Decoder for converting [[io.circe.Json]] to
-   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
+   * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
    *
    * Converts a circe JSON object to a Typesafe Config instance.
    *
@@ -161,7 +161,7 @@ object syntax {
 
   /**
    * Enriches
-   * [[https://typesafehub.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
+   * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
    * instances with methods to decode to a specific type.
    */
   implicit class CirceConfigOps(val config: Config) extends AnyVal {
