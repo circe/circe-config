@@ -2,12 +2,14 @@
 
 ## master
 
+ - Update to [config 1.3.2].
  - Configure MiMa. [#4], [#8]
  - Build using sbt 1.0. [#9]
 
  [#4]: https://github.com/circe/circe-config/issues/4
  [#8]: https://github.com/circe/circe-config/pull/8
  [#9]: https://github.com/circe/circe-config/pull/9
+ [config 1.3.2]: https://github.com/lightbend/config/blob/master/NEWS.md#132-october-6-2017
 
 ## 0.3.0
 
