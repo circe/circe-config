@@ -161,7 +161,7 @@ object syntax {
 
   /**
    * Enriches
-   * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]].
+   * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
    * instances with methods to decode to a specific type.
    */
   implicit class CirceConfigOps(val config: Config) extends AnyVal {
