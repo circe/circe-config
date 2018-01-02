@@ -3,7 +3,7 @@ organization := "io.circe"
 description := "Yet another Typesafe Config decoder"
 homepage := Some(url("https://github.com/circe/circe-config"))
 licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
-apiURL := Some(url("https://circe.github.io/circe-config/api/"))
+apiURL := Some(url("https://circe.github.io/circe-config/"))
 
 mimaPreviousArtifacts := Set("io.circe" %% "circe-config" % "0.3.0")
 
