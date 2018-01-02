@@ -22,6 +22,15 @@ import scala.collection.JavaConverters._
  * circe-config: A [[https://github.com/lightbend/config Typesafe config]]
  * wrapper powered by [[io.circe circe]].
  *
+ * @note '''Limitations for numerical types''':
+ * Typesafe config uses Java's int, long and double types to represent numbers.
+ * In some cases, double values may be represented internally as long after a
+ * roundtrip since the [[https://github.com/lightbend/config/blob/master/HOCON.md HOCON]]
+ * formatting is not stable. Also, precision may be lost when converting from
+ * circe's [[io.circe.JsonNumber JsonNumber]] to Typesafe config's number
+ * representation (as can be seen in the
+ * [[https://github.com/circe/circe-config/blob/master/src/test/scala/io.circe.config/CirceConfigLaws.scala#L16-L40 test for the printer laws]]).
+ *
  * @example
  * {{{
  * scala> import com.typesafe.config.ConfigFactory

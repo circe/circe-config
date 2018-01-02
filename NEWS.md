@@ -5,10 +5,12 @@
  - Update circe to version [0.9.0](https://github.com/circe/circe/releases/tag/v0.9.0).
  - Update to [config 1.3.2].
  - Update Scala to 2.11.12.
+ - Document limitations regarding numerical types. [#7]
  - Configure MiMa. [#4], [#8]
  - Build using sbt 1.0. [#9]
 
  [#4]: https://github.com/circe/circe-config/issues/4
+ [#7]: https://github.com/circe/circe-config/issues/7
  [#8]: https://github.com/circe/circe-config/pull/8
  [#9]: https://github.com/circe/circe-config/pull/9
  [config 1.3.2]: https://github.com/lightbend/config/blob/master/NEWS.md#132-october-6-2017
