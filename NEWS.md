@@ -1,6 +1,6 @@
 # Release notes
 
-## master
+## 0.4.0
 
  - Update circe to version [0.9.0](https://github.com/circe/circe/releases/tag/v0.9.0).
  - Update to [config 1.3.2].
