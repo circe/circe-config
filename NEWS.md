@@ -2,7 +2,9 @@
 
 ## master
 
+ - Update circe to version [0.9.0](https://github.com/circe/circe/releases/tag/v0.9.0).
  - Update to [config 1.3.2].
+ - Update Scala to 2.11.12.
  - Configure MiMa. [#4], [#8]
  - Build using sbt 1.0. [#9]
 
