@@ -48,7 +48,7 @@ import com.typesafe.config._
  */
 object parser extends Parser {
 
-  private[this] final def toJson[T](parseConfig: => Config): Either[ParsingFailure, Json] = {
+  private[this] final def toJson(parseConfig: => Config): Either[ParsingFailure, Json] = {
     def convertValueUnsafe(value: ConfigValue): Json = value match {
       case obj: ConfigObject =>
         Json.fromFields(obj.asScala.mapValues(convertValueUnsafe))
