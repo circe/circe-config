@@ -1,5 +1,12 @@
 # Release notes
 
+## 0.4.1
+
+ - Update circe to version [0.9.1](https://github.com/circe/circe/releases/tag/v0.9.1).
+ - Build using sbt 1.1.1. [#13]
+
+ [#13]: https://github.com/circe/circe-config/pull/13
+
 ## 0.4.0
 
  - Update circe to version [0.9.0](https://github.com/circe/circe/releases/tag/v0.9.0).

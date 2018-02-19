@@ -19,7 +19,7 @@ More generally it provides parsers and printers for interoperating with
 To use this library configure your sbt project with the following line:
 
 ```sbt
-libraryDependencies += "io.circe" %% "circe-config" % "0.4.0"
+libraryDependencies += "io.circe" %% "circe-config" % "0.4.1"
 ```
 
 ## Documentation
