@@ -92,17 +92,6 @@ publishTo := Some {
   else
     Opts.resolver.sonatypeStaging
 }
-credentials ++= (
-  for {
-    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-  } yield Credentials(
-    "Sonatype Nexus Repository Manager",
-    "oss.sonatype.org",
-    username,
-    password
-  )
-).toSeq
 
 scmInfo := Some(
   ScmInfo(
