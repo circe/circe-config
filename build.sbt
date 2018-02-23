@@ -36,7 +36,7 @@ releaseProcess := {
 
 val Versions = new {
   val circe = "0.9.1"
-  val config = "1.3.2"
+  val config = "1.3.3"
   val discipline = "0.8"
   val scalaCheck = "0.13.5"
   val scalaTest = "3.0.4"
