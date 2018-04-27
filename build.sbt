@@ -2,10 +2,11 @@ name := "circe-config"
 organization := "io.circe"
 description := "Yet another Typesafe Config decoder"
 homepage := Some(url("https://github.com/circe/circe-config"))
-licenses += "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
+licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://circe.github.io/circe-config/"))
 
-mimaPreviousArtifacts := Set("io.circe" %% "circe-config" % "0.3.0")
+mimaPreviousArtifacts := Set("0.3.0", "0.4.0", "0.4.1")
+  .map("io.circe" %% "circe-config" % _)
 
 enablePlugins(GitPlugin)
 versionWithGit
@@ -35,11 +36,11 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val circe = "0.9.1"
-  val config = "1.3.2"
-  val discipline = "0.8"
-  val scalaCheck = "0.13.5"
-  val scalaTest = "3.0.4"
+  val circe = "0.9.3"
+  val config = "1.3.3"
+  val discipline = "0.9.0"
+  val scalaCheck = "1.13.5"
+  val scalaTest = "3.0.5"
 }
 
 libraryDependencies ++= Seq(
