@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.5.0
+
+ - Update circe to version [0.10.0](https://github.com/circe/circe/releases/tag/v0.10.0).
+
 ## 0.4.1
 
  - Update circe to version [0.9.1](https://github.com/circe/circe/releases/tag/v0.9.1).
