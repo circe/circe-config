@@ -5,8 +5,15 @@ homepage := Some(url("https://github.com/circe/circe-config"))
 licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://circe.github.io/circe-config/"))
 
-mimaPreviousArtifacts := Set("0.3.0", "0.4.0", "0.4.1", "0.5.0")
-  .map("io.circe" %% "circe-config" % _)
+mimaPreviousArtifacts := {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 11 | 12)) =>
+      Set("0.3.0", "0.4.0", "0.4.1", "0.5.0")
+        .map("io.circe" %% "circe-config" % _)
+    case _ =>
+      Set.empty
+  }
+}
 
 enablePlugins(GitPlugin)
 versionWithGit
@@ -74,14 +81,32 @@ scalacOptions ++= Seq(
   "-language:postfixOps",
   "-unchecked",
   "-Xfuture",
-  "-Xfatal-warnings",
-  "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-unused-import"
 )
 
-scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import")) }
+scalacOptions ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 11 | 12)) =>
+      Seq(
+        "-Xfatal-warnings",
+        "-Yno-adapted-args",
+      )
+    case _ =>
+      Nil
+  }
+}
+
+scalacOptions ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 11)) =>
+      Seq("-Ywarn-unused-import")
+    case _ =>
+      Seq("-Ywarn-unused:imports")
+  }
+}
+
+scalacOptions in (Compile, console) --= Seq("-Ywarn-unused-import", "-Ywarn-unused:imports")
 scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
 publishMavenStyle := true

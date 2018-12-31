@@ -16,13 +16,13 @@
 package io.circe.config
 
 import org.scalatest.{ FlatSpec, Matchers }
-import com.typesafe.config._
-import io.circe._
+import com.typesafe.config.{parser => _, _}
+import io.circe.{parser => _, _}
 import io.circe.generic.auto._
 import scala.concurrent.duration._
 import scala.io.Source
 
-import syntax._
+import io.circe.config.syntax._
 
 class CirceConfigSpec extends FlatSpec with Matchers {
   import CirceConfigSpec._

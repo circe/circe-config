@@ -16,7 +16,7 @@
 package io.circe
 package config
 
-import com.typesafe.config._
+import com.typesafe.config.{parser => _, _}
 import cats.syntax.either._
 import scala.concurrent.duration._
 
