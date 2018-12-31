@@ -65,7 +65,7 @@ package object config {
       },
       str => ConfigValueFactory.fromAnyRef(str),
       arr => ConfigValueFactory.fromIterable(arr.map(jsonToConfigValue).asJava),
-      obj => ConfigValueFactory.fromMap(obj.toMap.mapValues(jsonToConfigValue).asJava)
+      obj => ConfigValueFactory.fromMap(obj.toMap.mapValues(jsonToConfigValue).toMap.asJava)
     )
 
 }
