@@ -11,7 +11,7 @@
 ## 0.5.0
 
  - Update circe to version [0.10.0](https://github.com/circe/circe/releases/tag/v0.10.0).
- - Update to [config 1.3.2].
+ - Update to [config 1.3.3].
 
  [config 1.3.3]: https://github.com/lightbend/config/blob/master/NEWS.md#133-february-22-2018
 
