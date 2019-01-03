@@ -1,8 +1,19 @@
 # Release notes
 
+## 0.6.0
+
+ - Update circe to version [0.11.0](https://github.com/circe/circe/releases/tag/v0.11.0).
+ - Update Scala to 2.12.8 and publish for 2.13.0-M5. [#27], [#25]
+
+ [#25]: https://github.com/circe/circe-config/pull/25
+ [#27]: https://github.com/circe/circe-config/pull/27
+
 ## 0.5.0
 
  - Update circe to version [0.10.0](https://github.com/circe/circe/releases/tag/v0.10.0).
+ - Update to [config 1.3.2].
+
+ [config 1.3.3]: https://github.com/lightbend/config/blob/master/NEWS.md#133-february-22-2018
 
 ## 0.4.1
 
