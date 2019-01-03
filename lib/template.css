@@ -244,6 +244,18 @@ span.symbol > a {
   background: url("package.svg") no-repeat center;
 }
 
+.big-circle.annotation {
+  background: url("annotation.svg") no-repeat center;
+}
+
+.big-circle.object-companion-annotation {
+  background: url("object_comp_annotation.svg") no-repeat center;
+}
+
+.big-circle.annotation-companion-object {
+  background: url("annotation_comp.svg") no-repeat center;
+}
+
 body.abstract.type div.big-circle {
   background: url("abstract_type.svg") no-repeat center;
 }
@@ -817,38 +829,6 @@ div.fullcomment dl.paramcmts > dd {
   margin-bottom: 5px;
   margin-left: 70px;
   min-height: 15px;
-}
-
-/* Author Content Table formatting */
-
-.doctbl {
-  border-collapse: collapse;
-  margin: 1.0em 0em;
-}
-
-.doctbl-left {
-  text-align: left;
-}
-
-.doctbl-center {
-  text-align: center;
-}
-
-.doctbl-right {
-  text-align: right;
-}
-
-table.doctbl th {
-  border: 1px dotted #364550;
-  background-color: #c2d2dc;
-  padding: 5px;
-  color: #103a51;
-  font-weight: bold;
-}
-
-table.doctbl td {
-  border: 1px dotted #364550;
-  padding: 5px;
 }
 
 /* Members filter tool */
