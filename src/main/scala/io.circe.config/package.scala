@@ -15,8 +15,13 @@
  */
 package io.circe
 
+import cats.ApplicativeError
+import cats.instances.either._
+import cats.syntax.bifunctor._
+import cats.syntax.either._
 import com.typesafe.config._
 import scala.collection.JavaConverters._
+import config.syntax._
 
 /**
  * circe-config: A [[https://github.com/lightbend/config Typesafe config]]
@@ -54,6 +59,11 @@ import scala.collection.JavaConverters._
  * }}}
  */
 package object config {
+  def loadConfigF[F[_], C : Decoder](implicit ev : ApplicativeError[F, Throwable]) : F[C] =
+    ConfigFactory.load().as[C].leftWiden[Throwable].raiseOrPure[F]
+
+  def loadConfigF[F[_], C : Decoder](path : String)(implicit ev : ApplicativeError[F, Throwable]) : F[C] =
+    ConfigFactory.load().as[C](path).leftWiden[Throwable].raiseOrPure[F]
 
   private[config] def jsonToConfigValue(json: Json): ConfigValue =
     json.fold(

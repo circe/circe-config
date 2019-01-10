@@ -79,6 +79,7 @@ scalacOptions ++= Seq(
   "-encoding", "UTF-8",
   "-feature",
   "-language:postfixOps",
+  "-language:higherKinds",
   "-unchecked",
   "-Xfuture",
   "-Ywarn-dead-code",

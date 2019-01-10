@@ -15,13 +15,15 @@
  */
 package io.circe.config
 
-import org.scalatest.{ FlatSpec, Matchers }
+import cats.implicits._
+import com.typesafe.config.ConfigMemorySize
+import org.scalatest.{FlatSpec, Matchers}
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
 import io.circe.generic.auto._
+
 import scala.concurrent.duration._
 import scala.io.Source
-
 import io.circe.config.syntax._
 
 class CirceConfigSpec extends FlatSpec with Matchers {
@@ -70,6 +72,18 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
   }
 
+  type ErrorHandler[A] = Either[Throwable, A] // Typically this would be IO or something similar
+
+  it should "load with loadConfigF to path" in {
+    val conf = loadConfigF[ErrorHandler, HttpSettings]("http")
+    conf.fold(e => fail(e), cfg => assert(cfg == DecodedAppSettings.http))
+  }
+
+  it should "load with loadConfigF to root" in {
+    val conf = loadConfigF[ErrorHandler, AppSettings]
+    conf.fold(fail(_), cfg => assert(cfg == DecodedAppSettings))
+  }
+
   "round-trip" should "parse and print" in {
     for (file <- testResourcesDir.listFiles) {
       val json = parser.parseFile(file)
@@ -114,6 +128,30 @@ object CirceConfigSpec {
     m: TypeWithAdder[Int],
     n: Double,
     o: Double
+  )
+
+  case class ServerSettings(
+    host: String,
+    port: Int,
+    timeout: FiniteDuration,
+    maxUpload: ConfigMemorySize
+  )
+  case class HttpSettings(
+    version: Double,
+    server: ServerSettings
+  )
+  case class AppSettings(http: HttpSettings)
+
+  val DecodedAppSettings = AppSettings(
+    HttpSettings(
+      1.1,
+      ServerSettings(
+        "localhost",
+        8080,
+        5 seconds,
+        ConfigMemorySize.ofBytes(5242880)
+      )
+    )
   )
 
   val DecodedTestConfig = TestConfig(

@@ -52,7 +52,18 @@ res2: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(Server
 
 Based on this [application.conf].
 
- [application.conf]: https://github.com/circe/circe-config/tree/master/src/test/resources/application.conf
+If you are working in something like `cats.effect.IO`, or some other type `F[_]` that provides a
+`cats.ApplicativeError[F, Throwable]`, you can use the following, with the same imports as above:
+
+```scala
+import cats.implicits._, cats.effect.IO
+import io.circe.config._
+val cfg : IO[AppSettings] = loadConfigF[IO, AppSettings]
+```
+
+This makes the configuration directly available in your `F[_]` such as IO, which handles any errors.
+
+[application.conf]: https://github.com/circe/circe-config/tree/master/src/test/resources/application.conf
 
 ## Contributing
 
