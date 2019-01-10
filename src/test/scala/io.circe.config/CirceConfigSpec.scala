@@ -76,7 +76,7 @@ class CirceConfigSpec extends FlatSpec with Matchers {
 
   it should "load with loadConfigF to path" in {
     val conf = loadConfigF[ErrorHandler, HttpSettings]("http")
-    conf.fold(e => fail(e), cfg => assert(cfg == DecodedAppSettings.http))
+    conf.fold(fail(_), cfg => assert(cfg == DecodedAppSettings.http))
   }
 
   it should "load with loadConfigF to root" in {
