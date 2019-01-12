@@ -16,8 +16,12 @@
 package io.circe
 package config
 
+import cats.ApplicativeError
 import com.typesafe.config.{parser => _, _}
+import cats.instances.either._
 import cats.syntax.either._
+import cats.syntax.bifunctor._
+
 import scala.concurrent.duration._
 
 /**
@@ -177,5 +181,17 @@ object syntax {
     def as[A: Decoder](path: String): Either[io.circe.Error, A] =
       if (config.hasPath(path)) parser.decode[A](config.getConfig(path))
       else Left(ParsingFailure("Path not found in config", new ConfigException.Missing(path)))
+
+    /**
+      * Read config settings into the specified type.
+      */
+    def asF[F[_], A: Decoder](implicit ev: ApplicativeError[F, Throwable]): F[A] =
+      as[A].leftWiden[Throwable].raiseOrPure[F]
+
+    /**
+      * Read config settings at given path into the specified type.
+      */
+    def asF[F[_], A: Decoder](path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
+      as[A](path).leftWiden[Throwable].raiseOrPure[F]
   }
 }

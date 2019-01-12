@@ -15,6 +15,7 @@
  */
 package io.circe.config
 
+import cats.effect.IO
 import cats.implicits._
 import com.typesafe.config.ConfigMemorySize
 import org.scalatest.{FlatSpec, Matchers}
@@ -70,6 +71,14 @@ class CirceConfigSpec extends FlatSpec with Matchers {
 
   it should "provide syntax to decode at a given path" in {
     assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
+  }
+
+  it should "provide Config decoder into an F" in {
+    assert(AppConfig.asF[IO, TestConfig].unsafeRunSync() == DecodedTestConfig)
+  }
+
+  it should "provide syntax to decode at a given path into an F" in {
+    assert(AppConfig.asF[IO, Nested]("e").unsafeRunSync() == Nested(true))
   }
 
   type ErrorHandler[A] = Either[Throwable, A] // Typically this would be IO or something similar
