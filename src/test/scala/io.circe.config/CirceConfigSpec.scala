@@ -81,16 +81,14 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     assert(AppConfig.asF[IO, Nested]("e").unsafeRunSync() == Nested(true))
   }
 
-  type ErrorHandler[A] = Either[Throwable, A] // Typically this would be IO or something similar
-
   it should "load with loadConfigF to path" in {
-    val conf = loadConfigF[ErrorHandler, HttpSettings]("http")
-    conf.fold(fail(_), cfg => assert(cfg == DecodedAppSettings.http))
+    val conf = loadConfigF[IO, HttpSettings]("http")
+    assert(conf.unsafeRunSync() == DecodedAppSettings.http)
   }
 
   it should "load with loadConfigF to root" in {
-    val conf = loadConfigF[ErrorHandler, AppSettings]
-    conf.fold(fail(_), cfg => assert(cfg == DecodedAppSettings))
+    val conf = loadConfigF[IO, AppSettings]
+    assert(conf.unsafeRunSync() == DecodedAppSettings)
   }
 
   "round-trip" should "parse and print" in {
