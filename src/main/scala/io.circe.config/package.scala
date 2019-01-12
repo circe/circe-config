@@ -16,9 +16,7 @@
 package io.circe
 
 import cats.ApplicativeError
-import cats.instances.either._
-import cats.syntax.bifunctor._
-import cats.syntax.either._
+import cats.implicits._
 import com.typesafe.config._
 import scala.util.Try
 import scala.collection.JavaConverters._
@@ -61,10 +59,10 @@ import config.syntax._
  */
 package object config {
   def loadConfigF[F[_], C : Decoder](implicit ev : ApplicativeError[F, Throwable]) : F[C] =
-    Try(ConfigFactory.load()).toEither.flatMap(_.as[C]).leftWiden[Throwable].raiseOrPure[F]
+    Either.fromTry(Try(ConfigFactory.load())).flatMap(_.as[C]).leftWiden[Throwable].raiseOrPure[F]
 
   def loadConfigF[F[_], C : Decoder](path : String)(implicit ev : ApplicativeError[F, Throwable]) : F[C] =
-    Try(ConfigFactory.load()).toEither.flatMap(_.as[C](path)).leftWiden[Throwable].raiseOrPure[F]
+    Either.fromTry(Try(ConfigFactory.load())).flatMap(_.as[C](path)).leftWiden[Throwable].raiseOrPure[F]
 
   private[config] def jsonToConfigValue(json: Json): ConfigValue =
     json.fold(
