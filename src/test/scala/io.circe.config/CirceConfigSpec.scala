@@ -16,7 +16,6 @@
 package io.circe.config
 
 import cats.effect.IO
-import cats.implicits._
 import com.typesafe.config.ConfigMemorySize
 import org.scalatest.{FlatSpec, Matchers}
 import com.typesafe.config.{parser => _, _}
@@ -57,6 +56,14 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     def file = resolveFile("CirceConfigSpec.conf")
     def parse = parser.parseFile(file)
     def decode = parser.decodeFile[TestConfig](file)
+  }
+
+  it should "parse and decode config from default typesafe config resolution" in {
+    parser.decode[AppSettings]().fold(fail(_), _ should equal (DecodedAppSettings))
+  }
+
+  it should "parse and decode config from default typesafe config resolution into an F" in {
+    parser.loadF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
   }
 
   "printer" should "print it into a config string" in {

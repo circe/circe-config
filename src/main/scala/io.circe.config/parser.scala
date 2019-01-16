@@ -16,9 +16,13 @@
 package io.circe
 package config
 
+import cats.ApplicativeError
 import cats.data.ValidatedNel
 import cats.syntax.either._
+import cats.syntax.bifunctor._
+import cats.instances.either._
 import java.io.File
+
 import scala.collection.JavaConverters._
 import com.typesafe.config._
 
@@ -83,6 +87,12 @@ object parser extends Parser {
       .leftMap(error => ParsingFailure(error.getMessage, error))
   }
 
+  final def load() : Either[ParsingFailure, Json] =
+    toJson(ConfigFactory.load())
+
+  final def loadF[F[_], A]()(implicit ev : ApplicativeError[F, Throwable], d : Decoder[A]): F[A] =
+    decode().leftWiden[Throwable].raiseOrPure[F]
+
   final def parse(config: Config): Either[ParsingFailure, Json] =
     toJson(config)
 
@@ -91,6 +101,9 @@ object parser extends Parser {
 
   final def parseFile(file: File): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.parseFile(file))
+
+  final def decode[A : Decoder]() : Either[Error, A] =
+    finishDecode(load())
 
   final def decode[A: Decoder](config: Config): Either[Error, A] =
     finishDecode(parse(config))

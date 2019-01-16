@@ -57,8 +57,8 @@ If you are working in something like `cats.effect.IO`, or some other type `F[_]`
 
 ```scala
 import cats.implicits._, cats.effect.IO
-import io.circe.config._
-val cfg : IO[AppSettings] = loadConfigF[IO, AppSettings]
+import io.circe.config.parser
+val cfg : IO[AppSettings] = parser.loadF[IO, AppSettings]
 ```
 
 This makes the configuration directly available in your `F[_]` such as IO, which handles any errors.
