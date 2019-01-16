@@ -87,10 +87,10 @@ object parser extends Parser {
       .leftMap(error => ParsingFailure(error.getMessage, error))
   }
 
-  final def load() : Either[ParsingFailure, Json] =
+  final def load(): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.load())
 
-  final def loadF[F[_], A]()(implicit ev : ApplicativeError[F, Throwable], d : Decoder[A]): F[A] =
+  final def loadF[F[_], A]()(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
     decode().leftWiden[Throwable].raiseOrPure[F]
 
   final def parse(config: Config): Either[ParsingFailure, Json] =
@@ -102,7 +102,7 @@ object parser extends Parser {
   final def parseFile(file: File): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.parseFile(file))
 
-  final def decode[A : Decoder]() : Either[Error, A] =
+  final def decode[A: Decoder](): Either[Error, A] =
     finishDecode(load())
 
   final def decode[A: Decoder](config: Config): Either[Error, A] =
