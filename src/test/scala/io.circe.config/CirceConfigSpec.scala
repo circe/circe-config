@@ -16,7 +16,6 @@
 package io.circe.config
 
 import cats.effect.IO
-import com.typesafe.config.ConfigMemorySize
 import org.scalatest.{FlatSpec, Matchers}
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
