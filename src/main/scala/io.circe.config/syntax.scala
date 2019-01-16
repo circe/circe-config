@@ -179,8 +179,7 @@ object syntax {
      * Read config settings at given path into the specified type.
      */
     def as[A: Decoder](path: String): Either[io.circe.Error, A] =
-      if (config.hasPath(path)) parser.decode[A](config.getConfig(path))
-      else Left(ParsingFailure("Path not found in config", new ConfigException.Missing(path)))
+      parser.decodePath[A](config, path)
 
     /**
       * Read config settings into the specified type.

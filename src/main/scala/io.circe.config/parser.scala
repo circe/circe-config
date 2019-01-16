@@ -93,6 +93,9 @@ object parser extends Parser {
   final def loadF[F[_], A]()(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
     decode().leftWiden[Throwable].raiseOrPure[F]
 
+  final def loadF[F[_], A](path: String)(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
+    decodePath[A](path).raiseOrPure[F]
+
   final def parse(config: Config): Either[ParsingFailure, Json] =
     toJson(config)
 
@@ -113,6 +116,13 @@ object parser extends Parser {
 
   final def decodeAccumulating[A: Decoder](config: Config): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parse(config))
+
+  final def decodePath[A: Decoder](path: String): Either[Throwable, A] =
+    Either.catchNonFatal(ConfigFactory.load()).flatMap(decodePath[A](_, path).leftWiden[Throwable])
+
+  final def decodePath[A: Decoder](config: Config, path: String): Either[Error, A] =
+    if (config.hasPath(path)) decode[A](config.getConfig(path))
+    else Left(ParsingFailure("Path not found in config", new ConfigException.Missing(path)))
 
   final def decodeFileAccumulating[A: Decoder](file: File): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parseFile(file))

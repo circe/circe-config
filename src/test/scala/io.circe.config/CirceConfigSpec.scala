@@ -65,6 +65,10 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     parser.loadF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
   }
 
+  it should "parse and decode config from default typesafe config resolution into an F with path" in {
+    parser.loadF[IO, HttpSettings]("http").unsafeRunSync() should equal (DecodedAppSettings.http)
+  }
+
   "printer" should "print it into a config string" in {
     val json = parser.parse(AppConfig)
     val expected = readFile("CirceConfigSpec.printed.conf")
