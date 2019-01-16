@@ -81,16 +81,6 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     assert(AppConfig.asF[IO, Nested]("e").unsafeRunSync() == Nested(true))
   }
 
-  it should "load with loadConfigF to path" in {
-    val conf = loadConfigF[IO, HttpSettings]("http")
-    assert(conf.unsafeRunSync() == DecodedAppSettings.http)
-  }
-
-  it should "load with loadConfigF to root" in {
-    val conf = loadConfigF[IO, AppSettings]
-    assert(conf.unsafeRunSync() == DecodedAppSettings)
-  }
-
   "round-trip" should "parse and print" in {
     for (file <- testResourcesDir.listFiles) {
       val json = parser.parseFile(file)
