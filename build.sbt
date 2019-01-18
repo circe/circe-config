@@ -43,6 +43,7 @@ releaseProcess := {
 }
 
 val Versions = new {
+  val catsEffect = "1.1.0"
   val circe = "0.11.0"
   val config = "1.3.3"
   val discipline = "0.10.0"
@@ -56,6 +57,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % Versions.circe,
   "io.circe" %% "circe-generic" % Versions.circe % Test,
   "io.circe" %% "circe-testing" % Versions.circe % Test,
+  "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
   "org.typelevel" %% "discipline" % Versions.discipline % Test,
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
@@ -79,6 +81,7 @@ scalacOptions ++= Seq(
   "-encoding", "UTF-8",
   "-feature",
   "-language:postfixOps",
+  "-language:higherKinds",
   "-unchecked",
   "-Xfuture",
   "-Ywarn-dead-code",

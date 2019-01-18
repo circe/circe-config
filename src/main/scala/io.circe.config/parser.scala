@@ -16,9 +16,13 @@
 package io.circe
 package config
 
+import cats.ApplicativeError
 import cats.data.ValidatedNel
 import cats.syntax.either._
+import cats.syntax.bifunctor._
+import cats.instances.either._
 import java.io.File
+
 import scala.collection.JavaConverters._
 import com.typesafe.config._
 
@@ -83,6 +87,15 @@ object parser extends Parser {
       .leftMap(error => ParsingFailure(error.getMessage, error))
   }
 
+  final def load(): Either[ParsingFailure, Json] =
+    toJson(ConfigFactory.load())
+
+  final def loadF[F[_], A]()(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
+    decode().leftWiden[Throwable].raiseOrPure[F]
+
+  final def loadF[F[_], A](path: String)(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
+    decodePath[A](path).raiseOrPure[F]
+
   final def parse(config: Config): Either[ParsingFailure, Json] =
     toJson(config)
 
@@ -92,6 +105,9 @@ object parser extends Parser {
   final def parseFile(file: File): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.parseFile(file))
 
+  final def decode[A: Decoder](): Either[Error, A] =
+    finishDecode(load())
+
   final def decode[A: Decoder](config: Config): Either[Error, A] =
     finishDecode(parse(config))
 
@@ -100,6 +116,13 @@ object parser extends Parser {
 
   final def decodeAccumulating[A: Decoder](config: Config): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parse(config))
+
+  final def decodePath[A: Decoder](path: String): Either[Throwable, A] =
+    Either.catchNonFatal(ConfigFactory.load()).flatMap(decodePath[A](_, path).leftWiden[Throwable])
+
+  final def decodePath[A: Decoder](config: Config, path: String): Either[Error, A] =
+    if (config.hasPath(path)) decode[A](config.getConfig(path))
+    else Left(ParsingFailure("Path not found in config", new ConfigException.Missing(path)))
 
   final def decodeFileAccumulating[A: Decoder](file: File): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parseFile(file))

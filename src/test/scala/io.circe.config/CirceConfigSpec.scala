@@ -15,13 +15,14 @@
  */
 package io.circe.config
 
-import org.scalatest.{ FlatSpec, Matchers }
+import cats.effect.IO
+import org.scalatest.{FlatSpec, Matchers}
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
 import io.circe.generic.auto._
+
 import scala.concurrent.duration._
 import scala.io.Source
-
 import io.circe.config.syntax._
 
 class CirceConfigSpec extends FlatSpec with Matchers {
@@ -56,6 +57,18 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     def decode = parser.decodeFile[TestConfig](file)
   }
 
+  it should "parse and decode config from default typesafe config resolution" in {
+    parser.decode[AppSettings]().fold(fail(_), _ should equal (DecodedAppSettings))
+  }
+
+  it should "parse and decode config from default typesafe config resolution into an F" in {
+    parser.loadF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
+  }
+
+  it should "parse and decode config from default typesafe config resolution into an F with path" in {
+    parser.loadF[IO, HttpSettings]("http").unsafeRunSync() should equal (DecodedAppSettings.http)
+  }
+
   "printer" should "print it into a config string" in {
     val json = parser.parse(AppConfig)
     val expected = readFile("CirceConfigSpec.printed.conf")
@@ -68,6 +81,14 @@ class CirceConfigSpec extends FlatSpec with Matchers {
 
   it should "provide syntax to decode at a given path" in {
     assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
+  }
+
+  it should "provide Config decoder into an F" in {
+    assert(AppConfig.asF[IO, TestConfig].unsafeRunSync() == DecodedTestConfig)
+  }
+
+  it should "provide syntax to decode at a given path into an F" in {
+    assert(AppConfig.asF[IO, Nested]("e").unsafeRunSync() == Nested(true))
   }
 
   "round-trip" should "parse and print" in {
@@ -114,6 +135,30 @@ object CirceConfigSpec {
     m: TypeWithAdder[Int],
     n: Double,
     o: Double
+  )
+
+  case class ServerSettings(
+    host: String,
+    port: Int,
+    timeout: FiniteDuration,
+    maxUpload: ConfigMemorySize
+  )
+  case class HttpSettings(
+    version: Double,
+    server: ServerSettings
+  )
+  case class AppSettings(http: HttpSettings)
+
+  val DecodedAppSettings = AppSettings(
+    HttpSettings(
+      1.1,
+      ServerSettings(
+        "localhost",
+        8080,
+        5 seconds,
+        ConfigMemorySize.ofBytes(5242880)
+      )
+    )
   )
 
   val DecodedTestConfig = TestConfig(
