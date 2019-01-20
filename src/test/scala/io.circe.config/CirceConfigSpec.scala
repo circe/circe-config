@@ -61,12 +61,12 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     parser.decode[AppSettings]().fold(fail(_), _ should equal (DecodedAppSettings))
   }
 
-  it should "parse and decode config from default typesafe config resolution into an F" in {
-    parser.loadF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
+  it should "parse and decode config from default typesafe config resolution via ApplicativeError" in {
+    parser.decodeF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
   }
 
-  it should "parse and decode config from default typesafe config resolution into an F with path" in {
-    parser.loadF[IO, HttpSettings]("http").unsafeRunSync() should equal (DecodedAppSettings.http)
+  it should "parse and decode config from default typesafe config resolution with path via ApplicativeError" in {
+    parser.decodePathF[IO, HttpSettings]("http").unsafeRunSync() should equal (DecodedAppSettings.http)
   }
 
   "printer" should "print it into a config string" in {
@@ -83,11 +83,11 @@ class CirceConfigSpec extends FlatSpec with Matchers {
     assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
   }
 
-  it should "provide Config decoder into an F" in {
+  it should "provide Config decoder via ApplicativeError" in {
     assert(AppConfig.asF[IO, TestConfig].unsafeRunSync() == DecodedTestConfig)
   }
 
-  it should "provide syntax to decode at a given path into an F" in {
+  it should "provide syntax to decode at a given path via ApplicativeError" in {
     assert(AppConfig.asF[IO, Nested]("e").unsafeRunSync() == Nested(true))
   }
 

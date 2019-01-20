@@ -52,18 +52,37 @@ res2: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(Server
 
 Based on this [application.conf].
 
-If you are working in something like `cats.effect.IO`, or some other type `F[_]` that provides a
-`cats.ApplicativeError[F, Throwable]`, you can use the following, with the same imports as above:
+If you are using [`cats.effect.IO`], or some other type `F[_]` that provides a
+[`cats.ApplicativeError`], you can use the following, with the same imports as above:
 
 ```scala
-import cats.implicits._, cats.effect.IO
-import io.circe.config.parser
-val cfg : IO[AppSettings] = parser.loadF[IO, AppSettings]
+scala> import cats.effect.IO
+scala> import io.circe.generic.auto._
+scala> import io.circe.config.parser
+
+scala> case class ServerSettings(host: String, port: Int)
+scala> case class HttpSettings(server: ServerSettings, version: Option[Double])
+scala> case class AppSettings(http: HttpSettings)
+
+scala> parser.decodeF[IO, AppSettings]()
+res0: cats.effect.IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080),Some(1.1))))
+
+scala> val settings: IO[AppSettings] = parser.decodeF[IO, AppSettings]
+scala> settings.unsafeRunSync()
+res1: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080),Some(1.1)))
+
+scala> parser.decodePathF[IO, ServerSettings]("http.server")
+res2: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
+
+scala> parser.decodePathF[IO, ServerSettings]("path.not.found")
+res3: cats.effect.IO[ServerSettings] = IO(throw io.circe.ParsingFailure: Path not found in config)
 ```
 
-This makes the configuration directly available in your `F[_]` such as IO, which handles any errors.
+This makes the configuration directly available in your `F[_]`, such as `cats.effect.IO`, which handles any errors.
 
 [application.conf]: https://github.com/circe/circe-config/tree/master/src/test/resources/application.conf
+[`cats.effect.IO`]: https://typelevel.org/cats-effect/datatypes/io.html
+[`cats.ApplicativeError`]: https://typelevel.org/cats/api/cats/ApplicativeError.html
 
 ## Contributing
 

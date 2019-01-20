@@ -31,6 +31,9 @@ import com.typesafe.config._
  * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
  * sources to [[io.circe.Json]] as well as decoding to a specific type.
  *
+ * If you are working in something like [[https://typelevel.org/cats-effect/api/cats/effect/IO cats.effect.IO]], or some other type `F[_]` that provides a
+ * [[cats.ApplicativeError]], there're also decoders for loading such types.
+ *
  * @example
  * {{{
  * scala> import com.typesafe.config.ConfigFactory
@@ -43,8 +46,16 @@ import com.typesafe.config._
  *
  * scala> import io.circe.generic.auto._
  * scala> case class ServerSettings(host: String, port: Int)
- * scala> parser.decode[ServerSettings](config.getConfig("server"))
- * res1: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080))
+ * scala> case class AppSettings(server: ServerSettings)
+ *
+ * scala> parser.decode[AppSettings](config)
+ * res1: Either[io.circe.Error, AppSettings] = Right(AppSettings(ServerSettings(localhost,8080)))
+ * scala> parser.decodePath[ServerSettings](config, "server")
+ * res2: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080))
+ *
+ * scala> import cats.effect.IO
+ * scala> parser.decodePathF[IO, ServerSettings](config, "server")
+ * res3: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
  * }}}
  *
  * @see [[syntax.configDecoder]] for how to map [[io.circe.Json]] to
@@ -52,7 +63,7 @@ import com.typesafe.config._
  */
 object parser extends Parser {
 
-  private[this] final def toJson(parseConfig: => Config): Either[ParsingFailure, Json] = {
+  private[this] final def toJson(parseConfig: => Config, path: Option[String] = None): Either[ParsingFailure, Json] = {
     def convertValueUnsafe(value: ConfigValue): Json = value match {
       case obj: ConfigObject =>
         Json.fromFields(obj.asScala.mapValues(convertValueUnsafe))
@@ -83,18 +94,21 @@ object parser extends Parser {
     }
 
     Either
-      .catchNonFatal(convertValueUnsafe(parseConfig.root))
+      .catchNonFatal {
+        convertValueUnsafe {
+          val config = parseConfig
+          path.fold(config) {
+            path =>
+              if (config.hasPath(path)) config.getConfig(path)
+              else throw new ParsingFailure("Path not found in config", new ConfigException.Missing(path))
+          }.root
+        }
+      }
       .leftMap(error => ParsingFailure(error.getMessage, error))
   }
 
-  final def load(): Either[ParsingFailure, Json] =
+  final def parse(): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.load())
-
-  final def loadF[F[_], A]()(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
-    decode().leftWiden[Throwable].raiseOrPure[F]
-
-  final def loadF[F[_], A](path: String)(implicit ev: ApplicativeError[F, Throwable], d: Decoder[A]): F[A] =
-    decodePath[A](path).raiseOrPure[F]
 
   final def parse(config: Config): Either[ParsingFailure, Json] =
     toJson(config)
@@ -105,26 +119,180 @@ object parser extends Parser {
   final def parseFile(file: File): Either[ParsingFailure, Json] =
     toJson(ConfigFactory.parseFile(file))
 
-  final def decode[A: Decoder](): Either[Error, A] =
-    finishDecode(load())
+  final def parsePath(path: String): Either[ParsingFailure, Json] =
+    toJson(ConfigFactory.load(), Some(path))
 
+  final def parsePath(config: Config, path: String): Either[ParsingFailure, Json] =
+    toJson(config, Some(path))
+
+
+  /**
+   * Load the default configuration and decode an instance at a specific path.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   * scala> case class HttpSettings(server: ServerSettings)
+   * scala> case class AppSettings(http: HttpSettings)
+   *
+   * scala> parser.decode[AppSettings]()
+   * res0: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080))))
+   * }}}
+   */
+  final def decode[A: Decoder](): Either[Error, A] =
+    finishDecode(parse())
+
+  /**
+   * Load the default configuration and decode an instance at a specific path.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   * scala> case class HttpSettings(server: ServerSettings)
+   * scala> case class AppSettings(http: HttpSettings)
+   *
+   * scala> import com.typesafe.config.ConfigFactory
+   * scala> val config = ConfigFactory.load()
+   *
+   * scala> parser.decode[AppSettings](config)
+   * res0: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080))))
+   * }}}
+   */
   final def decode[A: Decoder](config: Config): Either[Error, A] =
     finishDecode(parse(config))
 
+  /**
+   * Load configuration from file and decode an instance.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   * scala> case class HttpSettings(server: ServerSettings)
+   * scala> case class AppSettings(http: HttpSettings)
+   *
+   * scala> parser.decodeFile[AppSettings](new java.io.File("src/test/resources/application.conf"))
+   * res0: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080))))
+   * }}}
+   */
   final def decodeFile[A: Decoder](file: File): Either[Error, A] =
-    finishDecode[A](parseFile(file))
+    finishDecode(parseFile(file))
+
+  /**
+   * Load the default configuration and decode an instance.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   *
+   * scala> parser.decodePath[ServerSettings]("http.server")
+   * res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080))
+   * }}}
+   */
+  final def decodePath[A: Decoder](path: String): Either[Error, A] =
+    finishDecode(parsePath(path))
+
+  /**
+   * Decode of an instance at a specific path.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   *
+   * scala> import com.typesafe.config.ConfigFactory
+   * scala> val config = ConfigFactory.load()
+   *
+   * scala> parser.decodePath[ServerSettings](config, "http.server")
+   * res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080))
+   * }}}
+   */
+  final def decodePath[A: Decoder](config: Config, path: String): Either[Error, A] =
+    finishDecode(parsePath(config, path))
+
 
   final def decodeAccumulating[A: Decoder](config: Config): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parse(config))
 
-  final def decodePath[A: Decoder](path: String): Either[Throwable, A] =
-    Either.catchNonFatal(ConfigFactory.load()).flatMap(decodePath[A](_, path).leftWiden[Throwable])
-
-  final def decodePath[A: Decoder](config: Config, path: String): Either[Error, A] =
-    if (config.hasPath(path)) decode[A](config.getConfig(path))
-    else Left(ParsingFailure("Path not found in config", new ConfigException.Missing(path)))
-
   final def decodeFileAccumulating[A: Decoder](file: File): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parseFile(file))
 
+
+  /**
+   * Load default configuration and decode an instance supporting [[cats.ApplicativeError]].
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   * scala> case class HttpSettings(server: ServerSettings)
+   * scala> case class AppSettings(http: HttpSettings)
+   *
+   * scala> import cats.effect.IO
+   * scala> parser.decodeF[IO, AppSettings]()
+   * res0: cats.effect.IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080))))
+   * }}}
+   */
+  final def decodeF[F[_], A: Decoder]()(implicit ev: ApplicativeError[F, Throwable]): F[A] =
+    decode[A]().leftWiden[Throwable].raiseOrPure[F]
+
+  /**
+   * Load default configuration and decode an instance supporting [[cats.ApplicativeError]] at a specific path.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   *
+   * scala> import cats.effect.IO
+   * scala> parser.decodePathF[IO, ServerSettings]("http.server")
+   * res0: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
+   * }}}
+   */
+  final def decodePathF[F[_], A: Decoder](path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
+    decodePath[A](path).leftWiden[Throwable].raiseOrPure[F]
+
+  /**
+   * Decode an instance supporting [[cats.ApplicativeError]].
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   * scala> case class HttpSettings(server: ServerSettings)
+   * scala> case class AppSettings(http: HttpSettings)
+   *
+   * scala> import com.typesafe.config.ConfigFactory
+   * scala> val config = ConfigFactory.load()
+   *
+   * scala> import cats.effect.IO
+   * scala> parser.decodeF[IO, AppSettings](config)
+   * res0: cats.effect.IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080))))
+   * }}}
+   */
+  final def decodeF[F[_], A: Decoder](config: Config)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
+    decode[A](config).leftWiden[Throwable].raiseOrPure[F]
+
+  /**
+   * Decode an instance supporting [[cats.ApplicativeError]] at a specific path.
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.generic.auto._
+   * scala> case class ServerSettings(host: String, port: Int)
+   *
+   * scala> import com.typesafe.config.ConfigFactory
+   * scala> val config = ConfigFactory.load()
+   *
+   * scala> import cats.effect.IO
+   * scala> import io.circe.config.parser
+   * scala> parser.decodePathF[IO, ServerSettings](config, "http.server")
+   * res0: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
+   * }}}
+   */
+  final def decodePathF[F[_], A: Decoder](config: Config, path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
+    decodePath[A](config, path).leftWiden[Throwable].raiseOrPure[F]
 }
