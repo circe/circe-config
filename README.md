@@ -28,6 +28,10 @@ libraryDependencies += "io.circe" %% "circe-config" % "0.5.0"
 
 ## Example
 
+The following examples use `io.circe:circe-generic` as a dependency to
+automatically derive decoders. They load the configuration found in
+[application.conf].
+
 ```scala
 scala> import com.typesafe.config.{ ConfigFactory, ConfigMemorySize }
 scala> import io.circe.generic.auto._
@@ -38,19 +42,28 @@ scala> case class ServerSettings(host: String, port: Int, timeout: FiniteDuratio
 scala> case class HttpSettings(server: ServerSettings, version: Option[Double])
 scala> case class AppSettings(http: HttpSettings)
 
+// Load default configuration and decode instances
+scala> import io.circe.config.parser
+
+scala> parser.decode[AppSettings]()
+res0: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
+
+scala> parser.decodePath[ServerSettings]("http.server")
+res1: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
+
 scala> val config = ConfigFactory.load()
 
+// Decode instances from an already loaded configuration
+
 scala> config.as[ServerSettings]("http.server")
-res0: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
+res2: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
 
 scala> config.as[HttpSettings]("http")
-res1: Either[io.circe.Error,HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1)))
+res3: Either[io.circe.Error,HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1)))
 
 scala> config.as[AppSettings]
-res2: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
+res4: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
 ```
-
-Based on this [application.conf].
 
 If you are using [`cats.effect.IO`], or some other type `F[_]` that provides a
 [`cats.ApplicativeError`], you can use the following, with the same imports as above:
