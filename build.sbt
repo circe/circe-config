@@ -46,7 +46,7 @@ val Versions = new {
   val catsEffect = "1.1.0"
   val circe = "0.11.1"
   val config = "1.3.3"
-  val discipline = "0.10.0"
+  val discipline = "0.11.0"
   val scalaCheck = "1.14.0"
   val scalaTest = "3.0.5"
 }
