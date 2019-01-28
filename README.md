@@ -19,7 +19,7 @@ More generally it provides parsers and printers for interoperating with
 To use this library configure your sbt project with the following line:
 
 ```sbt
-libraryDependencies += "io.circe" %% "circe-config" % "0.5.0"
+libraryDependencies += "io.circe" %% "circe-config" % "0.6.1"
 ```
 
 ## Documentation
@@ -66,7 +66,7 @@ res4: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(Server
 ```
 
 If you are using [`cats.effect.IO`], or some other type `F[_]` that provides a
-[`cats.ApplicativeError`], you can use the following, with the same imports as above:
+[`cats.ApplicativeError`], you can use the following:
 
 ```scala
 scala> import cats.effect.IO
