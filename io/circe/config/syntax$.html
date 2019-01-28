@@ -19,7 +19,16 @@ scala&gt; config.as[HttpSettings](<span class="lit">"http"</span>)
 res1: Either[io.circe.Error, HttpSettings] = Right(HttpSettings(ServerSettings(localhost,<span class="num">8080</span>,<span class="std">None</span>),<span class="num">1.1</span>))
 
 scala&gt; config.as[AppSettings]
-res2: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,<span class="num">8080</span>,<span class="std">None</span>),<span class="num">1.1</span>)))</pre></li></ol></div><dt>Note</dt><dd><span class="cmt"><p><b>Limitations for numerical types</b>:
+res2: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,<span class="num">8080</span>,<span class="std">None</span>),<span class="num">1.1</span>)))
+
+scala&gt; <span class="kw">import</span> cats.effect.IO
+scala&gt; config.asF[IO, AppSettings]
+res3: IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,<span class="num">8080</span>,<span class="std">None</span>),<span class="num">1.1</span>)))
+
+scala&gt; <span class="kw">import</span> io.circe.config.parser
+scala&gt; <span class="kw">val</span> settings = parser.decodeF[IO, AppSettings]()
+scala&gt; settings.unsafeRunSync()
+res4: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,<span class="num">8080</span>,<span class="std">None</span>),<span class="num">1.1</span>))</pre></li></ol></div><dt>Note</dt><dd><span class="cmt"><p><b>Limitations for numerical types</b>:
 Typesafe config uses Java's int, long and double types to represent numbers.
 In some cases, double values may be represented internally as long after a
 roundtrip since the <a href="https://github.com/lightbend/config/blob/master/HOCON.md" target="_blank">HOCON</a>
