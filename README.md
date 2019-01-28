@@ -28,6 +28,10 @@ libraryDependencies += "io.circe" %% "circe-config" % "0.5.0"
 
 ## Example
 
+The following examples use `io.circe:circe-generic` as a dependency to
+automatically derive decoders. They load the configuration found in
+[application.conf].
+
 ```scala
 scala> import com.typesafe.config.{ ConfigFactory, ConfigMemorySize }
 scala> import io.circe.generic.auto._
@@ -38,32 +42,60 @@ scala> case class ServerSettings(host: String, port: Int, timeout: FiniteDuratio
 scala> case class HttpSettings(server: ServerSettings, version: Option[Double])
 scala> case class AppSettings(http: HttpSettings)
 
+// Load default configuration and decode instances
+scala> import io.circe.config.parser
+
+scala> parser.decode[AppSettings]()
+res0: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
+
+scala> parser.decodePath[ServerSettings]("http.server")
+res1: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
+
 scala> val config = ConfigFactory.load()
 
+// Decode instances from an already loaded configuration
+
 scala> config.as[ServerSettings]("http.server")
-res0: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
+res2: Either[io.circe.Error,ServerSettings] = Right(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)))
 
 scala> config.as[HttpSettings]("http")
-res1: Either[io.circe.Error,HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1)))
+res3: Either[io.circe.Error,HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1)))
 
 scala> config.as[AppSettings]
-res2: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
+res4: Either[io.circe.Error,AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,5 seconds,ConfigMemorySize(5242880)),Some(1.1))))
 ```
 
-Based on this [application.conf].
-
-If you are working in something like `cats.effect.IO`, or some other type `F[_]` that provides a
-`cats.ApplicativeError[F, Throwable]`, you can use the following, with the same imports as above:
+If you are using [`cats.effect.IO`], or some other type `F[_]` that provides a
+[`cats.ApplicativeError`], you can use the following, with the same imports as above:
 
 ```scala
-import cats.implicits._, cats.effect.IO
-import io.circe.config.parser
-val cfg : IO[AppSettings] = parser.loadF[IO, AppSettings]
+scala> import cats.effect.IO
+scala> import io.circe.generic.auto._
+scala> import io.circe.config.parser
+
+scala> case class ServerSettings(host: String, port: Int)
+scala> case class HttpSettings(server: ServerSettings, version: Option[Double])
+scala> case class AppSettings(http: HttpSettings)
+
+scala> parser.decodeF[IO, AppSettings]()
+res0: cats.effect.IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080),Some(1.1))))
+
+scala> val settings: IO[AppSettings] = parser.decodeF[IO, AppSettings]
+scala> settings.unsafeRunSync()
+res1: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080),Some(1.1)))
+
+scala> parser.decodePathF[IO, ServerSettings]("http.server")
+res2: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
+
+scala> parser.decodePathF[IO, ServerSettings]("path.not.found")
+res3: cats.effect.IO[ServerSettings] = IO(throw io.circe.ParsingFailure: Path not found in config)
 ```
 
-This makes the configuration directly available in your `F[_]` such as IO, which handles any errors.
+This makes the configuration directly available in your `F[_]`, such as `cats.effect.IO`, which handles any errors.
 
 [application.conf]: https://github.com/circe/circe-config/tree/master/src/test/resources/application.conf
+[`cats.effect.IO`]: https://typelevel.org/cats-effect/datatypes/io.html
+[`cats.ApplicativeError`]: https://typelevel.org/cats/api/cats/ApplicativeError.html
 
 ## Contributing
 

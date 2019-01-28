@@ -51,6 +51,15 @@ import scala.collection.JavaConverters._
  *
  * scala> config.as[AppSettings]
  * res2: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
+ *
+ * scala> import cats.effect.IO
+ * scala> config.asF[IO, AppSettings]
+ * res3: IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
+ *
+ * scala> import io.circe.config.parser
+ * scala> val settings = parser.decodeF[IO, AppSettings]()
+ * scala> settings.unsafeRunSync()
+ * res4: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1))
  * }}}
  */
 package object config {

@@ -185,12 +185,12 @@ object syntax {
       * Read config settings into the specified type.
       */
     def asF[F[_], A: Decoder](implicit ev: ApplicativeError[F, Throwable]): F[A] =
-      as[A].leftWiden[Throwable].raiseOrPure[F]
+      parser.decodeF[F, A](config)
 
     /**
       * Read config settings at given path into the specified type.
       */
     def asF[F[_], A: Decoder](path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
-      as[A](path).leftWiden[Throwable].raiseOrPure[F]
+      parser.decodePathF[F, A](config, path)
   }
 }
