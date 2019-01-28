@@ -1,6 +1,6 @@
 # Release notes
 
-## master
+## 0.6.1
 
  - Update circe to version [0.11.1](https://github.com/circe/circe/releases/tag/v0.11.1).
  - Add decoders that loads the default configuration. [#29]
