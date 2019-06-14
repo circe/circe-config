@@ -86,7 +86,6 @@ scalacOptions ++= Seq(
   "-language:postfixOps",
   "-language:higherKinds",
   "-unchecked",
-  "-Xfuture",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
 )
@@ -97,6 +96,7 @@ scalacOptions ++= {
       Seq(
         "-Xfatal-warnings",
         "-Yno-adapted-args",
+        "-Xfuture",
       )
     case _ =>
       Nil
