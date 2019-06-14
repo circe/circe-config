@@ -23,7 +23,7 @@ import cats.syntax.bifunctor._
 import cats.instances.either._
 import java.io.File
 
-import scala.collection.JavaConverters._
+import compat.converters._
 import com.typesafe.config._
 
 /**

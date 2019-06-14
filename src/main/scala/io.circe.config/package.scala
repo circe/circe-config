@@ -16,7 +16,7 @@
 package io.circe
 
 import com.typesafe.config._
-import scala.collection.JavaConverters._
+import config.compat.converters._
 
 /**
  * circe-config: A [[https://github.com/lightbend/config Typesafe config]]

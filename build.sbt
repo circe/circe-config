@@ -16,6 +16,14 @@ mimaPreviousArtifacts := {
   versions.filter(versionFilter).map("io.circe" %% "circe-config" % _)
 }
 
+unmanagedSourceDirectories in Compile += {
+  val sourceDir = (sourceDirectory in Compile).value
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, n)) if n <= 12 => sourceDir / "scala-2.13-"
+    case _                       => sourceDir / "scala-2.13+"
+  }
+}
+
 enablePlugins(GitPlugin)
 versionWithGit
 git.useGitDescribe := true
