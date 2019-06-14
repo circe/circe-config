@@ -16,7 +16,8 @@
 package io.circe.config
 
 import cats.effect.IO
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.Matchers
+import org.scalatest.flatspec.AnyFlatSpec
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
 import io.circe.generic.auto._
@@ -25,7 +26,8 @@ import scala.concurrent.duration._
 import scala.io.Source
 import io.circe.config.syntax._
 
-class CirceConfigSpec extends FlatSpec with Matchers {
+
+class CirceConfigSpec extends AnyFlatSpec with Matchers {
   import CirceConfigSpec._
 
   trait ParserTests {
