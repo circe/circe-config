@@ -5,13 +5,13 @@ import cats.laws._
 import cats.laws.discipline._
 import io.circe.{ Decoder, Json, Parser, ParsingFailure }
 import io.circe.testing.ParserTests
-import org.scalatest.FlatSpec
-import org.scalatest.prop.Checkers
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatestplus.scalacheck.Checkers
 import org.scalacheck.{ Arbitrary, Prop }
 import org.typelevel.discipline.Laws
 import com.typesafe.config.{parser => _, _}
 
-class CirceConfigLaws extends FlatSpec {
+class CirceConfigLaws extends AnyFlatSpec {
 
   implicit val arbitraryConfigJson: Arbitrary[Json] = Arbitrary {
     def normalize(json: Json): Json = json

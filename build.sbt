@@ -50,6 +50,7 @@ val Versions = new {
   val discipline = "0.12.0-M3"
   val scalaCheck = "1.14.0"
   val scalaTest = "3.1.0-SNAP13"
+  val scalaTestPlus = "1.0.0-SNAP8"
 }
 
 libraryDependencies ++= Seq(
@@ -61,7 +62,8 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
   "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
-  "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
+  "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
+  "org.scalatestplus" %% "scalatestplus-scalacheck" % Versions.scalaTestPlus % Test
 )
 
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
