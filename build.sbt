@@ -44,12 +44,12 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val catsEffect = "1.3.0"
-  val circe = "0.11.1"
+  val catsEffect = "2.0.0-M4"
+  val circe = "0.12.0-M3"
   val config = "1.3.3"
-  val discipline = "0.11.0"
+  val discipline = "0.12.0-M3"
   val scalaCheck = "1.14.0"
-  val scalaTest = "3.0.5"
+  val scalaTest = "3.1.0-SNAP13"
 }
 
 libraryDependencies ++= Seq(
@@ -59,7 +59,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % Versions.circe % Test,
   "io.circe" %% "circe-testing" % Versions.circe % Test,
   "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
-  "org.typelevel" %% "discipline" % Versions.discipline % Test,
+  "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
 )
