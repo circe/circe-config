@@ -9,7 +9,7 @@ mimaPreviousArtifacts := {
   val versions = Set("0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0")
   val versionFilter: String => Boolean = CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, 11 | 12)) => _ => true
-    case Some((2, 13)) => Set("0.6.0")
+    case Some((2, 13)) => _ => false
     case _ => _ => false
   }
 
