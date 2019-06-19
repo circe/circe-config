@@ -1,5 +1,16 @@
 # Release notes
 
+## 0.7.0-M1
+
+ - Update circe to version [0.12.0-M3](https://github.com/circe/circe/releases/tag/v0.12.0-M3).
+ - Update Cats and cats-effect to 2.0.0-M4.
+ - Update to [config 1.3.4].
+ - Publish for 2.13.0. [#43], [#44]
+
+ [#43]: https://github.com/circe/circe-config/pull/43
+ [#44]: https://github.com/circe/circe-config/pull/44
+ [config 1.3.4]: https://github.com/lightbend/config/blob/master/NEWS.md#134-april-18-2019
+
 ## 0.6.1
 
  - Update circe to version [0.11.1](https://github.com/circe/circe/releases/tag/v0.11.1).
