@@ -9,11 +9,19 @@ mimaPreviousArtifacts := {
   val versions = Set("0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0")
   val versionFilter: String => Boolean = CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, 11 | 12)) => _ => true
-    case Some((2, 13)) => Set("0.6.0")
+    case Some((2, 13)) => _ => false
     case _ => _ => false
   }
 
   versions.filter(versionFilter).map("io.circe" %% "circe-config" % _)
+}
+
+unmanagedSourceDirectories in Compile += {
+  val sourceDir = (sourceDirectory in Compile).value
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, n)) if n <= 12 => sourceDir / "scala-2.13-"
+    case _                       => sourceDir / "scala-2.13+"
+  }
 }
 
 enablePlugins(GitPlugin)
@@ -44,12 +52,13 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val catsEffect = "1.3.0"
-  val circe = "0.11.1"
+  val catsEffect = "2.0.0-M4"
+  val circe = "0.12.0-M3"
   val config = "1.3.4"
-  val discipline = "0.11.0"
+  val discipline = "0.12.0-M3"
   val scalaCheck = "1.14.0"
-  val scalaTest = "3.0.5"
+  val scalaTest = "3.1.0-SNAP13"
+  val scalaTestPlus = "1.0.0-SNAP8"
 }
 
 libraryDependencies ++= Seq(
@@ -59,9 +68,10 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % Versions.circe % Test,
   "io.circe" %% "circe-testing" % Versions.circe % Test,
   "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
-  "org.typelevel" %% "discipline" % Versions.discipline % Test,
+  "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
-  "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
+  "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
+  "org.scalatestplus" %% "scalatestplus-scalacheck" % Versions.scalaTestPlus % Test
 )
 
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
@@ -84,7 +94,6 @@ scalacOptions ++= Seq(
   "-language:postfixOps",
   "-language:higherKinds",
   "-unchecked",
-  "-Xfuture",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
 )
@@ -95,6 +104,7 @@ scalacOptions ++= {
       Seq(
         "-Xfatal-warnings",
         "-Yno-adapted-args",
+        "-Xfuture",
       )
     case _ =>
       Nil
