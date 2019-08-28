@@ -52,8 +52,8 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val catsEffect = "2.0.0-RC1"
-  val circe = "0.12.0-M3"
+  val catsEffect = "2.0.0-RC2"
+  val circe = "0.12.0-RC4"
   val config = "1.3.4"
   val discipline = "1.0.0"
   val scalaCheck = "1.14.0"

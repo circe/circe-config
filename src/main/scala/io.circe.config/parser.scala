@@ -237,7 +237,7 @@ object parser extends Parser {
    * }}}
    */
   final def decodeF[F[_], A: Decoder]()(implicit ev: ApplicativeError[F, Throwable]): F[A] =
-    decode[A]().leftWiden[Throwable].raiseOrPure[F]
+    decode[A]().leftWiden[Throwable].liftTo[F]
 
   /**
    * Load default configuration and decode an instance supporting [[cats.ApplicativeError]] at a specific path.
@@ -253,7 +253,7 @@ object parser extends Parser {
    * }}}
    */
   final def decodePathF[F[_], A: Decoder](path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
-    decodePath[A](path).leftWiden[Throwable].raiseOrPure[F]
+    decodePath[A](path).leftWiden[Throwable].liftTo[F]
 
   /**
    * Decode an instance supporting [[cats.ApplicativeError]].
@@ -274,7 +274,7 @@ object parser extends Parser {
    * }}}
    */
   final def decodeF[F[_], A: Decoder](config: Config)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
-    decode[A](config).leftWiden[Throwable].raiseOrPure[F]
+    decode[A](config).leftWiden[Throwable].liftTo[F]
 
   /**
    * Decode an instance supporting [[cats.ApplicativeError]] at a specific path.
@@ -294,5 +294,5 @@ object parser extends Parser {
    * }}}
    */
   final def decodePathF[F[_], A: Decoder](config: Config, path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
-    decodePath[A](config, path).leftWiden[Throwable].raiseOrPure[F]
+    decodePath[A](config, path).leftWiden[Throwable].liftTo[F]
 }
