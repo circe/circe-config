@@ -41,7 +41,7 @@ import com.typesafe.config._
  * scala> val config = ConfigFactory.parseString("server { host = localhost, port = 8080 }")
  *
  * scala> val json: Either[io.circe.ParsingFailure, io.circe.Json] = parser.parse(config)
- * scala> json.right.get.noSpaces
+ * scala> json.map(_.noSpaces).getOrElse("Parse failure")
  * res0: String = {"server":{"port":8080,"host":"localhost"}}
  *
  * scala> import io.circe.generic.auto._
