@@ -74,7 +74,7 @@ case class CodecTests[A](decoder: Decoder[A], parse: A => Either[ParsingFailure,
       name = s"codec[$name]",
       parent = None,
       "decodingRoundTrip" -> Prop.forAll { (json: Json) =>
-        decoder.decodeJson(json).right.flatMap(parse) <-> Right(json)
+        decoder.decodeJson(json).flatMap(parse) <-> Right(json)
       }
     )
 }

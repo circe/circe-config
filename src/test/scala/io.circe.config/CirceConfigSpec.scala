@@ -36,11 +36,12 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
 
     assert(parse.isRight)
 
-    val config = decode
-    assert(config == Right(DecodedTestConfig))
-    assert(config.right.get.k.getDouble("ka") == 1.1)
-    assert(config.right.get.k.getString("kb") == "abc")
-    assert(config.right.get.l.unwrapped == "localhost")
+    val Right(config) = decode
+
+    assert(config == DecodedTestConfig)
+    assert(config.k.getDouble("ka") == 1.1)
+    assert(config.k.getString("kb") == "abc")
+    assert(config.l.unwrapped == "localhost")
   }
 
   "parser" should "parse and decode config from string" in new ParserTests {
@@ -72,9 +73,9 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
   }
 
   "printer" should "print it into a config string" in {
-    val json = parser.parse(AppConfig)
+    val Right(json) = parser.parse(AppConfig)
     val expected = readFile("CirceConfigSpec.printed.conf")
-    assert(printer.print(json.right.get) == expected)
+    assert(printer.print(json) == expected)
   }
 
   "syntax" should "provide Config decoder" in {
@@ -95,10 +96,9 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
 
   "round-trip" should "parse and print" in {
     for (file <- testResourcesDir.listFiles) {
-      val json = parser.parseFile(file)
-      assert(json.isRight == true, s"failed to parse ${file.getName}")
+      val Right(json) = parser.parseFile(file)
       assert(
-        parser.parse(printer.print(json.right.get)) == json,
+        parser.parse(printer.print(json)) == Right(json),
         s"round-trip failed for ${file.getName}")
     }
   }
