@@ -18,19 +18,21 @@ class CirceConfigLaws extends AnyFlatSpec {
       .mapObject(_.filterKeys(_.nonEmpty).mapValues(normalize))
       .mapArray(_.map(normalize))
       .mapNumber(number => {
-        def numberToDouble = {
-          val double = number.toDouble
-          if (double.isWhole)
-            Some(Json.fromLong(double.toLong))
-          else
-            Json.fromDouble(double)
-        }
-        // Map to the three principal types supported by Typesafe Config: Int, Long or Double
+        // Lower the precision to the types used internally by
+        // Lightbend Config to ensure that numbers are representable.
+        val double: java.lang.Double = number.toDouble
+        val long: java.lang.Long = double.toLong
+
         val json =
-          number.toInt.map(Json.fromInt) orElse
-            number.toLong.map(Json.fromLong) orElse
-            numberToDouble getOrElse
+          if (double.isInfinite)
+            // While +/+Infinity can be represented, it cannot be round-tripped.
             Json.fromInt(42)
+          else if (long == double)
+            // Emulate Lightbend Config's internal cast:
+            // https://github.com/lightbend/config/blob/v1.3.4/config/src/main/java/com/typesafe/config/impl/ConfigNumber.java#L96-L104
+            Json.fromLong(long)
+          else
+            Json.fromDouble(double).get
 
         json.asNumber.get
       })
