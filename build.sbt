@@ -58,7 +58,7 @@ val Versions = new {
   val discipline = "1.0.0"
   val scalaCheck = "1.14.1"
   val scalaTest = "3.1.0-SNAP13"
-  val scalaTestPlus = "1.0.0-SNAP8"
+  val scalaTestPlus = "3.1.0.0-RC2"
 }
 
 libraryDependencies ++= Seq(
