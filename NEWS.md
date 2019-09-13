@@ -1,5 +1,18 @@
 # Release notes
 
+## 0.7.0
+
+ - Update circe to version [0.12.1](https://github.com/circe/circe/releases/tag/v0.12.1). [#71]
+ - Add decoder for `java.time.Period`. [#48], [#60]
+ - Update Cats (via circe 0.12.1) and cats-effect to 2.0.0. [#70]
+ - Update Scala to 2.12.10. [#73]
+
+ [#48]: https://github.com/circe/circe-config/issues/48
+ [#60]: https://github.com/circe/circe-config/pull/60
+ [#70]: https://github.com/circe/circe-config/pull/70
+ [#71]: https://github.com/circe/circe-config/pull/71
+ [#73]: https://github.com/circe/circe-config/pull/73
+
 ## 0.7.0-M1
 
  - Update circe to version [0.12.0-M3](https://github.com/circe/circe/releases/tag/v0.12.0-M3).
