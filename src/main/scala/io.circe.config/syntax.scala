@@ -23,6 +23,7 @@ import cats.syntax.either._
 import cats.syntax.bifunctor._
 
 import scala.concurrent.duration._
+import java.time.Period
 
 /**
  * Implicits for decoding Typesafe Config values and instances using
@@ -46,7 +47,7 @@ import scala.concurrent.duration._
 object syntax {
   /**
    * Decoder for reading
-   * [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration formats]].
+   * [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration format]].
    *
    * @example
    * {{{
@@ -72,7 +73,32 @@ object syntax {
 
   /**
    * Decoder for reading
-   * [[https://github.com/lightbend/config/blob/master/HOCON.md#size-in-bytes-format memory size in bytes format]]
+   * [[https://github.com/lightbend/config/blob/master/HOCON.md#period-format period format]].
+   *
+   * @example
+   * {{{
+   * scala> import io.circe.Json
+   * scala> import io.circe.config.syntax._
+   * scala> import java.time.Period
+   *
+   * scala> periodDecoder.decodeJson(Json.fromString("1 day"))
+   * res0: io.circe.Decoder.Result[Period] = Right(P1D)
+   * scala> periodDecoder.decodeJson(Json.fromString("3 y"))
+   * res1: io.circe.Decoder.Result[Period] = Right(P3Y)
+   *
+   * scala> Json.fromString("24 months").as[Period]
+   * res2: io.circe.Decoder.Result[Period] = Right(P24M)
+   * }}}
+   */
+  implicit val periodDecoder: Decoder[Period] = Decoder.decodeString.emap { str =>
+    Either
+      .catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p"))
+      .leftMap(t => "Decoder[Period]")
+  }
+
+  /**
+   * Decoder for reading
+   * [[https://github.com/lightbend/config/blob/master/HOCON.md#size-in-bytes-format size in bytes format]]
    * into a
    * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigMemorySize.html com.typesafe.config.ConfigMemorySize]].
    *

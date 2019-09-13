@@ -23,6 +23,7 @@ import io.circe.{parser => _, _}
 import io.circe.generic.auto._
 
 import scala.concurrent.duration._
+import java.time.Period
 import scala.io.Source
 import io.circe.config.syntax._
 
@@ -136,7 +137,8 @@ object CirceConfigSpec {
     l: ConfigValue,
     m: TypeWithAdder[Int],
     n: Double,
-    o: Double
+    o: Double,
+    p: Period
   )
 
   case class ServerSettings(
@@ -178,6 +180,7 @@ object CirceConfigSpec {
     l = ConfigValueFactory.fromAnyRef("localhost"),
     m = TypeWithAdder(12),
     n = 0.0,
-    o = 0
+    o = 0,
+    p = Period.ofWeeks(4)
   )
 }
