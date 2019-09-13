@@ -81,7 +81,7 @@ scala&gt; <span class="kw">import</span> io.circe.config.parser
 scala&gt; <span class="kw">val</span> config = ConfigFactory.parseString(<span class="lit">"server { host = localhost, port = 8080 }"</span>)
 
 scala&gt; <span class="kw">val</span> json: Either[io.circe.ParsingFailure, io.circe.Json] = parser.parse(config)
-scala&gt; json.right.get.noSpaces
+scala&gt; json.map(_.noSpaces).getOrElse(<span class="lit">"Parse failure"</span>)
 res0: <span class="std">String</span> = {<span class="lit">"server"</span>:{<span class="lit">"port"</span>:<span class="num">8080</span>,<span class="lit">"host"</span>:<span class="lit">"localhost"</span>}}
 
 scala&gt; <span class="kw">import</span> io.circe.generic.auto._
