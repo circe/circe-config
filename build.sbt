@@ -57,8 +57,8 @@ val Versions = new {
   val config = "1.4.0"
   val discipline = "1.0.2"
   val scalaCheck = "1.14.3"
-  val scalaTest = "3.1.0-SNAP13"
-  val scalaTestPlus = "3.1.0.0-RC2"
+  val scalaTest = "3.1.0"
+  val scalaTestPlus = "3.1.0.1"
 }
 
 libraryDependencies ++= Seq(
@@ -71,7 +71,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
-  "org.scalatestplus" %% "scalatestplus-scalacheck" % Versions.scalaTestPlus % Test
+  "org.scalatestplus" %% "scalacheck-1-14" % Versions.scalaTestPlus % Test
 )
 
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
@@ -114,6 +114,10 @@ scalacOptions ++= {
 
 scalacOptions in (Compile, console) --= Seq("-Ywarn-unused-import", "-Ywarn-unused:imports")
 scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
+// Temporary. See: https://github.com/tkawachi/sbt-doctest/pull/132
+scalacOptions in Test ~= {
+  _.filterNot(Set("-Xfatal-warnings"))
+}
 
 publishMavenStyle := true
 publishArtifact in Test := false
