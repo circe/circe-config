@@ -16,7 +16,7 @@
 package io.circe.config
 
 import cats.effect.IO
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
