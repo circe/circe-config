@@ -57,7 +57,7 @@ val Versions = new {
   val config = "1.4.0"
   val discipline = "1.0.1"
   val scalaCheck = "1.14.3"
-  val scalaTest = "3.1.0-SNAP13"
+  val scalaTest = "3.1.0"
   val scalaTestPlus = "3.1.0.0-RC2"
 }
 
