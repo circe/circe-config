@@ -68,10 +68,11 @@ package object config {
     json.fold(
       ConfigValueFactory.fromAnyRef(null),
       boolean => ConfigValueFactory.fromAnyRef(boolean),
-      number => number.toLong match {
-        case Some(long) => ConfigValueFactory.fromAnyRef(long)
-        case None => ConfigValueFactory.fromAnyRef(number.toDouble)
-      },
+      number =>
+        number.toLong match {
+          case Some(long) => ConfigValueFactory.fromAnyRef(long)
+          case None       => ConfigValueFactory.fromAnyRef(number.toDouble)
+        },
       str => ConfigValueFactory.fromAnyRef(str),
       arr => ConfigValueFactory.fromIterable(arr.map(jsonToConfigValue).asJava),
       obj => ConfigValueFactory.fromMap(obj.toMap.mapValues(jsonToConfigValue).toMap.asJava)

@@ -3,21 +3,19 @@ package io.circe.config
 import cats.instances.either._
 import cats.laws._
 import cats.laws.discipline._
-import io.circe.{ Decoder, Json, Parser, ParsingFailure }
+import io.circe.{Decoder, Json, Parser, ParsingFailure}
 import io.circe.testing.ParserTests
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatestplus.scalacheck.Checkers
-import org.scalacheck.{ Arbitrary, Prop }
+import org.scalacheck.{Arbitrary, Prop}
 import org.typelevel.discipline.Laws
 import com.typesafe.config.{parser => _, _}
 
 class CirceConfigLaws extends AnyFlatSpec {
 
   implicit val arbitraryConfigJson: Arbitrary[Json] = Arbitrary {
-    def normalize(json: Json): Json = json
-      .mapObject(_.filterKeys(_.nonEmpty).mapValues(normalize))
-      .mapArray(_.map(normalize))
-      .mapNumber(number => {
+    def normalize(json: Json): Json =
+      json.mapObject(_.filterKeys(_.nonEmpty).mapValues(normalize)).mapArray(_.map(normalize)).mapNumber { number =>
         // Lower the precision to the types used internally by
         // Lightbend Config to ensure that numbers are representable.
         val double: java.lang.Double = number.toDouble
@@ -35,7 +33,7 @@ class CirceConfigLaws extends AnyFlatSpec {
             Json.fromDouble(double).get
 
         json.asNumber.get
-      })
+      }
 
     for (jsonObject <- io.circe.testing.instances.arbitraryJsonObject.arbitrary)
       yield normalize(Json.fromJsonObject(jsonObject))
@@ -47,7 +45,9 @@ class CirceConfigLaws extends AnyFlatSpec {
   }
 
   checkLaws("Parser", ParserTests(parser).fromString)
-  checkLaws("Parser", ParserTests(parser).fromFunction[Config]("fromConfig")(
+  checkLaws(
+    "Parser",
+    ParserTests(parser).fromFunction[Config]("fromConfig")(
       ConfigFactory.parseString,
       _.parse,
       _.decode[Json],
@@ -57,7 +57,6 @@ class CirceConfigLaws extends AnyFlatSpec {
   checkLaws("Printer", PrinterTests(parser).fromJson)
   checkLaws("Codec", CodecTests[Config](syntax.configDecoder, parser.parse).fromFunction("fromConfig"))
 }
-
 
 case class PrinterTests(parser: Parser) extends Laws {
   def fromJson(implicit A: Arbitrary[Json]): RuleSet =

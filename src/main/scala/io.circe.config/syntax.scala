@@ -45,6 +45,7 @@ import java.time.Period
  * }}}
  */
 object syntax {
+
   /**
    * Decoder for reading
    * [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration format]].
@@ -91,9 +92,7 @@ object syntax {
    * }}}
    */
   implicit val periodDecoder: Decoder[Period] = Decoder.decodeString.emap { str =>
-    Either
-      .catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p"))
-      .leftMap(t => "Decoder[Period]")
+    Either.catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p")).leftMap(t => "Decoder[Period]")
   }
 
   /**
@@ -185,7 +184,7 @@ object syntax {
   implicit val configDecoder: Decoder[Config] = configValueDecoder.emap { value =>
     value match {
       case obj: ConfigObject => Right(obj.toConfig)
-      case other => Left(s"JSON must be an object, was type ${other.valueType}")
+      case other             => Left(s"JSON must be an object, was type ${other.valueType}")
     }
   }
 
@@ -195,6 +194,7 @@ object syntax {
    * instances with methods to decode to a specific type.
    */
   implicit class CirceConfigOps(val config: Config) extends AnyVal {
+
     /**
      * Read config settings into the specified type.
      */
@@ -208,14 +208,14 @@ object syntax {
       parser.decodePath[A](config, path)
 
     /**
-      * Read config settings into the specified type.
-      */
+     * Read config settings into the specified type.
+     */
     def asF[F[_], A: Decoder](implicit ev: ApplicativeError[F, Throwable]): F[A] =
       parser.decodeF[F, A](config)
 
     /**
-      * Read config settings at given path into the specified type.
-      */
+     * Read config settings at given path into the specified type.
+     */
     def asF[F[_], A: Decoder](path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
       parser.decodePathF[F, A](config, path)
   }
