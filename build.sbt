@@ -116,10 +116,6 @@ scalacOptions ++= {
 
 scalacOptions in (Compile, console) --= Seq("-Ywarn-unused-import", "-Ywarn-unused:imports")
 scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
-// Temporary. See: https://github.com/tkawachi/sbt-doctest/pull/132
-scalacOptions in Test ~= {
-  _.filterNot(Set("-Xfatal-warnings"))
-}
 
 publishMavenStyle := true
 publishArtifact in Test := false
