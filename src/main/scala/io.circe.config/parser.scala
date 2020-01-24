@@ -97,11 +97,13 @@ object parser extends Parser {
       .catchNonFatal {
         convertValueUnsafe {
           val config = parseConfig
-          path.fold(config) {
-            path =>
-              if (config.hasPath(path)) config.getConfig(path)
+          path match {
+            case Some(path) =>
+              if (config.hasPath(path)) config.getValue(path)
               else throw new ParsingFailure("Path not found in config", new ConfigException.Missing(path))
-          }.root
+            case _ =>
+              config.root
+          }
         }
       }
       .leftMap(error => ParsingFailure(error.getMessage, error))

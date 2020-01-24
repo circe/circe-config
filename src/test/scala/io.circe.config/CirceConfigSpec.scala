@@ -65,6 +65,10 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
     parser.decode[AppSettings]().fold(fail(_), _ should equal (DecodedAppSettings))
   }
 
+  it should "parse and decode config value from default typesafe config resolution with path" in {
+    parser.decodePath[Double]("http.version").fold(fail(_), _ should equal (DecodedAppSettings.http.version))
+  }
+
   it should "parse and decode config from default typesafe config resolution via ApplicativeError" in {
     parser.decodeF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
   }
