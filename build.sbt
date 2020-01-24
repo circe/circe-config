@@ -10,7 +10,7 @@ mimaPreviousArtifacts := {
   val versionFilter: String => Boolean = CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, 12)) => _ => true
     case Some((2, 13)) => _ => false
-    case _ => _ => false
+    case _             => _ => false
   }
 
   versions.filter(versionFilter).map("io.circe" %% "circe-config" % _)
@@ -37,8 +37,7 @@ releaseVersionFile := target.value / "unused-version.sbt"
 releaseProcess := {
   import ReleaseTransformations._
   Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    { st: State =>
+    checkSnapshotDependencies, { st: State =>
       val v = (version in ThisBuild).value
       st.put(ReleaseKeys.versions, (v, v))
     },
@@ -83,20 +82,23 @@ doctestMarkdownEnabled := true
 scalacOptions in (Compile, doc) := Seq(
   "-groups",
   "-implicits",
-  "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
-  "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath
+  "-doc-source-url",
+  scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
+  "-sourcepath",
+  baseDirectory.in(LocalRootProject).value.getAbsolutePath
 )
 
 scalacOptions ++= Seq(
   "-deprecation",
-  "-encoding", "UTF-8",
+  "-encoding",
+  "UTF-8",
   "-feature",
   "-language:postfixOps",
   "-language:higherKinds",
   "-unchecked",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-unused:imports",
+  "-Ywarn-unused:imports"
 )
 
 scalacOptions ++= {
@@ -105,7 +107,7 @@ scalacOptions ++= {
       Seq(
         "-Xfatal-warnings",
         "-Yno-adapted-args",
-        "-Xfuture",
+        "-Xfuture"
       )
     case _ =>
       Nil
@@ -121,7 +123,9 @@ scalacOptions in Test ~= {
 
 publishMavenStyle := true
 publishArtifact in Test := false
-pomIncludeRepository := { _ => false }
+pomIncludeRepository := { _ =>
+  false
+}
 publishTo := Some {
   if (isSnapshot.value)
     Opts.resolver.sonatypeSnapshots

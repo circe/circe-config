@@ -27,7 +27,6 @@ import java.time.Period
 import scala.io.Source
 import io.circe.config.syntax._
 
-
 class CirceConfigSpec extends AnyFlatSpec with Matchers {
   import CirceConfigSpec._
 
@@ -62,15 +61,15 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "parse and decode config from default typesafe config resolution" in {
-    parser.decode[AppSettings]().fold(fail(_), _ should equal (DecodedAppSettings))
+    parser.decode[AppSettings]().fold(fail(_), _ should equal(DecodedAppSettings))
   }
 
   it should "parse and decode config from default typesafe config resolution via ApplicativeError" in {
-    parser.decodeF[IO, AppSettings]().unsafeRunSync() should equal (DecodedAppSettings)
+    parser.decodeF[IO, AppSettings]().unsafeRunSync() should equal(DecodedAppSettings)
   }
 
   it should "parse and decode config from default typesafe config resolution with path via ApplicativeError" in {
-    parser.decodePathF[IO, HttpSettings]("http").unsafeRunSync() should equal (DecodedAppSettings.http)
+    parser.decodePathF[IO, HttpSettings]("http").unsafeRunSync() should equal(DecodedAppSettings.http)
   }
 
   "printer" should "print it into a config string" in {
@@ -98,9 +97,7 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
   "round-trip" should "parse and print" in {
     for (file <- testResourcesDir.listFiles) {
       val Right(json) = parser.parseFile(file)
-      assert(
-        parser.parse(printer.print(json)) == Right(json),
-        s"round-trip failed for ${file.getName}")
+      assert(parser.parse(printer.print(json)) == Right(json), s"round-trip failed for ${file.getName}")
     }
   }
 }

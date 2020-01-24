@@ -93,18 +93,17 @@ object parser extends Parser {
         }
     }
 
-    Either
-      .catchNonFatal {
-        convertValueUnsafe {
-          val config = parseConfig
-          path.fold(config) {
-            path =>
-              if (config.hasPath(path)) config.getConfig(path)
-              else throw new ParsingFailure("Path not found in config", new ConfigException.Missing(path))
-          }.root
-        }
+    Either.catchNonFatal {
+      convertValueUnsafe {
+        val config = parseConfig
+        path
+          .fold(config) { path =>
+            if (config.hasPath(path)) config.getConfig(path)
+            else throw new ParsingFailure("Path not found in config", new ConfigException.Missing(path))
+          }
+          .root
       }
-      .leftMap(error => ParsingFailure(error.getMessage, error))
+    }.leftMap(error => ParsingFailure(error.getMessage, error))
   }
 
   final def parse(): Either[ParsingFailure, Json] =
@@ -124,7 +123,6 @@ object parser extends Parser {
 
   final def parsePath(config: Config, path: String): Either[ParsingFailure, Json] =
     toJson(config, Some(path))
-
 
   /**
    * Load the default configuration and decode an instance at a specific path.
@@ -213,13 +211,11 @@ object parser extends Parser {
   final def decodePath[A: Decoder](config: Config, path: String): Either[Error, A] =
     finishDecode(parsePath(config, path))
 
-
   final def decodeAccumulating[A: Decoder](config: Config): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parse(config))
 
   final def decodeFileAccumulating[A: Decoder](file: File): ValidatedNel[Error, A] =
     finishDecodeAccumulating[A](parseFile(file))
-
 
   /**
    * Load default configuration and decode an instance supporting [[cats.ApplicativeError]].
@@ -293,6 +289,8 @@ object parser extends Parser {
    * res0: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
    * }}}
    */
-  final def decodePathF[F[_], A: Decoder](config: Config, path: String)(implicit ev: ApplicativeError[F, Throwable]): F[A] =
+  final def decodePathF[F[_], A: Decoder](config: Config, path: String)(
+    implicit ev: ApplicativeError[F, Throwable]
+  ): F[A] =
     decodePath[A](config, path).leftWiden[Throwable].liftTo[F]
 }
