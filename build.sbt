@@ -57,7 +57,7 @@ val Versions = new {
   val discipline = "1.0.2"
   val scalaCheck = "1.14.3"
   val scalaTest = "3.1.1"
-  val scalaTestPlus = "3.1.1.0"
+  val scalaTestPlus = "3.1.1.1"
 }
 
 libraryDependencies ++= Seq(
