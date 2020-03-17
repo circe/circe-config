@@ -31,6 +31,7 @@ git.remoteRepo := "git@github.com:circe/circe-config.git"
 
 enablePlugins(ReleasePlugin)
 releaseCrossBuild := true
+releaseVcsSign := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseTagName := (version in ThisBuild).value
 releaseVersionFile := target.value / "unused-version.sbt"
