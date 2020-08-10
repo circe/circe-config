@@ -55,10 +55,10 @@ val Versions = new {
   val catsEffect = "2.1.4"
   val circe = "0.13.0"
   val config = "1.4.0"
-  val discipline = "1.0.2"
+  val discipline = "1.0.3"
   val scalaCheck = "1.14.3"
-  val scalaTest = "3.2.0"
-  val scalaTestPlus = "3.2.1.0"
+  val scalaTest = "3.2.1"
+  val scalaTestPlus = "3.2.0.0"
 }
 
 libraryDependencies ++= Seq(
