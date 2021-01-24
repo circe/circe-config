@@ -93,15 +93,15 @@ val Versions = new {
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % Versions.config,
-  "io.circe" %% "circe-core" % Versions.circe,
-  "io.circe" %% "circe-parser" % Versions.circe,
-  "io.circe" %% "circe-generic" % Versions.circe % Test,
-  "io.circe" %% "circe-testing" % Versions.circe % Test,
-  "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
-  "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
-  "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
-  "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
-  "org.scalatestplus" %% "scalacheck-1-15" % Versions.scalaTestPlus % Test
+  "io.circe" %%% "circe-core" % Versions.circe,
+  "io.circe" %%% "circe-parser" % Versions.circe,
+  "io.circe" %%% "circe-generic" % Versions.circe % Test,
+  "io.circe" %%% "circe-testing" % Versions.circe % Test,
+  "org.typelevel" %%% "cats-effect" % Versions.catsEffect % Test,
+  "org.typelevel" %%% "discipline-core" % Versions.discipline % Test,
+  "org.scalacheck" %%% "scalacheck" % Versions.scalaCheck % Test,
+  "org.scalatest" %%% "scalatest" % Versions.scalaTest % Test,
+  "org.scalatestplus" %%% "scalacheck-1-15" % Versions.scalaTestPlus % Test
 )
 
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
