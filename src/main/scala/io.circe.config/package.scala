@@ -65,11 +65,11 @@ package object config {
   private[config] def jsonToConfigValue(json: Json): ConfigValue =
     json.fold(
       ConfigValueFactory.fromAnyRef(null),
-      boolean => ConfigValueFactory.fromAnyRef(boolean),
+      boolean => ConfigValueFactory.fromAnyRef(boolean.asInstanceOf[java.lang.Boolean]),
       number =>
         number.toLong match {
-          case Some(long) => ConfigValueFactory.fromAnyRef(long)
-          case None       => ConfigValueFactory.fromAnyRef(number.toDouble)
+          case Some(long) => ConfigValueFactory.fromAnyRef(long.asInstanceOf[java.lang.Long])
+          case None       => ConfigValueFactory.fromAnyRef(number.toDouble.asInstanceOf[java.lang.Double])
         },
       str => ConfigValueFactory.fromAnyRef(str),
       arr => ConfigValueFactory.fromIterable(arr.map(jsonToConfigValue).asJava),
