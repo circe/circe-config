@@ -1,18 +1,19 @@
 import sbt._
-import Keys._
+import sbt.Keys._
 import sbt.io.Path.rebase
-
-import scala.io.Source
 
 object ConfigLibraryGenerator extends AutoPlugin {
 
-
   override def projectSettings: Seq[Setting[_]] =
-    inConfig(Compile)(sourceGenerators += sourceGeneratorTask) ++ inConfig(Test)(sourceGenerators += sourceGeneratorTask) ++
+    inConfig(Compile)(
       Seq(
-        Test / unmanagedResourceDirectories ++= (LocalRootProject / Test / unmanagedResourceDirectories).value
-      )
-
+        sourceGenerators += sourceGeneratorTask,
+        resourceGenerators += resourceGeneratorTask
+      )) ++ inConfig(Test)(
+      Seq(
+        sourceGenerators += sourceGeneratorTask,
+        resourceGenerators += resourceGeneratorTask
+      ))
 
   object autoImport {
 
@@ -28,24 +29,19 @@ object ConfigLibraryGenerator extends AutoPlugin {
   }
 
   def sourceGeneratorTask: Def.Initialize[Task[Seq[File]]] = Def.task {
-    val streams = Keys.streams.value
-    val inCache = Difference.inputs(streams.cacheStoreFactory.make("sconfig-in"), FileInfo.lastModified)
-    val outCache = Difference.inputs(streams.cacheStoreFactory.make("sconfig-out"), FileInfo.exists)
     val library = autoImport.configLibrary.value
-    val sources = (LocalRootProject / Keys.unmanagedSources).value.toSet
-    val mappings = (sources pair rebase((LocalRootProject / sourceDirectories).value, sourceManaged.value)).toMap
+    val inCache = Difference.inputs(streams.value.cacheStoreFactory.make(s"${library.targetShortPackage}-in"), FileInfo.lastModified)
+    val outCache = Difference.inputs(streams.value.cacheStoreFactory.make(s"${library.targetShortPackage}-out"), FileInfo.exists)
+    val mappings = ((LocalRootProject / Keys.unmanagedSources).value pair rebase((LocalRootProject / sourceDirectories).value, sourceManaged.value)).toMap
 
-    streams.log.debug(s"Sources used for ${library.targetName} sources generation:${System.lineSeparator}${sources.mkString(System.lineSeparator)}")
+    streams.value.log.debug(s"Mappings used for ${library.targetName} sources generation:${System.lineSeparator}${mappings.mkString(System.lineSeparator)}")
 
-    inCache(sources) { inReport =>
+    inCache(mappings.keySet) { inReport =>
       outCache { outReport =>
         if (outReport.checked.nonEmpty && inReport.modified.isEmpty && outReport.modified.isEmpty)
           outReport.checked
         else inReport.checked.map { f =>
-          val out = {
-            val source = Source.fromFile(f)
-            try source.mkString finally source.close()
-          }.replaceAll("io[.]circe[.]config", library.targetPackage)
+          val out = IO.read(f).replaceAll("io[.]circe[.]config", library.targetPackage)
             .replaceFirst("package config", "package " + library.targetShortPackage)
             .replaceFirst("package object config", "package object " + library.targetShortPackage)
             .replaceAll("com[.]typesafe[.]config", library.libraryPackage)
@@ -62,4 +58,26 @@ object ConfigLibraryGenerator extends AutoPlugin {
       }
     }.toSeq
   }
+
+  def resourceGeneratorTask: Def.Initialize[Task[Seq[File]]] = Def.task {
+    val library = autoImport.configLibrary.value
+    val inCache = Difference.inputs(streams.value.cacheStoreFactory.make(s"${library.targetShortPackage}-in"), FileInfo.lastModified)
+    val outCache = Difference.inputs(streams.value.cacheStoreFactory.make(s"${library.targetShortPackage}-out"), FileInfo.exists)
+    val mappings = ((LocalRootProject / unmanagedResources).value pair rebase((LocalRootProject / unmanagedResourceDirectories).value, resourceManaged.value)).toMap
+
+    streams.value.log.debug(s"Mappings used for ${library.targetName} resource generation:${System.lineSeparator}${mappings.mkString(System.lineSeparator)}")
+
+    inCache(mappings.keySet) { inReport =>
+      outCache { outReport =>
+        if (outReport.checked.nonEmpty && inReport.modified.isEmpty && outReport.modified.isEmpty)
+          outReport.checked
+        else inReport.checked.map { r =>
+          val target = mappings(r)
+          IO.copy(Seq(r -> target), io.CopyOptions.apply().withOverwrite(true))
+          target
+        }
+      }
+    }.toSeq
+  }
+
 }
