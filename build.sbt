@@ -1,8 +1,9 @@
 name := "circe-config"
 description := "Yet another Typesafe Config decoder"
-homepage := Some(url("https://github.com/circe/circe-config"))
-licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://circe.github.io/circe-config/"))
+
+ThisBuild / homepage := Some(url("https://github.com/circe/circe-config"))
+ThisBuild / licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 
 ThisBuild / organization := "io.circe"
 ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6")
@@ -87,6 +88,7 @@ val Versions = new {
   val scalaCheck = "1.15.4"
   val scalaTest = "3.2.10"
   val scalaTestPlus = "3.2.10.0"
+  val sconfig = "1.4.5"
 }
 
 libraryDependencies ++= Seq(
@@ -106,65 +108,82 @@ enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
 autoAPIMappings := true
 ghpagesNoJekyll := true
 SiteScaladoc / siteSubdirName := ""
-doctestTestFramework := DoctestTestFramework.ScalaTest
-doctestMarkdownEnabled := true
-Compile / doc / scalacOptions := Seq(
-  "-groups",
-  "-implicits",
-  "-doc-source-url",
-  scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
-  "-sourcepath",
-  (LocalRootProject / baseDirectory).value.getAbsolutePath
-)
 
-scalacOptions ++= Seq(
-  "-deprecation",
-  "-encoding",
-  "UTF-8",
-  "-feature",
-  "-language:postfixOps",
-  "-language:higherKinds",
-  "-unchecked",
-  "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
-  "-Ywarn-unused:imports"
-)
+inThisBuild(
+  Seq(
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-encoding",
+      "UTF-8",
+      "-feature",
+      "-language:postfixOps",
+      "-language:higherKinds",
+      "-unchecked",
+      "-Ywarn-dead-code",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-unused:imports"),
+    scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, 12)) =>
+          Seq(
+            "-Xfatal-warnings",
+            "-Yno-adapted-args",
+            "-Xfuture"
+          )
+        case _ =>
+          Nil
+      }
+    },
 
-scalacOptions ++= {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 12)) =>
-      Seq(
-        "-Xfatal-warnings",
-        "-Yno-adapted-args",
-        "-Xfuture"
-      )
-    case _ =>
-      Nil
-  }
-}
+    Compile / doc / scalacOptions := Seq(
+      "-groups",
+      "-implicits",
+      "-doc-source-url",
+      scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
+      "-sourcepath",
+      (LocalRootProject / baseDirectory).value.getAbsolutePath
+    ),
+
+    doctestTestFramework := DoctestTestFramework.ScalaTest,
+    doctestMarkdownEnabled := true,
+
+    publishMavenStyle := true,
+    Test / publishArtifact := false,
+    publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging),
+    pomIncludeRepository := ( _ => false ),
+
+    scmInfo := Some(ScmInfo(url("https://github.com/circe/circe-config"), "scm:git:git@github.com:circe/circe-config.git")),
+    developers := List(
+      Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
+    )
+  )
+)
 
 Compile / console / scalacOptions --= Seq("-Ywarn-unused-import", "-Ywarn-unused:imports")
 Test / console / scalacOptions := (Compile / console / scalacOptions).value
 
-publishMavenStyle := true
-Test / publishArtifact := false
-pomIncludeRepository := { _ =>
-  false
-}
-publishTo := Some {
-  if (isSnapshot.value)
-    Opts.resolver.sonatypeSnapshots
-  else
-    Opts.resolver.sonatypeStaging
-}
+lazy val `circe-config` =
+  (project in file("."))
 
-scmInfo := Some(
-  ScmInfo(
-    url("https://github.com/circe/circe-config"),
-    "scm:git:git@github.com:circe/circe-config.git"
-  )
-)
+lazy val `circe-sconfig` =
+  crossProject(JVMPlatform, JSPlatform)
+    .withoutSuffixFor(JVMPlatform)
+    .in(file(".sconfig"))
+    .enablePlugins(ConfigLibraryGenerator)
+    .settings(
+      description := "Yet another Typesafe Config AST decoder",
+      configLibrary := ConfigLibrary(
+        targetPackage = "io.circe.sconfig",
+        targetShortPackage = "sconfig",
+        targetName = "circe-sconfig",
+        libraryPackage = "org.ekrich.config",
+        libraryDocUrl = "[[https://github.com/ekrich/sconfig SConfig]]"),
+      libraryDependencies ++= (LocalRootProject / libraryDependencies).value,
+      libraryDependencies += "org.ekrich" %%% "sconfig" % Versions.sconfig,
+      libraryDependencies -= "com.typesafe" % "config" % Versions.config
+    )
+    .jvmSettings(
+      doctestTestFramework := (LocalRootProject / doctestTestFramework).value
+    )
 
-developers := List(
-  Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
-)
+aggregateProjects(`circe-sconfig`.jvm, `circe-sconfig`.js)
