@@ -1,3 +1,4 @@
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.5.2")
 addSbtPlugin("com.dwijnand" % "sbt-travisci" % "1.2.0")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13")
 addSbtPlugin("com.github.tkawachi" % "sbt-doctest" % "0.9.8")
