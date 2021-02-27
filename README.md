@@ -1,6 +1,6 @@
 # circe-config
 
-[![Travis CI Status]][Travis CI]
+[![Build](https://github.com/circe/circe-config/workflows/Continuous%20Integration/badge.svg)](https://github.com/circe/circe-config/actions)
 [![Latest Version Badge]][Latest Version]
 
 Small library for translating between [HOCON], [Java properties], and JSON
