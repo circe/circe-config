@@ -140,3 +140,14 @@ scmInfo := Some(
 developers := List(
   Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
 )
+
+ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8")
+// No auto-publish atm. Remove this line to generate publish stage
+ThisBuild / githubWorkflowPublishTargetBranches := Seq.empty
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(
+    List("test", "doc", "mimaReportBinaryIssues"),
+    id = None,
+    name = Some("Test")
+  ),
+)
