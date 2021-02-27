@@ -1,3 +1,8 @@
+val scala212 = "2.12.12"
+val scala213 = "2.13.5"
+
+ThisBuild / crossScalaVersions := Seq(scala212, scala213)
+
 name := "circe-config"
 organization := "io.circe"
 description := "Yet another Typesafe Config decoder"
