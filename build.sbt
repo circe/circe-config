@@ -52,7 +52,7 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val catsEffect = "2.3.1"
+  val catsEffect = "2.3.3"
   val circe = "0.13.0"
   val config = "1.4.1"
   val discipline = "1.1.4"
