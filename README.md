@@ -6,20 +6,29 @@
 Small library for translating between [HOCON], [Java properties], and JSON
 documents and circe's JSON AST.
 
-At a high-level it can be used as a [circe] powered front-end for the [Typesafe
-config] library to enable boilerplate free loading of settings into Scala types.
-More generally it provides parsers and printers for interoperating with
-[Typesafe config]'s JSON AST.
+At a high-level it can be used as a [circe] powered front-end for either the [Typesafe
+config] or [sconfig] libraries to enable boilerplate free loading of settings into Scala types.
+More generally it provides parsers and printers for interoperating with a [Typesafe config]
+compatible JSON AST.
 
  [HOCON]: https://github.com/lightbend/config/blob/master/HOCON.md
  [Java properties]: https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html
 
 ## Usage
 
-To use this library configure your sbt project with the following line:
+To use this library configure your sbt project with one of the following lines:
 
+#### With Typesafe Config
 ```sbt
-libraryDependencies += "io.circe" %% "circe-config" % "0.7.0"
+libraryDependencies += "io.circe" %% "circe-config" % "0.7.0" 
+```
+#### With sconfig
+```sbt
+libraryDependencies += "io.circe" %% "circe-sconfig" % "0.7.0" 
+```
+#### With Scala.js
+```sbt
+libraryDependencies += "io.circe" %%% "circe-sconfig" % "0.7.0" 
 ```
 
 ## Documentation
@@ -30,7 +39,9 @@ libraryDependencies += "io.circe" %% "circe-config" % "0.7.0"
 
 The following examples use `io.circe:circe-generic` as a dependency to
 automatically derive decoders. They load the configuration found in
-[application.conf].
+[application.conf] using `circe-config` via [Typesafe Config]. To use
+`circe-sconfig` via [sconfig], replace any references to`io.circe.config`
+below with `io.circe.sconfig`.
 
 ```scala
 scala> import com.typesafe.config.{ ConfigFactory, ConfigMemorySize }
@@ -122,6 +133,7 @@ limitations under the License.
  [apache]: http://www.apache.org/licenses/LICENSE-2.0
  [circe]: https://github.com/circe/circe
  [Typesafe config]: https://github.com/lightbend/config
+ [sconfig]: https://github.com/ekrich/sconfig
  [Travis CI]: https://travis-ci.org/circe/circe-config
  [Travis CI Status]: https://travis-ci.org/circe/circe-config.svg?branch=master
  [Latest Version Badge]: https://img.shields.io/maven-central/v/io.circe/circe-config_2.12.svg
