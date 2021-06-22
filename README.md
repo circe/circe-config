@@ -1,6 +1,6 @@
 # circe-config
 
-[![Travis CI Status]][Travis CI]
+[![CI Status]][CI]
 [![Latest Version Badge]][Latest Version]
 
 Small library for translating between [HOCON], [Java properties], and JSON
@@ -80,7 +80,7 @@ scala> case class AppSettings(http: HttpSettings)
 scala> parser.decodeF[IO, AppSettings]()
 res0: cats.effect.IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080),Some(1.1))))
 
-scala> val settings: IO[AppSettings] = parser.decodeF[IO, AppSettings]
+scala> val settings: IO[AppSettings] = parser.decodeF[IO, AppSettings]()
 scala> settings.unsafeRunSync()
 res1: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080),Some(1.1)))
 
@@ -122,7 +122,7 @@ limitations under the License.
  [apache]: http://www.apache.org/licenses/LICENSE-2.0
  [circe]: https://github.com/circe/circe
  [Typesafe config]: https://github.com/lightbend/config
- [Travis CI]: https://travis-ci.org/circe/circe-config
- [Travis CI Status]: https://travis-ci.org/circe/circe-config.svg?branch=master
+ [CI]: https://github.com/circe/circe-config/actions
+ [CI Status]: https://img.shields.io/github/workflow/status/circe/circe-config/Continuous%20Integration.svg
  [Latest Version Badge]: https://img.shields.io/maven-central/v/io.circe/circe-config_2.12.svg
  [Latest Version]: https://maven-badges.herokuapp.com/maven-central/io.circe/circe-config_2.12

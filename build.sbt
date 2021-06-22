@@ -1,9 +1,36 @@
 name := "circe-config"
-organization := "io.circe"
 description := "Yet another Typesafe Config decoder"
 homepage := Some(url("https://github.com/circe/circe-config"))
 licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 apiURL := Some(url("https://circe.github.io/circe-config/"))
+
+ThisBuild / organization := "io.circe"
+ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6")
+ThisBuild / scalaVersion := crossScalaVersions.value.last
+
+ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8")
+ThisBuild / githubWorkflowPublishTargetBranches := Nil
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(
+    List(
+      "clean",
+      "coverage",
+      "scalafmtCheckAll",
+      "scalafmtSbtCheck",
+      "test",
+      "coverageReport"
+    ),
+    id = None,
+    name = Some("Test")
+  ),
+  WorkflowStep.Use(
+    UseRef.Public(
+      "codecov",
+      "codecov-action",
+      "v1"
+    )
+  )
+)
 
 mimaPreviousArtifacts := {
   val versions = Set("0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0")
@@ -16,8 +43,8 @@ mimaPreviousArtifacts := {
   versions.filter(versionFilter).map("io.circe" %% "circe-config" % _)
 }
 
-unmanagedSourceDirectories in Compile += {
-  val sourceDir = (sourceDirectory in Compile).value
+Compile / unmanagedSourceDirectories += {
+  val sourceDir = (Compile / sourceDirectory).value
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, n)) if n <= 12 => sourceDir / "scala-2.13-"
     case _                       => sourceDir / "scala-2.13+"
@@ -33,13 +60,14 @@ enablePlugins(ReleasePlugin)
 releaseCrossBuild := true
 releaseVcsSign := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
-releaseTagName := (version in ThisBuild).value
+releaseTagName := (ThisBuild / version).value
 releaseVersionFile := target.value / "unused-version.sbt"
 releaseProcess := {
   import ReleaseTransformations._
   Seq[ReleaseStep](
-    checkSnapshotDependencies, { st: State =>
-      val v = (version in ThisBuild).value
+    checkSnapshotDependencies,
+    { st: State =>
+      val v = (ThisBuild / version).value
       st.put(ReleaseKeys.versions, (v, v))
     },
     runTest,
@@ -58,7 +86,7 @@ val Versions = new {
   val discipline = "1.1.5"
   val scalaCheck = "1.15.4"
   val scalaTest = "3.2.9"
-  val scalaTestPlus = "3.2.2.0"
+  val scalaTestPlus = "3.2.9.0"
 }
 
 libraryDependencies ++= Seq(
@@ -71,22 +99,22 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
   "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
   "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
-  "org.scalatestplus" %% "scalacheck-1-14" % Versions.scalaTestPlus % Test
+  "org.scalatestplus" %% "scalacheck-1-15" % Versions.scalaTestPlus % Test
 )
 
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
 autoAPIMappings := true
 ghpagesNoJekyll := true
-siteSubdirName in SiteScaladoc := ""
+SiteScaladoc / siteSubdirName := ""
 doctestTestFramework := DoctestTestFramework.ScalaTest
 doctestMarkdownEnabled := true
-scalacOptions in (Compile, doc) := Seq(
+Compile / doc / scalacOptions := Seq(
   "-groups",
   "-implicits",
   "-doc-source-url",
   scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
   "-sourcepath",
-  baseDirectory.in(LocalRootProject).value.getAbsolutePath
+  (LocalRootProject / baseDirectory).value.getAbsolutePath
 )
 
 scalacOptions ++= Seq(
@@ -115,11 +143,11 @@ scalacOptions ++= {
   }
 }
 
-scalacOptions in (Compile, console) --= Seq("-Ywarn-unused-import", "-Ywarn-unused:imports")
-scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
+Compile / console / scalacOptions --= Seq("-Ywarn-unused-import", "-Ywarn-unused:imports")
+Test / console / scalacOptions := (Compile / console / scalacOptions).value
 
 publishMavenStyle := true
-publishArtifact in Test := false
+Test / publishArtifact := false
 pomIncludeRepository := { _ =>
   false
 }

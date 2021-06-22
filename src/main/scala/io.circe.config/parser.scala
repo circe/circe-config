@@ -289,8 +289,8 @@ object parser extends Parser {
    * res0: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
    * }}}
    */
-  final def decodePathF[F[_], A: Decoder](config: Config, path: String)(
-    implicit ev: ApplicativeError[F, Throwable]
+  final def decodePathF[F[_], A: Decoder](config: Config, path: String)(implicit
+    ev: ApplicativeError[F, Throwable]
   ): F[A] =
     decodePath[A](config, path).leftWiden[Throwable].liftTo[F]
 }
