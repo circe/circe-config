@@ -113,7 +113,7 @@ object CirceConfigSpec {
   sealed abstract class Adder[T] {
     def add(a: T, b: T): T
   }
-  implicit def numericAdder[T: scala.math.Numeric] = new Adder[T] {
+  implicit def numericAdder[T: scala.math.Numeric]: Adder[T] = new Adder[T] {
     override def add(a: T, b: T): T = implicitly[scala.math.Numeric[T]].plus(a, b)
   }
 

@@ -1,4 +1,4 @@
-addSbtPlugin("com.dwijnand" % "sbt-travisci" % "1.2.0")
+addSbtPlugin("com.codecommit" % "sbt-github-actions" % "0.12.0")
 addSbtPlugin("com.github.sbt" % "sbt-release" % "1.0.15")
 addSbtPlugin("com.github.tkawachi" % "sbt-doctest" % "0.9.9")
 addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.1.2")
