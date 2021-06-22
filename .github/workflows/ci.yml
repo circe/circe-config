@@ -52,6 +52,6 @@ jobs:
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Test
-        run: sbt --client '++${{ matrix.scala }}; clean; coverage; scalastyle; scalafmtCheckAll; scalafmtSbtCheck; test; coverageReport'
+        run: sbt --client '++${{ matrix.scala }}; clean; coverage; scalafmtCheckAll; scalafmtSbtCheck; test; coverageReport'
 
       - uses: codecov/codecov-action@v1

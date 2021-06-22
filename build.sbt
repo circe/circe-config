@@ -15,7 +15,6 @@ ThisBuild / githubWorkflowBuild := Seq(
     List(
       "clean",
       "coverage",
-      "scalastyle",
       "scalafmtCheckAll",
       "scalafmtSbtCheck",
       "test",
