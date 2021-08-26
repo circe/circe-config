@@ -26,12 +26,10 @@ import scala.concurrent.duration._
 import java.time.Period
 
 /**
- * Implicits for decoding Typesafe Config values and instances using
- * [[io.circe.Decoder circe decoders]].
+ * Implicits for decoding Typesafe Config values and instances using [[io.circe.Decoder circe decoders]].
  *
- * In addition to [[syntax.durationDecoder]] and [[syntax.memorySizeDecoder]]
- * for reading Typesafe Config specific value formats, this module also provides
- * [[syntax.CirceConfigOps]] for decoding loaded configurations.
+ * In addition to [[syntax.durationDecoder]] and [[syntax.memorySizeDecoder]] for reading Typesafe Config specific value
+ * formats, this module also provides [[syntax.CirceConfigOps]] for decoding loaded configurations.
  *
  * @example
  * {{{
@@ -47,8 +45,7 @@ import java.time.Period
 object syntax {
 
   /**
-   * Decoder for reading
-   * [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration format]].
+   * Decoder for reading [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration format]].
    *
    * @example
    * {{{
@@ -73,8 +70,7 @@ object syntax {
   }
 
   /**
-   * Decoder for reading
-   * [[https://github.com/lightbend/config/blob/master/HOCON.md#period-format period format]].
+   * Decoder for reading [[https://github.com/lightbend/config/blob/master/HOCON.md#period-format period format]].
    *
    * @example
    * {{{
@@ -97,8 +93,7 @@ object syntax {
 
   /**
    * Decoder for reading
-   * [[https://github.com/lightbend/config/blob/master/HOCON.md#size-in-bytes-format size in bytes format]]
-   * into a
+   * [[https://github.com/lightbend/config/blob/master/HOCON.md#size-in-bytes-format size in bytes format]] into a
    * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigMemorySize.html com.typesafe.config.ConfigMemorySize]].
    *
    * @example
@@ -148,7 +143,8 @@ object syntax {
    * res2: io.circe.Decoder.Result[ConfigValue] = Right(SimpleConfigObject({"host":"localhost","port":8080}))
    * }}}
    *
-   * @see [[configDecoder]] for decoding circe JSON objects to a Typesafe Config instance.
+   * @see
+   *   [[configDecoder]] for decoding circe JSON objects to a Typesafe Config instance.
    */
   implicit val configValueDecoder: Decoder[ConfigValue] = Decoder.decodeJson.emap { json =>
     Either.catchNonFatal(jsonToConfigValue(json)).leftMap(t => "Decoder[ConfigValue]")
@@ -179,7 +175,8 @@ object syntax {
    * res2: io.circe.Decoder.Result[Config] = Left(DecodingFailure(JSON must be an object, was type NUMBER, List()))
    * }}}
    *
-   * @see [[configValueDecoder]] for decoding any circe JSON AST.
+   * @see
+   *   [[configValueDecoder]] for decoding any circe JSON AST.
    */
   implicit val configDecoder: Decoder[Config] = configValueDecoder.emap { value =>
     value match {

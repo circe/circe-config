@@ -28,11 +28,11 @@ import com.typesafe.config._
 
 /**
  * Utilities for parsing
- * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
- * sources to [[io.circe.Json]] as well as decoding to a specific type.
+ * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]] sources
+ * to [[io.circe.Json]] as well as decoding to a specific type.
  *
- * If you are working in something like [[https://typelevel.org/cats-effect/api/cats/effect/IO cats.effect.IO]], or some other type `F[_]` that provides a
- * [[cats.ApplicativeError]], there're also decoders for loading such types.
+ * If you are working in something like [[https://typelevel.org/cats-effect/api/cats/effect/IO cats.effect.IO]], or some
+ * other type `F[_]` that provides a [[cats.ApplicativeError]], there're also decoders for loading such types.
  *
  * @example
  * {{{
@@ -58,8 +58,9 @@ import com.typesafe.config._
  * res3: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
  * }}}
  *
- * @see [[syntax.configDecoder]] for how to map [[io.circe.Json]] to
- * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
+ * @see
+ *   [[syntax.configDecoder]] for how to map [[io.circe.Json]] to
+ *   [[https://lightbend.github.io/config/latest/api/com/typesafe/config/Config.html com.typesafe.config.Config]]
  */
 object parser extends Parser {
 

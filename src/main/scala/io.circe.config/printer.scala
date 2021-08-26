@@ -37,19 +37,21 @@ object printer {
   /**
    * Default printer options.
    *
-   * By default JSON is printed in
-   * [[https://github.com/lightbend/config/blob/master/HOCON.md HOCON format]]
-   * without origin comments.
+   * By default JSON is printed in [[https://github.com/lightbend/config/blob/master/HOCON.md HOCON format]] without
+   * origin comments.
    *
-   * @see [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigRenderOptions.html com.typesafe.config.ConfigRenderOptions]]
+   * @see
+   *   [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigRenderOptions.html com.typesafe.config.ConfigRenderOptions]]
    */
   val DefaultOptions = ConfigRenderOptions.defaults.setJson(false).setOriginComments(false)
 
   /**
    * Print JSON to a Typesafe Config string.
    *
-   * @param root A [[io.circe.JsonObject JSON object]]
-   * @param options Printer options allowing to configure printing to JSON or HOCON
+   * @param root
+   *   A [[io.circe.JsonObject JSON object]]
+   * @param options
+   *   Printer options allowing to configure printing to JSON or HOCON
    */
   def print(root: Json, options: ConfigRenderOptions = DefaultOptions): String =
     jsonToConfigValue(root).render(options)
