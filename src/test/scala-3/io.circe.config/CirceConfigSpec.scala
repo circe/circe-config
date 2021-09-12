@@ -20,7 +20,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
-import io.circe.generic.auto._
 
 import scala.concurrent.duration._
 import java.time.Period
@@ -105,7 +104,7 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
 object CirceConfigSpec {
   val testResourcesDir = new java.io.File("src/test/resources")
   def resolveFile(name: String) = new java.io.File(testResourcesDir, name)
-  def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines.mkString("\n")
+  def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines().mkString("\n")
 
   val AppConfig: Config = ConfigFactory.parseResources("CirceConfigSpec.conf")
   val AppConfigString: String = readFile("CirceConfigSpec.conf")
@@ -180,4 +179,59 @@ object CirceConfigSpec {
     o = 0,
     p = Period.ofWeeks(4)
   )
+
+  given typeWithAdderDecoder[T: Adder](using adderDecoder: Decoder[T]): Decoder[TypeWithAdder[T]] = { hCursor =>
+    for {
+      typeWithAdder <- hCursor.downField("typeWithAdder").as[T]
+    } yield TypeWithAdder(typeWithAdder)
+  }
+
+  given Decoder[Nested] = { hCursor =>
+    for {
+      obj <- hCursor.downField("obj").as[Boolean]
+    } yield Nested(obj)
+  }
+
+  given Decoder[TestConfig] = { hCursor =>
+    for {
+      a <- hCursor.downField("a").as[Int]
+      b <- hCursor.downField("b").as[Boolean]
+      c <- hCursor.downField("c").as[String]
+      d <- hCursor.downField("d").as[Option[String]]
+      e <- hCursor.downField("e").as[Nested]
+      f <- hCursor.downField("f").as[List[Double]]
+      g <- hCursor.downField("g").as[List[List[String]]]
+      h <- hCursor.downField("h").as[List[Nested]]
+      i <- hCursor.downField("i").as[FiniteDuration]
+      j <- hCursor.downField("j").as[ConfigMemorySize]
+      k <- hCursor.downField("k").as[Config]
+      l <- hCursor.downField("l").as[ConfigValue]
+      m <- hCursor.downField("m").as[TypeWithAdder[Int]]
+      n <- hCursor.downField("n").as[Double]
+      o <- hCursor.downField("o").as[Double]
+      p <- hCursor.downField("p").as[Period]
+    } yield TestConfig(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
+  }
+
+  given Decoder[ServerSettings] = { hCursor =>
+    for {
+      host <- hCursor.downField("host").as[String]
+      port <- hCursor.downField("port").as[Int]
+      timeout <- hCursor.downField("timeout").as[FiniteDuration]
+      maxUpload <- hCursor.downField("maxUpload").as[ConfigMemorySize]
+    } yield ServerSettings(host, port, timeout, maxUpload)
+  }
+
+  given Decoder[HttpSettings] = { hCursor =>
+    for {
+      version <- hCursor.downField("version").as[Double]
+      server <- hCursor.downField("server").as[ServerSettings]
+    } yield HttpSettings(version, server)
+  }
+
+  given Decoder[AppSettings] = { hCursor =>
+    for {
+      http <- hCursor.downField("http").as[HttpSettings]
+    } yield new AppSettings(http)
+  }
 }
