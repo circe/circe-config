@@ -21,7 +21,19 @@ ThisBuild / githubWorkflowBuild := Seq(
       "coverageReport"
     ),
     id = None,
-    name = Some("Test")
+    name = Some("Test with coverage"),
+    cond = Some("${{ matrix.scala != '3.0.2' }}")
+  ),
+  WorkflowStep.Sbt(
+    List(
+      "clean",
+      "scalafmtCheckAll",
+      "scalafmtSbtCheck",
+      "test"
+    ),
+    id = None,
+    name = Some("Test without coverage"),
+    cond = Some("${{ matrix.scala == '3.0.2' }}")
   ),
   WorkflowStep.Use(
     UseRef.Public(

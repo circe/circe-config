@@ -51,7 +51,12 @@ jobs:
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
-      - name: Test
+      - name: Test with coverage
+        if: ${{ matrix.scala != '3.0.2' }}
         run: sbt ++${{ matrix.scala }} clean coverage scalafmtCheckAll scalafmtSbtCheck test coverageReport
+
+      - name: Test without coverage
+        if: ${{ matrix.scala == '3.0.2' }}
+        run: sbt ++${{ matrix.scala }} clean scalafmtCheckAll scalafmtSbtCheck test
 
       - uses: codecov/codecov-action@v1
