@@ -69,6 +69,7 @@ If you are using [`cats.effect.IO`], or some other type `F[_]` that provides a
 [`cats.ApplicativeError`], you can use the following:
 
 ```scala
+scala> import cats.effect.unsafe.implicits.global
 scala> import cats.effect.IO
 scala> import io.circe.generic.auto._
 scala> import io.circe.config.parser
@@ -87,8 +88,8 @@ res1: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080),Some
 scala> parser.decodePathF[IO, ServerSettings]("http.server")
 res2: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
 
-scala> parser.decodePathF[IO, ServerSettings]("path.not.found")
-res3: cats.effect.IO[ServerSettings] = IO(throw io.circe.ParsingFailure: Path not found in config)
+scala> parser.decodePathF[IO, ServerSettings]("path.not.found").option.unsafeRunSync
+res3: Option[ServerSettings] = None
 ```
 
 This makes the configuration directly available in your `F[_]`, such as `cats.effect.IO`, which handles any errors.

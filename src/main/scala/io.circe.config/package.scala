@@ -31,6 +31,7 @@ import config.compat.converters._
  *
  * @example
  * {{{
+ * scala> import cats.effect.unsafe.implicits.global
  * scala> import com.typesafe.config.ConfigFactory
  * scala> import io.circe.generic.auto._
  * scala> import io.circe.config.syntax._
