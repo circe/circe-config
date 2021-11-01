@@ -5,7 +5,7 @@ licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.htm
 apiURL := Some(url("https://circe.github.io/circe-config/"))
 
 ThisBuild / organization := "io.circe"
-ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6", "3.0.2")
+ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6", "3.1.0")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
 
 ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8")
@@ -22,7 +22,7 @@ ThisBuild / githubWorkflowBuild := Seq(
     ),
     id = None,
     name = Some("Test with coverage"),
-    cond = Some("${{ matrix.scala != '3.0.2' }}")
+    cond = Some("${{ matrix.scala != '3.1.0' }}")
   ),
   WorkflowStep.Sbt(
     List(
@@ -33,7 +33,7 @@ ThisBuild / githubWorkflowBuild := Seq(
     ),
     id = None,
     name = Some("Test without coverage"),
-    cond = Some("${{ matrix.scala == '3.0.2' }}")
+    cond = Some("${{ matrix.scala == '3.1.0' }}")
   ),
   WorkflowStep.Use(
     UseRef.Public(
