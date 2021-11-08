@@ -108,6 +108,8 @@ enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
 autoAPIMappings := true
 ghpagesNoJekyll := true
 SiteScaladoc / siteSubdirName := ""
+doctestTestFramework := DoctestTestFramework.ScalaTest
+doctestMarkdownEnabled := true
 
 inThisBuild(
   Seq(
@@ -143,8 +145,6 @@ inThisBuild(
       "-sourcepath",
       (LocalRootProject / baseDirectory).value.getAbsolutePath
     ),
-    doctestTestFramework := DoctestTestFramework.ScalaTest,
-    doctestMarkdownEnabled := true,
     publishMavenStyle := true,
     Test / publishArtifact := false,
     publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging),
@@ -189,7 +189,8 @@ lazy val `circe-sconfig` =
       libraryDependencies -= "com.typesafe" % "config" % Versions.config
     )
     .jvmSettings(
-      doctestTestFramework := (LocalRootProject / doctestTestFramework).value
+      doctestTestFramework := (LocalRootProject / doctestTestFramework).value,
+      doctestMarkdownEnabled := (LocalRootProject / doctestMarkdownEnabled).value,
     )
 
 aggregateProjects(`circe-sconfig`.jvm, `circe-sconfig`.js)
