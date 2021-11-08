@@ -121,7 +121,8 @@ inThisBuild(
       "-unchecked",
       "-Ywarn-dead-code",
       "-Ywarn-numeric-widen",
-      "-Ywarn-unused:imports"),
+      "-Ywarn-unused:imports"
+    ),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) =>
@@ -134,7 +135,6 @@ inThisBuild(
           Nil
       }
     },
-
     Compile / doc / scalacOptions := Seq(
       "-groups",
       "-implicits",
@@ -143,16 +143,15 @@ inThisBuild(
       "-sourcepath",
       (LocalRootProject / baseDirectory).value.getAbsolutePath
     ),
-
     doctestTestFramework := DoctestTestFramework.ScalaTest,
     doctestMarkdownEnabled := true,
-
     publishMavenStyle := true,
     Test / publishArtifact := false,
     publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging),
-    pomIncludeRepository := ( _ => false ),
-
-    scmInfo := Some(ScmInfo(url("https://github.com/circe/circe-config"), "scm:git:git@github.com:circe/circe-config.git")),
+    pomIncludeRepository := (_ => false),
+    scmInfo := Some(
+      ScmInfo(url("https://github.com/circe/circe-config"), "scm:git:git@github.com:circe/circe-config.git")
+    ),
     developers := List(
       Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
     )
@@ -163,7 +162,7 @@ Compile / console / scalacOptions --= Seq("-Ywarn-unused-import", "-Ywarn-unused
 Test / console / scalacOptions := (Compile / console / scalacOptions).value
 
 lazy val `circe-config` =
-  (project in file("."))
+  project in file(".")
 
 lazy val `circe-sconfig` =
   crossProject(JVMPlatform, JSPlatform)
@@ -177,7 +176,8 @@ lazy val `circe-sconfig` =
         targetShortPackage = "sconfig",
         targetName = "circe-sconfig",
         libraryPackage = "org.ekrich.config",
-        libraryDocUrl = "[[https://github.com/ekrich/sconfig SConfig]]"),
+        libraryDocUrl = "[[https://github.com/ekrich/sconfig SConfig]]"
+      ),
       mimaPreviousArtifacts := {
         val unavailable = Set("0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.7.0", "0.8.0")
         (LocalRootProject / mimaPreviousArtifacts).value.collect {
