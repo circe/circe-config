@@ -190,7 +190,7 @@ lazy val `circe-sconfig` =
     )
     .jvmSettings(
       doctestTestFramework := (LocalRootProject / doctestTestFramework).value,
-      doctestMarkdownEnabled := (LocalRootProject / doctestMarkdownEnabled).value,
+      doctestMarkdownEnabled := (LocalRootProject / doctestMarkdownEnabled).value
     )
 
 aggregateProjects(`circe-sconfig`.jvm, `circe-sconfig`.js)
