@@ -5,7 +5,7 @@ licenses += "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.htm
 apiURL := Some(url("https://circe.github.io/circe-config/"))
 
 ThisBuild / organization := "io.circe"
-ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6")
+ThisBuild / crossScalaVersions := List("2.12.15", "2.13.6")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
 
 ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8")
