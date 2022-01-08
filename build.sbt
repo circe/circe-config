@@ -80,13 +80,13 @@ releaseProcess := {
 }
 
 val Versions = new {
-  val catsEffect = "2.5.3"
+  val catsEffect = "2.5.4"
   val circe = "0.14.1"
   val config = "1.4.1"
-  val discipline = "1.1.5"
+  val discipline = "1.4.0"
   val scalaCheck = "1.15.4"
-  val scalaTest = "3.2.9"
-  val scalaTestPlus = "3.2.9.0"
+  val scalaTest = "3.2.10"
+  val scalaTestPlus = "3.2.10.0"
 }
 
 libraryDependencies ++= Seq(
