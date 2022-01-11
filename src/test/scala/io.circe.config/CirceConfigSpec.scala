@@ -16,8 +16,7 @@
 package io.circe.config
 
 import cats.effect.IO
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.flatspec.AnyFlatSpec
+import munit.FunSuite
 import com.typesafe.config.{parser => _, _}
 import io.circe.{parser => _, _}
 import io.circe.generic.auto._
@@ -27,11 +26,13 @@ import java.time.Period
 import scala.io.Source
 import io.circe.config.syntax._
 
-class CirceConfigSpec extends AnyFlatSpec with Matchers {
+class CirceConfigSpec extends FunSuite {
+
   import CirceConfigSpec._
 
   trait ParserTests {
     def parse: Either[ParsingFailure, Json]
+
     def decode: Either[Error, TestConfig]
 
     assert(parse.isRight)
@@ -44,57 +45,77 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
     assert(config.l.unwrapped == "localhost")
   }
 
-  "parser" should "parse and decode config from string" in new ParserTests {
-    def parse = parser.parse(AppConfigString)
-    def decode = parser.decode[TestConfig](AppConfigString)
+  def parserAssertions(parse: Either[ParsingFailure, Json], decode: Either[Error, TestConfig]): Unit = {
+    assert(parse.isRight)
+
+    val Right(config) = decode
+
+    assert(config == DecodedTestConfig)
+    assert(config.k.getDouble("ka") == 1.1)
+    assert(config.k.getString("kb") == "abc")
+    assert(config.l.unwrapped == "localhost")
   }
 
-  it should "parse and decode config from object" in new ParserTests {
-    def parse = parser.parse(AppConfig)
-    def decode = parser.decode[TestConfig](AppConfig)
+  test("parser should parse and decode config from string") {
+    parserAssertions(
+      parser.parse(AppConfigString),
+      parser.decode[TestConfig](AppConfigString)
+    )
   }
 
-  it should "parse and decode config from file" in new ParserTests {
+  test("parser should parse and decode config from object") {
+    parserAssertions(
+      parser.parse(AppConfig),
+      parser.decode[TestConfig](AppConfig)
+    )
+  }
+
+  test("parser should parse and decode config from file") {
     def file = resolveFile("CirceConfigSpec.conf")
-    def parse = parser.parseFile(file)
-    def decode = parser.decodeFile[TestConfig](file)
+
+    parserAssertions(parser.parseFile(file), parser.decodeFile[TestConfig](file))
   }
 
-  it should "parse and decode config from default typesafe config resolution" in {
-    parser.decode[AppSettings]().fold(fail(_), _ should equal(DecodedAppSettings))
+  test("parser should parse and decode config from default typesafe config resolution") {
+    parser
+      .decode[AppSettings]()
+      .fold(
+        fail("failed to decode typesafe config", _),
+        s => assert(s == DecodedAppSettings)
+      )
   }
 
-  it should "parse and decode config from default typesafe config resolution via ApplicativeError" in {
-    parser.decodeF[IO, AppSettings]().unsafeRunSync() should equal(DecodedAppSettings)
+  test("parser should parse and decode config from default typesafe config resolution via ApplicativeError") {
+    assert(parser.decodeF[IO, AppSettings]().unsafeRunSync() == DecodedAppSettings)
   }
 
-  it should "parse and decode config from default typesafe config resolution with path via ApplicativeError" in {
-    parser.decodePathF[IO, HttpSettings]("http").unsafeRunSync() should equal(DecodedAppSettings.http)
+  test("parser should parse and decode config from default typesafe config resolution with path via ApplicativeError") {
+    assert(parser.decodePathF[IO, HttpSettings]("http").unsafeRunSync() == (DecodedAppSettings.http))
   }
 
-  "printer" should "print it into a config string" in {
+  test("printer should print it into a config string") {
     val Right(json) = parser.parse(AppConfig)
     val expected = readFile("CirceConfigSpec.printed.conf")
     assert(printer.print(json) == expected)
   }
 
-  "syntax" should "provide Config decoder" in {
+  test("syntax should provide Config decoder") {
     assert(AppConfig.as[TestConfig] == Right(DecodedTestConfig))
   }
 
-  it should "provide syntax to decode at a given path" in {
+  test("provide syntax to decode at a given path") {
     assert(AppConfig.as[Nested]("e") == Right(Nested(true)))
   }
 
-  it should "provide Config decoder via ApplicativeError" in {
+  test("provide Config decoder via ApplicativeError") {
     assert(AppConfig.asF[IO, TestConfig].unsafeRunSync() == DecodedTestConfig)
   }
 
-  it should "provide syntax to decode at a given path via ApplicativeError" in {
+  test("provide syntax to decode at a given path via ApplicativeError") {
     assert(AppConfig.asF[IO, Nested]("e").unsafeRunSync() == Nested(true))
   }
 
-  "round-trip" should "parse and print" in {
+  test("round-trip should parse and print") {
     for (file <- testResourcesDir.listFiles) {
       val Right(json) = parser.parseFile(file)
       assert(parser.parse(printer.print(json)) == Right(json), s"round-trip failed for ${file.getName}")

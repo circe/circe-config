@@ -84,9 +84,7 @@ val Versions = new {
   val circe = "0.14.1"
   val config = "1.4.1"
   val discipline = "1.4.0"
-  val scalaCheck = "1.15.4"
-  val scalaTest = "3.2.10"
-  val scalaTestPlus = "3.2.10.0"
+  val munit = "0.7.29"
 }
 
 libraryDependencies ++= Seq(
@@ -97,16 +95,14 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-testing" % Versions.circe % Test,
   "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
   "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
-  "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
-  "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
-  "org.scalatestplus" %% "scalacheck-1-15" % Versions.scalaTestPlus % Test
+  "org.scalameta" %% "munit-scalacheck" % Versions.munit % Test
 )
 
 enablePlugins(GhpagesPlugin, SiteScaladocPlugin)
 autoAPIMappings := true
 ghpagesNoJekyll := true
 SiteScaladoc / siteSubdirName := ""
-doctestTestFramework := DoctestTestFramework.ScalaTest
+doctestTestFramework := DoctestTestFramework.Munit
 doctestMarkdownEnabled := true
 Compile / doc / scalacOptions := Seq(
   "-groups",

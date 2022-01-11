@@ -3,15 +3,14 @@ package io.circe.config
 import cats.instances.either._
 import cats.laws._
 import cats.laws.discipline._
-import io.circe.{Decoder, Json, Parser, ParsingFailure}
+import com.typesafe.config.{parser => _, _}
 import io.circe.testing.ParserTests
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatestplus.scalacheck.Checkers
+import io.circe.{Decoder, Json, Parser, ParsingFailure}
+import munit.ScalaCheckSuite
 import org.scalacheck.{Arbitrary, Prop}
 import org.typelevel.discipline.Laws
-import com.typesafe.config.{parser => _, _}
 
-class CirceConfigLaws extends AnyFlatSpec {
+class CirceConfigLaws extends ScalaCheckSuite {
 
   implicit val arbitraryConfigJson: Arbitrary[Json] = Arbitrary {
     def normalize(json: Json): Json =
@@ -39,10 +38,10 @@ class CirceConfigLaws extends AnyFlatSpec {
       yield normalize(Json.fromJsonObject(jsonObject))
   }
 
-  def checkLaws(name: String, ruleSet: Laws#RuleSet): Unit = ruleSet.all.properties.zipWithIndex.foreach {
-    case ((id, prop), 0) => name should s"obey $id" in Checkers.check(prop)
-    case ((id, prop), _) => it should s"obey $id" in Checkers.check(prop)
-  }
+  def checkLaws(name: String, ruleSet: Laws#RuleSet): Unit =
+    ruleSet.all.properties.foreach { case (id, prop) =>
+      property(s"$name should obey $id")(prop)
+    }
 
   checkLaws("Parser", ParserTests(parser).fromString)
   checkLaws(
