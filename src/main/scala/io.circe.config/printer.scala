@@ -22,7 +22,7 @@ import com.typesafe.config._
  * Print [[io.circe.Json]] to a Typesafe Config string.
  *
  * @example
- * {{{
+ *   {{{
  * scala> import io.circe.Json
  * scala> import io.circe.config.printer
  *
@@ -30,7 +30,7 @@ import com.typesafe.config._
  * scala> val json = Json.obj("server" -> Json.obj("host" -> Json.fromString("localhost"), "port" -> Json.fromInt(8080)))
  * scala> printer.print(json, options)
  * res0: String = server{host=localhost,port=8080}
- * }}}
+ *   }}}
  */
 object printer {
 
