@@ -85,7 +85,7 @@ val Versions = new {
   val config = "1.4.1"
   val discipline = "1.4.0"
   val scalaCheck = "1.15.4"
-  val scalaTest = "3.2.10"
+  val scalaTest = "3.2.11"
   val scalaTestPlus = "3.2.10.0"
 }
 
