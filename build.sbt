@@ -35,9 +35,9 @@ ThisBuild / githubWorkflowBuild := Seq(
 mimaPreviousArtifacts := {
   val versions = Set("0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0")
   val versionFilter: String => Boolean = CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 12)) => _ => true
-    case Some((2, 13)) => _ => false
-    case _             => _ => false
+    case Some(2, 12) => _ => true
+    case Some(2, 13) => _ => false
+    case _           => _ => false
   }
 
   versions.filter(versionFilter).map("io.circe" %% "circe-config" % _)
@@ -46,8 +46,8 @@ mimaPreviousArtifacts := {
 Compile / unmanagedSourceDirectories += {
   val sourceDir = (Compile / sourceDirectory).value
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n <= 12 => sourceDir / "scala-2.13-"
-    case _                       => sourceDir / "scala-2.13+"
+    case Some(2, n) if n <= 12 => sourceDir / "scala-2.13-"
+    case _                     => sourceDir / "scala-2.13+"
   }
 }
 
@@ -132,7 +132,7 @@ scalacOptions ++= Seq(
 
 scalacOptions ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 12)) =>
+    case Some(2, 12) =>
       Seq(
         "-Xfatal-warnings",
         "-Yno-adapted-args",
