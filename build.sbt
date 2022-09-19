@@ -84,7 +84,7 @@ val Versions = new {
   val circe = "0.14.1"
   val config = "1.4.2"
   val discipline = "1.4.0"
-  val scalaCheck = "1.15.4"
+  val scalaCheck = "1.17.0"
   val scalaTest = "3.2.11"
   val scalaTestPlus = "3.2.11.0"
 }
