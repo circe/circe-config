@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.circe.config
 
 import cats.effect.IO
@@ -103,7 +104,7 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
 }
 
 object CirceConfigSpec {
-  val testResourcesDir = new java.io.File("src/test/resources")
+  val testResourcesDir = new java.io.File("config/src/test/resources")
   def resolveFile(name: String) = new java.io.File(testResourcesDir, name)
   def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines.mkString("\n")
 
