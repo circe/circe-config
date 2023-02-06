@@ -1,0 +1,8 @@
+circe-config
+Copyright 2017 Circe
+Licensed under Apache License 2.0 (see LICENSE)
+
+This software contains portions of code derived from io.github.jonas:circe-config
+https://github.com/jonas/circe-config
+Copyright 2017 Jonas Fonseca
+Licensed under Apache License 2.0 (see LICENSE)
