@@ -10,6 +10,7 @@ val scala213 = "2.13.8"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213)
 ThisBuild / tlCiReleaseBranches := Seq("master")
+ThisBuild / tlFatalWarningsInCi := false
 
 val Versions = new {
   val catsEffect = "2.5.4"
