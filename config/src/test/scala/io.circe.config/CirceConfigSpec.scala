@@ -17,16 +17,16 @@
 package io.circe.config
 
 import cats.effect.IO
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.flatspec.AnyFlatSpec
 import com.typesafe.config.{parser => _, _}
-import io.circe.{parser => _, _}
-import io.circe.generic.auto._
-
-import scala.concurrent.duration._
-import java.time.Period
-import scala.io.Source
 import io.circe.config.syntax._
+import io.circe.generic.auto._
+import io.circe.{parser => _, _}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+
+import java.time.Period
+import scala.concurrent.duration._
+import scala.io.Source
 
 class CirceConfigSpec extends AnyFlatSpec with Matchers {
   import CirceConfigSpec._

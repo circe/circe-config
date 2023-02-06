@@ -19,13 +19,17 @@ package io.circe.config
 import cats.instances.either._
 import cats.laws._
 import cats.laws.discipline._
-import io.circe.{Decoder, Json, Parser, ParsingFailure}
+import com.typesafe.config.{parser => _, _}
+import io.circe.Decoder
+import io.circe.Json
+import io.circe.Parser
+import io.circe.ParsingFailure
 import io.circe.testing.ParserTests
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatestplus.scalacheck.Checkers
-import org.scalacheck.{Arbitrary, Prop}
 import org.typelevel.discipline.Laws
-import com.typesafe.config.{parser => _, _}
 
 class CirceConfigLaws extends AnyFlatSpec {
 

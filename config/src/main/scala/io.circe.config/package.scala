@@ -17,6 +17,7 @@
 package io.circe
 
 import com.typesafe.config._
+
 import config.compat.converters._
 
 /**

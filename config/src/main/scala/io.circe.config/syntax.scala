@@ -18,13 +18,13 @@ package io.circe
 package config
 
 import cats.ApplicativeError
-import com.typesafe.config.{parser => _, _}
 import cats.instances.either._
-import cats.syntax.either._
 import cats.syntax.bifunctor._
+import cats.syntax.either._
+import com.typesafe.config.{parser => _, _}
 
-import scala.concurrent.duration._
 import java.time.Period
+import scala.concurrent.duration._
 
 /**
  * Implicits for decoding Typesafe Config values and instances using [[io.circe.Decoder circe decoders]].

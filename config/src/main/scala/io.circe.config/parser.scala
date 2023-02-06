@@ -19,13 +19,14 @@ package config
 
 import cats.ApplicativeError
 import cats.data.ValidatedNel
-import cats.syntax.either._
-import cats.syntax.bifunctor._
 import cats.instances.either._
+import cats.syntax.bifunctor._
+import cats.syntax.either._
+import com.typesafe.config._
+
 import java.io.File
 
 import compat.converters._
-import com.typesafe.config._
 
 /**
  * Utilities for parsing
