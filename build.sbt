@@ -42,5 +42,9 @@ lazy val config = crossProject(JVMPlatform)
       "org.scalatestplus" %% "scalacheck-1-15" % Versions.scalaTestPlus % Test
     ),
     doctestTestFramework := DoctestTestFramework.ScalaTest,
-    doctestMarkdownEnabled := true
+    doctestMarkdownEnabled := true,
+    tlVersionIntroduced := Map(
+      "2.12" -> "0.3.0",
+      "2.13" -> "0.7.0"
+    )
   )
