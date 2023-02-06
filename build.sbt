@@ -53,7 +53,6 @@ lazy val config = project
     ),
     doctestTestFramework := DoctestTestFramework.ScalaTest,
     doctestMarkdownEnabled := true,
-    headerLicense := Some(HeaderLicense.ALv2(s"${startYear.value.get}", "Jonas Fonseca")),
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
       "2.13" -> "0.7.0"
