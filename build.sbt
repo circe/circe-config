@@ -24,8 +24,7 @@ val Versions = new {
 
 lazy val root = tlCrossRootProject.aggregate(config)
 
-lazy val config = crossProject(JVMPlatform)
-  .crossType(CrossType.Pure)
+lazy val config = project
   .in(file("config"))
   .settings(
     name := "circe-config",
