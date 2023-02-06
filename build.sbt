@@ -1,6 +1,5 @@
 ThisBuild / tlBaseVersion := "0.8"
 ThisBuild / startYear := Some(2017)
-ThisBuild / organizationName := "Jonas Fonseca"
 ThisBuild / description := "Yet another Typesafe Config decoder"
 ThisBuild / developers := List(
   Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
@@ -59,6 +58,7 @@ lazy val config = project
     ),
     doctestTestFramework := DoctestTestFramework.ScalaTest,
     doctestMarkdownEnabled := true,
+    headerLicense := Some(HeaderLicense.ALv2(s"${startYear.value.get}", "Jonas Fonseca")),
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
       "2.13" -> "0.7.0"
