@@ -8,6 +8,7 @@ val scala212 = "2.12.15"
 val scala213 = "2.13.8"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213)
+ThisBuild / circeRootOfCodeCoverage := Some("root")
 ThisBuild / tlCiReleaseBranches := Seq("master")
 ThisBuild / tlFatalWarningsInCi := false
 ThisBuild / tlMimaPreviousVersions ++= Set(
