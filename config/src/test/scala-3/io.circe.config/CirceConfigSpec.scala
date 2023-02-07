@@ -190,9 +190,10 @@ object CirceConfigSpec {
     p = Period.ofWeeks(4)
   )
 
-  implicit def typeWithAdderDecoder[T: Adder](implicit adderDecoder: Decoder[T]): Decoder[TypeWithAdder[T]] = { hCursor =>
-    for {
-      typeWithAdder <- hCursor.downField("typeWithAdder").as[T]
-    } yield TypeWithAdder(typeWithAdder)
+  implicit def typeWithAdderDecoder[T: Adder](implicit adderDecoder: Decoder[T]): Decoder[TypeWithAdder[T]] = {
+    hCursor =>
+      for {
+        typeWithAdder <- hCursor.downField("typeWithAdder").as[T]
+      } yield TypeWithAdder(typeWithAdder)
   }
 }
