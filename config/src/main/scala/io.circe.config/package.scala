@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Jonas Fonseca
+ * Copyright 2017 circe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,9 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Copyright 2017 Jonas Fonseca
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Based on https://github.com/jonas/circe-config/blob/0.2.1/src/main/scala/io.github.jonas.circe.config/package.scala
+ */
+
 package io.circe
 
 import com.typesafe.config._
+
 import config.compat.converters._
 
 /**
@@ -30,7 +40,7 @@ import config.compat.converters._
  *   [[https://github.com/circe/circe-config/blob/master/src/test/scala/io.circe.config/CirceConfigLaws.scala#L16-L40 test for the printer laws]]).
  *
  * @example
- * {{{
+ *   {{{
  * scala> import com.typesafe.config.ConfigFactory
  * scala> import io.circe.generic.auto._
  * scala> import io.circe.config.syntax._
@@ -58,7 +68,7 @@ import config.compat.converters._
  * scala> val settings = parser.decodeF[IO, AppSettings]()
  * scala> settings.unsafeRunSync()
  * res4: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1))
- * }}}
+ *   }}}
  */
 package object config {
 

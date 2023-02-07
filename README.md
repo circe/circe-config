@@ -19,7 +19,7 @@ More generally it provides parsers and printers for interoperating with
 To use this library configure your sbt project with the following line:
 
 ```sbt
-libraryDependencies += "io.circe" %% "circe-config" % "0.7.0"
+libraryDependencies += "io.circe" %% "circe-config" % "0.8.0"
 ```
 
 ## Documentation
@@ -123,6 +123,6 @@ limitations under the License.
  [circe]: https://github.com/circe/circe
  [Typesafe config]: https://github.com/lightbend/config
  [CI]: https://github.com/circe/circe-config/actions
- [CI Status]: https://img.shields.io/github/workflow/status/circe/circe-config/Continuous%20Integration.svg
+ [CI Status]: https://img.shields.io/github/actions/workflow/status/circe/circe-config/ci.yml?branch=master
  [Latest Version Badge]: https://img.shields.io/maven-central/v/io.circe/circe-config_2.12.svg
  [Latest Version]: https://maven-badges.herokuapp.com/maven-central/io.circe/circe-config_2.12

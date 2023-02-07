@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Jonas Fonseca
+ * Copyright 2017 circe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Copyright 2017 Jonas Fonseca
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Based on https://github.com/jonas/circe-config/blob/0.2.1/src/test/scala/io.github.jonas.circe.config/CirceConfigSpec.scala
+ */
+
 package io.circe.config
 
 import cats.effect.IO
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.flatspec.AnyFlatSpec
 import com.typesafe.config.{parser => _, _}
-import io.circe.{parser => _, _}
-import io.circe.generic.auto._
-
-import scala.concurrent.duration._
-import java.time.Period
-import scala.io.Source
 import io.circe.config.syntax._
+import io.circe.syntax._
+import io.circe.{parser => _, _}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+
+import java.time.Period
+import scala.concurrent.duration._
+import scala.io.Source
 
 class CirceConfigSpec extends AnyFlatSpec with Matchers {
   import CirceConfigSpec._
@@ -103,7 +112,7 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
 }
 
 object CirceConfigSpec {
-  val testResourcesDir = new java.io.File("src/test/resources")
+  val testResourcesDir = new java.io.File("config/src/test/resources")
   def resolveFile(name: String) = new java.io.File(testResourcesDir, name)
   def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines().mkString("\n")
 
@@ -118,7 +127,7 @@ object CirceConfigSpec {
   }
 
   case class TypeWithAdder[T: Adder](typeWithAdder: T)
-  case class Nested(obj: Boolean)
+  case class Nested(obj: Boolean) derives Decoder
   case class TestConfig(
     a: Int,
     b: Boolean,
@@ -136,19 +145,19 @@ object CirceConfigSpec {
     n: Double,
     o: Double,
     p: Period
-  )
+  ) derives Decoder
 
   case class ServerSettings(
     host: String,
     port: Int,
     timeout: FiniteDuration,
     maxUpload: ConfigMemorySize
-  )
+  ) derives Decoder
   case class HttpSettings(
     version: Double,
     server: ServerSettings
-  )
-  case class AppSettings(http: HttpSettings)
+  ) derives Decoder
+  case class AppSettings(http: HttpSettings) derives Decoder
 
   val DecodedAppSettings = AppSettings(
     HttpSettings(
@@ -156,7 +165,7 @@ object CirceConfigSpec {
       ServerSettings(
         "localhost",
         8080,
-        5 seconds,
+        5.seconds,
         ConfigMemorySize.ofBytes(5242880)
       )
     )
@@ -171,7 +180,7 @@ object CirceConfigSpec {
     f = List(0, .2, 123.4),
     g = List(List("nested", "list")),
     h = List(Nested(obj = true), Nested(obj = false)),
-    i = 7357 seconds,
+    i = 7357.seconds,
     j = ConfigMemorySize.ofBytes(134217728),
     k = ConfigFactory.parseString("ka = 1.1, kb = abc"),
     l = ConfigValueFactory.fromAnyRef("localhost"),
@@ -180,4 +189,10 @@ object CirceConfigSpec {
     o = 0,
     p = Period.ofWeeks(4)
   )
+
+  implicit def typeWithAdderDecoder[T: Adder](implicit adderDecoder: Decoder[T]): Decoder[TypeWithAdder[T]] = { hCursor =>
+    for {
+      typeWithAdder <- hCursor.downField("typeWithAdder").as[T]
+    } yield TypeWithAdder(typeWithAdder)
+  }
 }
