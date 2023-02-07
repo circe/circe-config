@@ -82,7 +82,7 @@ object parser extends Parser {
       case list: ConfigList =>
         Json.fromValues(list.asScala.map(convertValueUnsafe))
 
-      case scalar =>
+      case _ =>
         (value.valueType, value.unwrapped) match {
           case (ConfigValueType.NULL, _) =>
             Json.Null

@@ -26,8 +26,6 @@ package io.circe
 package config
 
 import cats.ApplicativeError
-import cats.instances.either._
-import cats.syntax.bifunctor._
 import cats.syntax.either._
 import com.typesafe.config.{parser => _, _}
 
@@ -75,7 +73,7 @@ object syntax {
     Either.catchNonFatal {
       val d = ConfigValueFactory.fromAnyRef(str).atKey("d").getDuration("d")
       Duration.fromNanos(d.toNanos)
-    }.leftMap(t => "Decoder[FiniteDuration]")
+    }.leftMap(_ => "Decoder[FiniteDuration]")
   }
 
   /**
@@ -97,7 +95,7 @@ object syntax {
    *   }}}
    */
   implicit val periodDecoder: Decoder[Period] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p")).leftMap(t => "Decoder[Period]")
+    Either.catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p")).leftMap(_ => "Decoder[Period]")
   }
 
   /**
@@ -123,7 +121,7 @@ object syntax {
   implicit val memorySizeDecoder: Decoder[ConfigMemorySize] = Decoder.decodeString.emap { str =>
     Either
       .catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("m").getMemorySize("m"))
-      .leftMap(t => "Decoder[ConfigMemorySize]")
+      .leftMap(_ => "Decoder[ConfigMemorySize]")
   }
 
   /**
@@ -156,7 +154,7 @@ object syntax {
    *   [[configDecoder]] for decoding circe JSON objects to a Typesafe Config instance.
    */
   implicit val configValueDecoder: Decoder[ConfigValue] = Decoder.decodeJson.emap { json =>
-    Either.catchNonFatal(jsonToConfigValue(json)).leftMap(t => "Decoder[ConfigValue]")
+    Either.catchNonFatal(jsonToConfigValue(json)).leftMap(_ => "Decoder[ConfigValue]")
   }
 
   /**
