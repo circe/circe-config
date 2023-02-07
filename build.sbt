@@ -57,6 +57,7 @@ lazy val config = project
     doctestMarkdownEnabled := true,
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
-      "2.13" -> "0.7.0"
+      "2.13" -> "0.7.0",
+      "3" -> "0.10.0"
     )
   )
