@@ -4,7 +4,7 @@ ThisBuild / description := "Yet another Typesafe Config decoder"
 ThisBuild / developers := List(
   Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
 )
-val scala212 = "2.12.15"
+val scala212 = "2.12.17"
 val scala213 = "2.13.8"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213)
