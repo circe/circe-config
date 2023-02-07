@@ -114,7 +114,7 @@ class CirceConfigSpec extends AnyFlatSpec with Matchers {
 object CirceConfigSpec {
   val testResourcesDir = new java.io.File("config/src/test/resources")
   def resolveFile(name: String) = new java.io.File(testResourcesDir, name)
-  def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines.mkString("\n")
+  def readFile(path: String) = Source.fromFile(resolveFile(path)).getLines().mkString("\n")
 
   val AppConfig: Config = ConfigFactory.parseResources("CirceConfigSpec.conf")
   val AppConfigString: String = readFile("CirceConfigSpec.conf")
