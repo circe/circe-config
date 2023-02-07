@@ -1,4 +1,4 @@
-ThisBuild / tlBaseVersion := "0.8"
+ThisBuild / tlBaseVersion := "0.10"
 ThisBuild / startYear := Some(2017)
 ThisBuild / description := "Yet another Typesafe Config decoder"
 ThisBuild / developers := List(
@@ -6,8 +6,9 @@ ThisBuild / developers := List(
 )
 val scala212 = "2.12.17"
 val scala213 = "2.13.10"
+val scala3 = "3.2.2"
 ThisBuild / scalaVersion := scala213
-ThisBuild / crossScalaVersions := Seq(scala212, scala213)
+ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
 ThisBuild / circeRootOfCodeCoverage := Some("root")
 ThisBuild / tlCiReleaseBranches := Seq("master")
 ThisBuild / tlFatalWarningsInCi := false
@@ -56,6 +57,7 @@ lazy val config = project
     doctestMarkdownEnabled := true,
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
-      "2.13" -> "0.7.0"
+      "2.13" -> "0.7.0",
+      "3" -> "0.10.0"
     )
   )
