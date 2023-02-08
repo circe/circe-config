@@ -24,8 +24,8 @@
 
 package io.circe.config
 
-import cats.effect.unsafe.implicits.global
 import cats.effect.IO
+import cats.effect.unsafe.implicits.global
 import com.typesafe.config.{parser => _, _}
 import io.circe.config.syntax._
 import io.circe.generic.auto._
