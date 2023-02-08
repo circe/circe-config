@@ -19,7 +19,7 @@ More generally it provides parsers and printers for interoperating with
 To use this library configure your sbt project with the following line:
 
 ```sbt
-libraryDependencies += "io.circe" %% "circe-config" % "0.7.0"
+libraryDependencies += "io.circe" %% "circe-config" % "0.8.0"
 ```
 
 ## Documentation
@@ -88,8 +88,8 @@ res1: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080),Some
 scala> parser.decodePathF[IO, ServerSettings]("http.server")
 res2: cats.effect.IO[ServerSettings] = IO(ServerSettings(localhost,8080))
 
-scala> parser.decodePathF[IO, ServerSettings]("path.not.found").option.unsafeRunSync
-res3: Option[ServerSettings] = None
+scala> parser.decodePathF[IO, ServerSettings]("path.not.found").attempt.unsafeRunSync()
+res3: Either[Throwable,ServerSettings] = Left(io.circe.ParsingFailure: Path not found in config)
 ```
 
 This makes the configuration directly available in your `F[_]`, such as `cats.effect.IO`, which handles any errors.
@@ -124,6 +124,6 @@ limitations under the License.
  [circe]: https://github.com/circe/circe
  [Typesafe config]: https://github.com/lightbend/config
  [CI]: https://github.com/circe/circe-config/actions
- [CI Status]: https://img.shields.io/github/workflow/status/circe/circe-config/Continuous%20Integration.svg
+ [CI Status]: https://img.shields.io/github/actions/workflow/status/circe/circe-config/ci.yml?branch=master
  [Latest Version Badge]: https://img.shields.io/maven-central/v/io.circe/circe-config_2.12.svg
  [Latest Version]: https://maven-badges.herokuapp.com/maven-central/io.circe/circe-config_2.12

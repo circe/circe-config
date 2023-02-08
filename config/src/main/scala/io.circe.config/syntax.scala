@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Jonas Fonseca
+ * Copyright 2017 circe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Copyright 2017 Jonas Fonseca
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Based on https://github.com/jonas/circe-config/blob/0.2.1/src/main/scala/io.github.jonas.circe.config/syntax.scala
+ */
+
 package io.circe
 package config
 
 import cats.ApplicativeError
-import com.typesafe.config.{parser => _, _}
-import cats.instances.either._
 import cats.syntax.either._
-import cats.syntax.bifunctor._
+import com.typesafe.config.{parser => _, _}
 
-import scala.concurrent.duration._
 import java.time.Period
+import scala.concurrent.duration._
 
 /**
  * Implicits for decoding Typesafe Config values and instances using [[io.circe.Decoder circe decoders]].
@@ -32,7 +39,7 @@ import java.time.Period
  * formats, this module also provides [[syntax.CirceConfigOps]] for decoding loaded configurations.
  *
  * @example
- * {{{
+ *   {{{
  * scala> import io.circe.generic.auto._
  * scala> import io.circe.config.syntax._
  * scala> import scala.concurrent.duration.FiniteDuration
@@ -40,7 +47,7 @@ import java.time.Period
  * scala> val config = com.typesafe.config.ConfigFactory.parseString("port = 7357, host = localhost, timeout = 5 s")
  * scala> config.as[ServerSettings]
  * res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(7357,localhost,5 seconds))
- * }}}
+ *   }}}
  */
 object syntax {
 
@@ -48,7 +55,7 @@ object syntax {
    * Decoder for reading [[https://github.com/lightbend/config/blob/master/HOCON.md#duration-format duration format]].
    *
    * @example
-   * {{{
+   *   {{{
    * scala> import io.circe.Json
    * scala> import io.circe.config.syntax._
    * scala> import scala.concurrent.duration.FiniteDuration
@@ -60,20 +67,20 @@ object syntax {
    *
    * scala> Json.fromString("200 ms").as[FiniteDuration]
    * res2: io.circe.Decoder.Result[FiniteDuration] = Right(200 milliseconds)
-   * }}}
+   *   }}}
    */
   implicit val durationDecoder: Decoder[FiniteDuration] = Decoder.decodeString.emap { str =>
     Either.catchNonFatal {
       val d = ConfigValueFactory.fromAnyRef(str).atKey("d").getDuration("d")
       Duration.fromNanos(d.toNanos)
-    }.leftMap(t => "Decoder[FiniteDuration]")
+    }.leftMap(_ => "Decoder[FiniteDuration]")
   }
 
   /**
    * Decoder for reading [[https://github.com/lightbend/config/blob/master/HOCON.md#period-format period format]].
    *
    * @example
-   * {{{
+   *   {{{
    * scala> import io.circe.Json
    * scala> import io.circe.config.syntax._
    * scala> import java.time.Period
@@ -85,10 +92,10 @@ object syntax {
    *
    * scala> Json.fromString("24 months").as[Period]
    * res2: io.circe.Decoder.Result[Period] = Right(P24M)
-   * }}}
+   *   }}}
    */
   implicit val periodDecoder: Decoder[Period] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p")).leftMap(t => "Decoder[Period]")
+    Either.catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("p").getPeriod("p")).leftMap(_ => "Decoder[Period]")
   }
 
   /**
@@ -97,7 +104,7 @@ object syntax {
    * [[https://lightbend.github.io/config/latest/api/com/typesafe/config/ConfigMemorySize.html com.typesafe.config.ConfigMemorySize]].
    *
    * @example
-   * {{{
+   *   {{{
    * scala> import io.circe.Json
    * scala> import io.circe.config.syntax._
    * scala> import com.typesafe.config.ConfigMemorySize
@@ -109,12 +116,12 @@ object syntax {
    *
    * scala> Json.fromString("32 GB").as[ConfigMemorySize]
    * res2: io.circe.Decoder.Result[ConfigMemorySize] = Right(ConfigMemorySize(32000000000))
-   * }}}
+   *   }}}
    */
   implicit val memorySizeDecoder: Decoder[ConfigMemorySize] = Decoder.decodeString.emap { str =>
     Either
       .catchNonFatal(ConfigValueFactory.fromAnyRef(str).atKey("m").getMemorySize("m"))
-      .leftMap(t => "Decoder[ConfigMemorySize]")
+      .leftMap(_ => "Decoder[ConfigMemorySize]")
   }
 
   /**
@@ -124,7 +131,7 @@ object syntax {
    * Maps any circe JSON AST to the Typesafe Config AST.
    *
    * @example
-   * {{{
+   *   {{{
    * scala> import io.circe.Json
    * scala> import com.typesafe.config.ConfigValue
    * scala> import io.circe.config.syntax._
@@ -141,13 +148,13 @@ object syntax {
    *
    * scala> serverJson.as[ConfigValue]
    * res2: io.circe.Decoder.Result[ConfigValue] = Right(SimpleConfigObject({"host":"localhost","port":8080}))
-   * }}}
+   *   }}}
    *
    * @see
    *   [[configDecoder]] for decoding circe JSON objects to a Typesafe Config instance.
    */
   implicit val configValueDecoder: Decoder[ConfigValue] = Decoder.decodeJson.emap { json =>
-    Either.catchNonFatal(jsonToConfigValue(json)).leftMap(t => "Decoder[ConfigValue]")
+    Either.catchNonFatal(jsonToConfigValue(json)).leftMap(_ => "Decoder[ConfigValue]")
   }
 
   /**
@@ -157,7 +164,7 @@ object syntax {
    * Converts a circe JSON object to a Typesafe Config instance.
    *
    * @example
-   * {{{
+   *   {{{
    * scala> import io.circe.Json
    * scala> import com.typesafe.config.Config
    * scala> import io.circe.config.syntax._
@@ -173,7 +180,7 @@ object syntax {
    *
    * scala> portJson.as[Config]
    * res2: io.circe.Decoder.Result[Config] = Left(DecodingFailure(JSON must be an object, was type NUMBER, List()))
-   * }}}
+   *   }}}
    *
    * @see
    *   [[configValueDecoder]] for decoding any circe JSON AST.
