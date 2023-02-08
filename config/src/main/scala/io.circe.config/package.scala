@@ -41,34 +41,34 @@ import config.compat.converters._
  *
  * @example
  *   {{{
- *  scala> import cats.effect.unsafe.implicits.global
- *  scala> import com.typesafe.config.ConfigFactory
- *  scala> import io.circe.generic.auto._
- *  scala> import io.circe.config.syntax._
+ * scala> import cats.effect.unsafe.implicits.global
+ * scala> import com.typesafe.config.ConfigFactory
+ * scala> import io.circe.generic.auto._
+ * scala> import io.circe.config.syntax._
  *
- *  scala> case class ServerSettings(host: String, port: Int, ssl: Option[String])
- *  scala> case class HttpSettings(server: ServerSettings, version: Double)
- *  scala> case class AppSettings(http: HttpSettings)
+ * scala> case class ServerSettings(host: String, port: Int, ssl: Option[String])
+ * scala> case class HttpSettings(server: ServerSettings, version: Double)
+ * scala> case class AppSettings(http: HttpSettings)
  *
- *  scala> val config = ConfigFactory.parseString("http { version = 1.1, server { host = localhost, port = 8080 } }")
+ * scala> val config = ConfigFactory.parseString("http { version = 1.1, server { host = localhost, port = 8080 } }")
  *
- *  scala> config.as[ServerSettings]("http.server")
- *  res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080,None))
+ * scala> config.as[ServerSettings]("http.server")
+ * res0: Either[io.circe.Error, ServerSettings] = Right(ServerSettings(localhost,8080,None))
  *
- *  scala> config.as[HttpSettings]("http")
- *  res1: Either[io.circe.Error, HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,None),1.1))
+ * scala> config.as[HttpSettings]("http")
+ * res1: Either[io.circe.Error, HttpSettings] = Right(HttpSettings(ServerSettings(localhost,8080,None),1.1))
  *
- *  scala> config.as[AppSettings]
- *  res2: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
+ * scala> config.as[AppSettings]
+ * res2: Either[io.circe.Error, AppSettings] = Right(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
  *
- *  scala> import cats.effect.IO
- *  scala> config.asF[IO, AppSettings]
- *  res3: IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
+ * scala> import cats.effect.IO
+ * scala> config.asF[IO, AppSettings]
+ * res3: IO[AppSettings] = IO(AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1)))
  *
- *  scala> import io.circe.config.parser
- *  scala> val settings = parser.decodeF[IO, AppSettings]()
- *  scala> settings.unsafeRunSync()
- *  res4: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1))
+ * scala> import io.circe.config.parser
+ * scala> val settings = parser.decodeF[IO, AppSettings]()
+ * scala> settings.unsafeRunSync()
+ * res4: AppSettings = AppSettings(HttpSettings(ServerSettings(localhost,8080,None),1.1))
  *   }}}
  */
 package object config {
