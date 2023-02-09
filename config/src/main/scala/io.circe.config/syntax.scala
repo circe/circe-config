@@ -179,7 +179,7 @@ object syntax {
    * res1: io.circe.Decoder.Result[Config] = Right(Config(SimpleConfigObject({"host":"localhost","port":8080})))
    *
    * scala> portJson.as[Config]
-   * res2: io.circe.Decoder.Result[Config] = Left(DecodingFailure(JSON must be an object, was type NUMBER, List()))
+   * res2: io.circe.Decoder.Result[Config] = Left(DecodingFailure at : JSON must be an object, was type NUMBER)
    *   }}}
    *
    * @see
