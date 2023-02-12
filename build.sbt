@@ -26,13 +26,11 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
 )
 
 val Versions = new {
-  val catsEffect = "3.4.6"
   val circe = "0.14.4"
   val config = "1.4.2"
-  val discipline = "1.4.0"
-  val scalaCheck = "1.15.4"
-  val scalaTest = "3.2.11"
-  val scalaTestPlus = "3.2.11.0"
+  val munit = "0.7.29"
+  val disciplineMunit = "1.0.9"
+  val munitcatsEffect = "1.0.7"
 }
 
 lazy val root = tlCrossRootProject.aggregate(config)
@@ -47,13 +45,11 @@ lazy val config = project
       "io.circe" %% "circe-parser" % Versions.circe,
       "io.circe" %% "circe-generic" % Versions.circe % Test,
       "io.circe" %% "circe-testing" % Versions.circe % Test,
-      "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
-      "org.typelevel" %% "discipline-core" % Versions.discipline % Test,
-      "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % Test,
-      "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
-      "org.scalatestplus" %% "scalacheck-1-15" % Versions.scalaTestPlus % Test
+      "org.scalameta" %% "munit" % Versions.munit % Test,
+      "org.typelevel" %% "discipline-munit" % Versions.disciplineMunit % Test,
+      "org.typelevel" %% "munit-cats-effect-3" % Versions.munitcatsEffect % Test
     ),
-    doctestTestFramework := DoctestTestFramework.ScalaTest,
+    doctestTestFramework := DoctestTestFramework.Munit,
     doctestMarkdownEnabled := true,
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
