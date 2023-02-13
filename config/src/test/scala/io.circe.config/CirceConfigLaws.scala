@@ -33,13 +33,12 @@ import io.circe.Json
 import io.circe.Parser
 import io.circe.ParsingFailure
 import io.circe.testing.ParserTests
+import munit.DisciplineSuite
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.Laws
 
-class CirceConfigLaws extends AnyFlatSpec {
+class CirceConfigLaws extends DisciplineSuite {
 
   implicit val arbitraryConfigJson: Arbitrary[Json] = Arbitrary {
     def normalize(json: Json): Json =
@@ -67,13 +66,8 @@ class CirceConfigLaws extends AnyFlatSpec {
       yield normalize(Json.fromJsonObject(jsonObject))
   }
 
-  def checkLaws(name: String, ruleSet: Laws#RuleSet): Unit = ruleSet.all.properties.zipWithIndex.foreach {
-    case ((id, prop), 0) => name should s"obey $id" in Checkers.check(prop)
-    case ((id, prop), _) => it should s"obey $id" in Checkers.check(prop)
-  }
-
-  checkLaws("Parser", ParserTests(parser).fromString)
-  checkLaws(
+  checkAll("Parser", ParserTests(parser).fromString)
+  checkAll(
     "Parser",
     ParserTests(parser).fromFunction[Config]("fromConfig")(
       ConfigFactory.parseString,
@@ -82,8 +76,8 @@ class CirceConfigLaws extends AnyFlatSpec {
       _.decodeAccumulating[Json]
     )
   )
-  checkLaws("Printer", PrinterTests(parser).fromJson)
-  checkLaws("Codec", CodecTests[Config](syntax.configDecoder, parser.parse).fromFunction("fromConfig"))
+  checkAll("Printer", PrinterTests(parser).fromJson)
+  checkAll("Codec", CodecTests[Config](syntax.configDecoder, parser.parse).fromFunction("fromConfig"))
 }
 
 case class PrinterTests(parser: Parser) extends Laws {
