@@ -30,7 +30,7 @@ val Versions = new {
   val config = "1.4.2"
   val munit = "0.7.29"
   val disciplineMunit = "1.0.9"
-  val munitcatsEffect = "1.0.7"
+  val munitCatsEffect = "1.0.7"
 }
 
 lazy val root = tlCrossRootProject.aggregate(config)
@@ -47,7 +47,7 @@ lazy val config = project
       "io.circe" %% "circe-testing" % Versions.circe % Test,
       "org.scalameta" %% "munit" % Versions.munit % Test,
       "org.typelevel" %% "discipline-munit" % Versions.disciplineMunit % Test,
-      "org.typelevel" %% "munit-cats-effect-3" % Versions.munitcatsEffect % Test
+      "org.typelevel" %% "munit-cats-effect-3" % Versions.munitCatsEffect % Test
     ),
     doctestTestFramework := DoctestTestFramework.Munit,
     doctestMarkdownEnabled := true,
