@@ -5,7 +5,7 @@ ThisBuild / developers := List(
   Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
 )
 val scala212 = "2.12.17"
-val scala213 = "2.13.10"
+val scala213 = "2.13.11"
 val scala3 = "3.3.0"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
