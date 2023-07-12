@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.17, 2.13.10, 3.3.0]
+        scala: [2.12.17, 2.13.11, 3.3.0]
         java: [temurin@11, temurin@17]
         project: [rootJVM]
         exclude:
@@ -131,7 +131,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.10]
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
@@ -194,12 +193,12 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13.10, rootJVM)
+      - name: Download target directories (2.13.11, rootJVM)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.10-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13.11-rootJVM
 
-      - name: Inflate target directories (2.13.10, rootJVM)
+      - name: Inflate target directories (2.13.11, rootJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -226,14 +225,14 @@ jobs:
           (echo "$PGP_PASSPHRASE"; echo; echo) | gpg --command-fd 0 --pinentry-mode loopback --change-passphrase $(gpg --list-secret-keys --with-colons 2> /dev/null | grep '^sec:' | cut --delimiter ':' --fields 5 | tail -n 1)
 
       - name: Publish
-        run: sbt '++ ${{ matrix.scala }}' tlCiRelease
+        run: sbt tlCiRelease
 
   coverage:
     name: Generate coverage report
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.17, 2.13.10]
+        scala: [2.12.17, 2.13.11]
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
