@@ -6,7 +6,7 @@ ThisBuild / developers := List(
 )
 val scala212 = "2.12.18"
 val scala213 = "2.13.11"
-val scala3 = "3.3.0"
+val scala3 = "3.3.1"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
 ThisBuild / circeRootOfCodeCoverage := Some("root")
@@ -26,7 +26,7 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
 )
 
 val Versions = new {
-  val circe = "0.14.5"
+  val circe = "0.14.6"
   val config = "1.4.2"
   val munit = "0.7.29"
   val disciplineMunit = "1.0.9"
