@@ -11,7 +11,7 @@ ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
 ThisBuild / circeRootOfCodeCoverage := Some("root")
 ThisBuild / tlCiReleaseBranches := Seq("master")
-ThisBuild / tlFatalWarningsInCi := false
+ThisBuild / tlFatalWarnings := false
 ThisBuild / tlMimaPreviousVersions ++= Set(
   // manually added because tags are not v-prefixed
   "0.3.0",
