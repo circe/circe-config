@@ -54,8 +54,6 @@ lazy val config = project
       "org.typelevel" %% "discipline-munit" % Versions.disciplineMunit % Test,
       "org.typelevel" %% "munit-cats-effect-3" % Versions.munitCatsEffect % Test
     ),
-    doctestTestFramework := DoctestTestFramework.Munit,
-    doctestMarkdownEnabled := true,
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
       "2.13" -> "0.7.0",
