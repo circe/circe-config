@@ -39,7 +39,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
-      - name: Setup sbt
+      - name: Install sbt
         uses: sbt/setup-sbt@v1
 
       - name: Checkout current branch (full)
@@ -120,7 +120,7 @@ jobs:
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Setup sbt
+      - name: Install sbt
         uses: sbt/setup-sbt@v1
 
       - name: Checkout current branch (full)
@@ -210,14 +210,14 @@ jobs:
 
   dependency-submission:
     name: Submit Dependencies
-    if: github.event_name != 'pull_request'
+    if: github.event.repository.fork == false && github.event_name != 'pull_request'
     strategy:
       matrix:
         os: [ubuntu-latest]
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Setup sbt
+      - name: Install sbt
         uses: sbt/setup-sbt@v1
 
       - name: Checkout current branch (full)
@@ -266,6 +266,9 @@ jobs:
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Install sbt
+        uses: sbt/setup-sbt@v1
+
       - name: Checkout current branch (fast)
         uses: actions/checkout@v4
 

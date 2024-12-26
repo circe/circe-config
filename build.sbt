@@ -24,11 +24,6 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
   "0.7.0-M1",
   "0.8.0"
 )
-ThisBuild / githubWorkflowJobSetup :=
-  WorkflowStep.Use(
-    ref = UseRef.Public("sbt", "setup-sbt", "v1"),
-    name = Some("Setup sbt")
-  ) +: (ThisBuild / githubWorkflowJobSetup).value
 
 val Versions = new {
   val circe = "0.14.10"
