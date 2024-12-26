@@ -31,7 +31,7 @@ ThisBuild / githubWorkflowJobSetup :=
   ) +: (ThisBuild / githubWorkflowJobSetup).value
 
 val Versions = new {
-  val circe = "0.14.7"
+  val circe = "0.14.10"
   val config = "1.4.3"
   val munit = "0.7.29"
   val disciplineMunit = "1.0.9"
