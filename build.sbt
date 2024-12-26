@@ -5,7 +5,7 @@ ThisBuild / developers := List(
   Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
 )
 val scala212 = "2.12.18"
-val scala213 = "2.13.11"
+val scala213 = "2.13.13"
 val scala3 = "3.3.4"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
@@ -24,6 +24,11 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
   "0.7.0-M1",
   "0.8.0"
 )
+ThisBuild / githubWorkflowJobSetup :=
+  WorkflowStep.Use(
+    ref = UseRef.Public("sbt", "setup-sbt", "v1"),
+    name = Some("Setup sbt")
+  ) +: (ThisBuild / githubWorkflowJobSetup).value
 
 val Versions = new {
   val circe = "0.14.7"
