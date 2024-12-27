@@ -5,7 +5,7 @@ ThisBuild / developers := List(
   Developer("jonas", "Jonas Fonseca", "jonas.fonseca@gmail.com", url("https://github.com/jonas"))
 )
 val scala212 = "2.12.18"
-val scala213 = "2.13.11"
+val scala213 = "2.13.15"
 val scala3 = "3.3.4"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
@@ -26,7 +26,7 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
 )
 
 val Versions = new {
-  val circe = "0.14.7"
+  val circe = "0.14.10"
   val config = "1.4.3"
   val munit = "1.0.3"
   val disciplineMunit = "1.0.9"
@@ -49,8 +49,6 @@ lazy val config = project
       "org.typelevel" %% "discipline-munit" % Versions.disciplineMunit % Test,
       "org.typelevel" %% "munit-cats-effect-3" % Versions.munitCatsEffect % Test
     ),
-    doctestTestFramework := DoctestTestFramework.Munit,
-    doctestMarkdownEnabled := true,
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
       "2.13" -> "0.7.0",

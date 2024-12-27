@@ -25,14 +25,14 @@
 package io.circe.config
 
 import cats.effect.IO
-import com.typesafe.config.{parser => _, _}
-import io.circe.config.syntax._
-import io.circe.syntax._
-import io.circe.{parser => _, _}
+import com.typesafe.config.{parser as _, *}
+import io.circe.config.syntax.*
+import io.circe.syntax.*
+import io.circe.{parser as _, *}
 import munit.CatsEffectSuite
 
 import java.time.Period
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.io.Source
 
 class CirceConfigSpec extends CatsEffectSuite {
