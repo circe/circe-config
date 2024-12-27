@@ -28,9 +28,9 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
 val Versions = new {
   val circe = "0.14.10"
   val config = "1.4.3"
-  val munit = "0.7.29"
-  val disciplineMunit = "1.0.9"
-  val munitCatsEffect = "1.0.7"
+  val munit = "1.0.3"
+  val disciplineMunit = "2.0.0"
+  val munitCatsEffect = "2.0.0"
 }
 
 lazy val root = tlCrossRootProject.aggregate(config)
@@ -47,7 +47,7 @@ lazy val config = project
       "io.circe" %% "circe-testing" % Versions.circe % Test,
       "org.scalameta" %% "munit" % Versions.munit % Test,
       "org.typelevel" %% "discipline-munit" % Versions.disciplineMunit % Test,
-      "org.typelevel" %% "munit-cats-effect-3" % Versions.munitCatsEffect % Test
+      "org.typelevel" %% "munit-cats-effect" % Versions.munitCatsEffect % Test
     ),
     tlVersionIntroduced := Map(
       "2.12" -> "0.3.0",
