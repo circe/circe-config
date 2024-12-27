@@ -27,7 +27,6 @@ package io.circe.config
 import cats.effect.IO
 import com.typesafe.config.{parser as _, *}
 import io.circe.config.syntax.*
-import io.circe.syntax.*
 import io.circe.{parser as _, *}
 import munit.CatsEffectSuite
 
@@ -86,8 +85,9 @@ class CirceConfigSpec extends CatsEffectSuite {
 
   test("printer should print it into a config string") {
     val Right(json) = parser.parse(AppConfig)
+    val printed = io.circe.config.printer.print(json)
     val expected = readFile("CirceConfigSpec.printed.conf")
-    assertEquals(printer.print(json), expected)
+    assertEquals(printed, expected)
   }
 
   test("syntax should provide Config decoder") {
@@ -109,7 +109,8 @@ class CirceConfigSpec extends CatsEffectSuite {
   test("round-trip should parse and print") {
     for (file <- testResourcesDir.listFiles) {
       val Right(json) = parser.parseFile(file)
-      assertEquals(parser.parse(printer.print(json)), Right(json), s"round-trip failed for ${file.getName}")
+      val printed = io.circe.config.printer.print(json)
+      assertEquals(parser.parse(printed), Right(json), s"round-trip failed for ${file.getName}")
     }
   }
 }
