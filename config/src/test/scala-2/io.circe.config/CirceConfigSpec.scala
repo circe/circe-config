@@ -170,7 +170,7 @@ object CirceConfigSpec {
       ServerSettings(
         "localhost",
         8080,
-        5 seconds,
+        5.seconds,
         ConfigMemorySize.ofBytes(5242880)
       )
     )
@@ -185,7 +185,7 @@ object CirceConfigSpec {
     f = List(0, .2, 123.4),
     g = List(List("nested", "list")),
     h = List(Nested(obj = true), Nested(obj = false)),
-    i = 7357 seconds,
+    i = 7357.seconds,
     j = ConfigMemorySize.ofBytes(134217728),
     k = ConfigFactory.parseString("ka = 1.1, kb = abc"),
     l = ConfigValueFactory.fromAnyRef("localhost"),
