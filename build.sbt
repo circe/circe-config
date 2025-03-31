@@ -30,7 +30,7 @@ val Versions = new {
   val config = "1.4.3"
   val munit = "1.1.0"
   val disciplineMunit = "2.0.0"
-  val munitCatsEffect = "2.0.0"
+  val munitCatsEffect = "2.1.0"
 }
 
 lazy val root = tlCrossRootProject.aggregate(config)
