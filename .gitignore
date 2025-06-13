@@ -1,3 +1,6 @@
 target
 *.swp
 .bsp/
+.bloop
+/.metals/
+**/metals.sbt
