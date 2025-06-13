@@ -10,7 +10,6 @@ val scala3 = "3.3.6"
 ThisBuild / scalaVersion := scala213
 ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
 ThisBuild / circeRootOfCodeCoverage := Some("root")
-ThisBuild / tlCiReleaseBranches := Seq("master")
 ThisBuild / tlFatalWarnings := false
 ThisBuild / tlMimaPreviousVersions ++= Set(
   // manually added because tags are not v-prefixed
