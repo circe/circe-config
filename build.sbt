@@ -25,7 +25,7 @@ ThisBuild / tlMimaPreviousVersions ++= Set(
 )
 
 val Versions = new {
-  val circe = "0.14.14"
+  val circe = "0.14.15"
   val config = "1.4.5"
   val munit = "1.2.0"
   val disciplineMunit = "2.0.0"
