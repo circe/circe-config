@@ -1,1 +1,1 @@
-addSbtPlugin("io.circe" % "sbt-circe-org" % "0.4.9")
+addSbtPlugin("io.circe" % "sbt-circe-org" % "0.4.10")
